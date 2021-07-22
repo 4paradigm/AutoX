@@ -13,18 +13,23 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 
 - [AutoX是什么？](#AutoX是什么？)
 - [目录](#目录)
+- [安装](#安装)
 - [架构](#架构)
 - [快速上手](#快速上手)
 - [比赛上分点总结](#比赛上分点总结)
 - [效果对比](#效果对比)
 
 <!-- /TOC -->
+# 安装
+```
+1. git clone https://github.com/4paradigm/autox.git
+2. cd autox
+3. python setup.py install
+```
 
 # 架构
 ```
-├── automl
-│   ├── CONST.py
-│   ├── autox.py
+├── autox
 │   ├── ensemble
 │   ├── feature_engineer
 │   ├── feature_selection
@@ -34,11 +39,12 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 │   ├── models
 │   ├── process_data
 │   └── util.py
-├── data
-│   └── data01
-│   └── data02
-├── run_demo.py
+│   ├── CONST.py
+│   ├── autox.py
+├── run_oneclick.py
+└── demo
 └── test
+├── setup.py
 ├── README.md
 ```
 
@@ -135,7 +141,7 @@ AutoX类自动为用户管理数据集和数据集信息。
 - split_train_test: 将训练集和测试集分开，一般在完成特征工程之后执行
 - get_submit: 获得预测结果(中间过程执行了完成的机器学习pipeline，包括数据预处理，特征工程，模型训练，模型调参，模型融合，模型预测等)
 
-# AutoX的整个pipeline包含以下操作，让我们来了解一下其中的具体细节。
+# AutoX的pipeline中的操作对应的具体细节：
 
 ## 读数据
 ```
@@ -179,7 +185,8 @@ AutoX类自动为用户管理数据集和数据集信息。
 ```
 
 - shift特征
-
+```
+```
 
 ## 模型训练
 ```
@@ -197,7 +204,7 @@ AutoX支持的模型融合方式包括一下两种，默认情况下，不进行
 
 
 # 比赛上分点总结：
-criteo: 对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。
+kaggle criteo: 对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。
 
 
 ## 错误排查
