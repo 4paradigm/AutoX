@@ -5,7 +5,7 @@ from .models.regressor import CrossLgbRegression
 from .process_data import feature_combination, train_test_divide, clip_label
 from .process_data import feature_filter
 from .process_data.feature_type_recognition import Feature_type_recognition
-from .util import log
+from .util import log, reduce_mem_usage
 
 class AutoX():
     def __init__(self, target, train_name, test_name, path, feature_type = {}, id = []):
@@ -76,6 +76,9 @@ class AutoX():
         log("feature combination")
         df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat']]
         self.dfs_['FE_all'] = feature_combination(df_list)
+
+        # 内存优化
+        self.dfs_['FE_all'] = reduce_mem_usage(self.dfs_['FE_all'])
 
         # train和test数据切分
         train_length = self.info_['shape_of_train']
