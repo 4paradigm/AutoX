@@ -51,7 +51,7 @@ class FeatureTargetEncoding:
                 # 通过统计信息进行筛选
                 del_targetencoding_cols = []
                 for targetencoding_col in self.ops:
-                    if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.1:
+                    if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.05:
                         del_targetencoding_cols.append(targetencoding_col)
                 for targetencoding_col in del_targetencoding_cols:
                     self.ops.remove(targetencoding_col)
