@@ -40,7 +40,8 @@ class FeatureTargetEncoding:
 
         for feature in self.df_feature_type.keys():
             if self.df_feature_type[feature] == FEATURE_TYPE['cat']:
-                self.ops.append([feature])
+                if feature != target:
+                    self.ops.append([feature])
 
         if not self.select_all:
             if self.target is not None:
@@ -48,12 +49,12 @@ class FeatureTargetEncoding:
                 pass
             else:
                 # 通过统计信息进行筛选
-                del_count_cols = []
-                for count_col in self.ops:
-                    if df.drop_duplicates(count_col).shape[0] > df.shape[0] * 0.1:
-                        del_count_cols.append(count_col)
-                for count_col in del_count_cols:
-                    self.ops.remove(count_col)
+                del_targetencoding_cols = []
+                for targetencoding_col in self.ops:
+                    if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.1:
+                        del_targetencoding_cols.append(targetencoding_col)
+                for targetencoding_col in del_targetencoding_cols:
+                    self.ops.remove(targetencoding_col)
 
     def get_ops(self):
         return self.ops
