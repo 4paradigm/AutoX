@@ -46,9 +46,17 @@ class FeatureTargetEncoding:
         if not self.select_all:
             # 通过统计信息进行筛选
             del_targetencoding_cols = []
+
+            # 用cat列在train和test上的分布来筛选, test做了target encoding之后，有值的部分要大于90%
+            # todo:其他特征中也可以采用这种方式
+            train = df[~df[target].isnull()]
+            test = df[df[target].isnull()]
             for targetencoding_col in self.ops:
                 if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.05:
                     del_targetencoding_cols.append(targetencoding_col)
+                if test.loc[test[targetencoding_col].isin(train[targetencoding_col].unique())].shape[0] / test.shape[0] < 0.9:
+                    del_targetencoding_cols.append(targetencoding_col)
+
             for targetencoding_col in del_targetencoding_cols:
                 self.ops.remove(targetencoding_col)
 
