@@ -54,8 +54,8 @@ class FeatureTargetEncoding:
             for targetencoding_col in self.ops:
                 if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.05:
                     del_targetencoding_cols.append(targetencoding_col)
-                if test.loc[test[targetencoding_col].isin(train[targetencoding_col].unique())].shape[0] / test.shape[0] < 0.9:
-                    del_targetencoding_cols.append(targetencoding_col)
+                if test.loc[test[targetencoding_col[0]].isin(train[targetencoding_col[0]].unique())].shape[0] / test.shape[0] < 0.9:
+                    del_targetencoding_cols.append(targetencoding_col[0])
 
             for targetencoding_col in del_targetencoding_cols:
                 self.ops.remove(targetencoding_col)
