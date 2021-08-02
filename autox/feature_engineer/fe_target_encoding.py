@@ -52,10 +52,10 @@ class FeatureTargetEncoding:
             train = df[~df[target].isnull()]
             test = df[df[target].isnull()]
             for targetencoding_col in self.ops:
-                if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.05:
+                if df.drop_duplicates(targetencoding_col).shape[0] > df.shape[0] * 0.001:
                     if targetencoding_col not in del_targetencoding_cols:
                         del_targetencoding_cols.append(targetencoding_col)
-                if test.loc[test[targetencoding_col[0]].isin(train[targetencoding_col[0]].unique())].shape[0] / test.shape[0] < 0.9:
+                if test.loc[test[targetencoding_col[0]].isin(train[targetencoding_col[0]].unique())].shape[0] / test.shape[0] < 0.999:
                     if targetencoding_col not in del_targetencoding_cols:
                         del_targetencoding_cols.append(targetencoding_col)
 
