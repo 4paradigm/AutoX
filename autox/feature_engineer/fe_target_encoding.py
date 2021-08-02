@@ -57,7 +57,7 @@ class FeatureTargetEncoding:
                 if test.loc[test[targetencoding_col[0]].isin(train[targetencoding_col[0]].unique())].shape[0] / test.shape[0] < 0.9:
                     del_targetencoding_cols.append(targetencoding_col[0])
 
-            for targetencoding_col in del_targetencoding_cols:
+            for targetencoding_col in list(set(del_targetencoding_cols)):
                 self.ops.remove(targetencoding_col)
 
     def get_ops(self):
