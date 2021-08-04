@@ -59,9 +59,11 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 ```
 
 # 效果对比：
-| index | data_name     | AutoX         | AutoGluon   | H2o |
-| ----- | ------------- | ---------------- | ----------------|----------------|
-| 1    | zhidemai   | 1.1426              | 1.9466             | 1.1927|
+| index |data_type | data_name(link)     | AutoX         | AutoGluon   | H2o |
+| ----- |----- | ------------- | ---------------- | ----------------|----------------|
+| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | 1.1426              | 1.9466             | 1.1927|
+| 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | x              | x             | x|
+| 3    |binary classification | [x](x)   | x              | x             | x|
 
 
 # 数据类型

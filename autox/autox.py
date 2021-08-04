@@ -18,13 +18,13 @@ class AutoX():
         self.dfs_ = read_data_from_path(path)
         self.info_['max_target'] = self.dfs_[train_name][target].max()
         self.info_['min_target'] = self.dfs_[train_name][target].min()
-        self.concat_train_test()
         if feature_type == {}:
             for table_name in self.dfs_.keys():
                 df = self.dfs_[table_name]
                 feature_type_recognition = Feature_type_recognition()
                 feature_type = feature_type_recognition.fit(df)
                 self.info_['feature_type'][table_name] = feature_type
+        self.concat_train_test()
 
         self.dfs_['FE_all'] = None
         self.sub = None
@@ -92,16 +92,19 @@ class AutoX():
 
         # 模型训练
         log("start training model")
-        crossLgbRegression = CrossLgbRegression()
-        crossLgbRegression.fit(train[used_features], train[target], Early_Stopping_Rounds=100, N_round=4000, Verbose=50)
+        if data_type == 'regression':
+            model = CrossLgbRegression()
+            model.fit(train[used_features], train[target], Early_Stopping_Rounds=100, N_round=4000, Verbose=50)
+        elif data_type == 'binary_classification':
+            todo: 开发二分类模型
 
         # 特征重要性
-        fimp = crossLgbRegression.feature_importances_
+        fimp = model.feature_importances_
         log("feature importance")
         log(fimp)
 
         # 模型预测
-        predict = crossLgbRegression.predict(test[used_features])
+        predict = model.predict(test[used_features])
 
         # 预测结果后处理
         min_ = self.info_['min_target']

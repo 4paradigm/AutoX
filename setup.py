@@ -12,7 +12,8 @@ setup(name="autox",
             'numpy',
             'pandas',
             'sklearn',
-            'tqdm'
+            'tqdm',
+            'optuna'
         ],
         python_requires='>=3.6',
         # packages=[],
