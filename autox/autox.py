@@ -8,7 +8,8 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, feature_type = {}, id = []):
+    def __init__(self, target, train_name, test_name, path, feature_type = {}, id = [], data_type = 'regression'):
+        self.data_type = data_type
         self.info_ = {}
         self.info_['id'] = id
         self.info_['target'] = target
@@ -92,11 +93,12 @@ class AutoX():
 
         # 模型训练
         log("start training model")
-        if data_type == 'regression':
+        if self.data_type == 'regression':
             model = CrossLgbRegression()
-            model.fit(train[used_features], train[target], Early_Stopping_Rounds=100, N_round=4000, Verbose=50)
-        elif data_type == 'binary_classification':
-            todo: 开发二分类模型
+            model.fit(train[used_features], train[target], Early_Stopping_Rounds=100, N_round=4000, Verbose=50, tuning=True)
+        elif self.data_type == 'binary_classification':
+            # todo: 开发二分类模型
+            pass
 
         # 特征重要性
         fimp = model.feature_importances_
