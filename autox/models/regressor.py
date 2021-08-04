@@ -75,11 +75,11 @@ class CrossLgbRegression(object):
         study = optuna.create_study(direction='minimize', sampler=TPESampler(), study_name='LgbRegressor')
         study.optimize(objective, timeout=train_time)
 
-        log('Number of finished trials: ', len(study.trials))
+        log(f'Number of finished trials: {len(study.trials)}')
         log('Best trial:')
         trial = study.best_trial
 
-        log('\tValue: {}'.format(trial.value))
+        log(f'\tValue: {trial.value}')
         log('\tParams: ')
         for key, value in trial.params.items():
             log('\t\t{}: {}'.format(key, value))
