@@ -95,7 +95,7 @@ class AutoX():
         log("start training model")
         if self.data_type == 'regression':
             model = CrossLgbRegression()
-            model.fit(train[used_features], train[target], Early_Stopping_Rounds=100, N_round=4000, Verbose=50, tuning=True)
+            model.fit(train[used_features], train[target], tuning=True)
         elif self.data_type == 'binary_classification':
             # todo: 开发二分类模型
             pass
