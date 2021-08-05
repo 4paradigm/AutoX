@@ -82,15 +82,15 @@ class CrossXgbRegression(object):
 
             start_time = time()
             print('Training on fold {}'.format(fold_n + 1))
-            X_train, y_train = X[train_index], y[train_index]
-            X_valid, y_valid = X[valid_index], y[valid_index]
+            X_train, y_train = X.loc[train_index,:], y.loc[train_index,:]
+            X_valid, y_valid = X.loc[valid_index,:], y.loc[valid_index,:]
             model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
                       eval_set=[(X_valid, y_valid)],
                       eval_metric='rmse', verbose=False)
             self.models.append(model)
 
-            self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importance()
+            self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X.iloc[valid_index])
             mse_ = mean_squared_error(y.iloc[valid_index], val)
             print('MSE: {}'.format(mse_))
