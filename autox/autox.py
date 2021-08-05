@@ -1,7 +1,7 @@
 from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .file_io.read_data import read_data_from_path
-from .models.regressor import CrossLgbRegression
+from .models.regressor import CrossLgbRegression, CrossXgbRegression
 from .process_data import feature_combination, train_test_divide, clip_label
 from .process_data import feature_filter
 from .process_data.feature_type_recognition import Feature_type_recognition
@@ -94,19 +94,24 @@ class AutoX():
         # 模型训练
         log("start training model")
         if self.data_type == 'regression':
-            model = CrossLgbRegression()
-            model.fit(train[used_features], train[target], tuning=True)
+            model_lgb = CrossLgbRegression()
+            model_lgb.fit(train[used_features], train[target], tuning=True)
+
+            model_xgb = CrossXgbRegression()
+            model_xgb.fit(train[used_features], train[target], tuning=True)
         elif self.data_type == 'binary_classification':
             # todo: 开发二分类模型
             pass
 
         # 特征重要性
-        fimp = model.feature_importances_
+        fimp = model_lgb.feature_importances_
         log("feature importance")
         log(fimp)
 
         # 模型预测
-        predict = model.predict(test[used_features])
+        predict_lgb = model_lgb.predict(test[used_features])
+        predict_xgb = model_xgb.predict(test[used_features])
+        predict = (predict_xgb + predict_lgb) / 2
 
         # 预测结果后处理
         min_ = self.info_['min_target']
