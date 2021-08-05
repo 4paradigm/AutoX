@@ -18,7 +18,7 @@ class CrossXgbRegression(object):
         self.n_fold = n_fold
         self.params_ = {
             'eta': 0.01,
-            'tree_method': 'gpu_hist',
+            # 'tree_method': 'gpu_hist',
             'max_depth': 11,
             'subsample': 0.6,
             'n_estimators': 1700,
