@@ -82,8 +82,8 @@ class CrossXgbRegression(object):
 
             start_time = time()
             print('Training on fold {}'.format(fold_n + 1))
-            X_train, y_train = X.loc[train_index,:], y.loc[train_index,:]
-            X_valid, y_valid = X.loc[valid_index,:], y.loc[valid_index,:]
+            X_train, y_train = X.iloc[train_index], y.iloc[train_index]
+            X_valid, y_valid = X.iloc[valid_index], y.iloc[valid_index]
             model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
                       eval_set=[(X_valid, y_valid)],
