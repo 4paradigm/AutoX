@@ -24,6 +24,7 @@ class CrossXgbRegression(object):
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
+            'tree_method': 'gpu_hist'
         }
         if params is not None:
             self.params_ = params
@@ -46,7 +47,7 @@ class CrossXgbRegression(object):
                 'reg_lambda': trial.suggest_int('reg_lambda', 5, 100),
                 'min_child_weight': trial.suggest_int('min_child_weight', 5, 20),
             }
-            reg = xgb.XGBRegressor(**param_grid)
+            reg = xgb.XGBRegressor(**param_grid, tree_method='gpu_hist')
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric='rmse',
                     verbose=False)
@@ -84,7 +85,7 @@ class CrossXgbRegression(object):
             print('Training on fold {}'.format(fold_n + 1))
             X_train, y_train = X.iloc[train_index], y.iloc[train_index]
             X_valid, y_valid = X.iloc[valid_index], y.iloc[valid_index]
-            model = xgb.XGBRegressor(**self.params_)
+            model = xgb.XGBRegressor(**self.params_, tree_method='gpu_hist')
             model.fit(X_train, y_train,
                       eval_set=[(X_valid, y_valid)],
                       eval_metric='rmse', verbose=False)
