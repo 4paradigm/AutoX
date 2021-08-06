@@ -13,7 +13,7 @@ import xgboost as xgb
 from sklearn.preprocessing import StandardScaler
 
 class CrossXgbRegression(object):
-    def __init__(self, params=None, n_fold=5):
+    def __init__(self, params=None, n_fold=10):
         self.models = []
         self.scaler = None
         self.feature_importances_ = pd.DataFrame()
@@ -38,7 +38,7 @@ class CrossXgbRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4)
         def objective(trial):
             param_grid = {
                 'max_depth': trial.suggest_int('max_depth', 6, 15),
@@ -49,7 +49,7 @@ class CrossXgbRegression(object):
                 'reg_lambda': trial.suggest_int('reg_lambda', 5, 100),
                 'min_child_weight': trial.suggest_int('min_child_weight', 5, 20),
             }
-            reg = xgb.XGBRegressor(**param_grid, tree_method='gpu_hist')
+            reg = xgb.XGBRegressor(tree_method='gpu_hist', **param_grid)
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric='rmse',
                     verbose=False)
@@ -69,6 +69,8 @@ class CrossXgbRegression(object):
             log('\t\t{}: {}'.format(key, value))
 
         self.params_ = trial.params
+        self.params_['eta'] = 0.01
+        self.params_['tree_method'] = 'gpu_hist'
 
     def fit(self, X, y, tuning=True):
         log(X.shape)
@@ -80,7 +82,7 @@ class CrossXgbRegression(object):
             log("[+]tuning params")
             self.optuna_tuning(X, y)
 
-        folds = KFold(n_splits=self.n_fold, shuffle=True, random_state=889)
+        folds = KFold(n_splits=self.n_fold, shuffle=True)
         RMSEs = []
 
         for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
@@ -89,12 +91,12 @@ class CrossXgbRegression(object):
             print('Training on fold {}'.format(fold_n + 1))
             X_train, y_train = X[train_index], y.iloc[train_index]
             X_valid, y_valid = X[valid_index], y.iloc[valid_index]
-            model = xgb.XGBRegressor(**self.params_, tree_method='gpu_hist')
+            model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
                       eval_set=[(X_valid, y_valid)],
                       eval_metric='rmse', verbose=False)
-            self.models.append(model)
 
+            self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
             rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
@@ -112,9 +114,10 @@ class CrossXgbRegression(object):
         test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
-                result = model.predict(test) / self.n_fold
+                result = model.predict(test)
             else:
-                result += model.predict(test) / self.n_fold
+                result += model.predict(test)
+        result /= self.n_fold
         return result
 
 class CrossLgbRegression(object):
