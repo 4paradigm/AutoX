@@ -11,6 +11,13 @@ import optuna
 from optuna.samplers import TPESampler
 import xgboost as xgb
 from sklearn.preprocessing import StandardScaler
+from pytorch_tabnet.tab_model import TabNetRegressor
+
+class CrossTabnetRegression(object):
+    pass
+    # https://pypi.org/project/pytorch-tabnet/
+
+
 
 class CrossXgbRegression(object):
     def __init__(self, params=None, n_fold=10):
@@ -144,7 +151,7 @@ class CrossLgbRegression(object):
             self.params_ = params
         self.Early_Stopping_Rounds = 150
         self.N_round = 5000
-        self.Verbose = 10
+        self.Verbose = 100
 
     def get_params(self):
         return self.params_
