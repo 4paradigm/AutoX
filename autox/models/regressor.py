@@ -12,7 +12,7 @@ from optuna.samplers import TPESampler
 import xgboost as xgb
 
 class CrossXgbRegression(object):
-    def __init__(self, params=None, n_fold=5):
+    def __init__(self, params=None, n_fold=10):
         self.models = []
         self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
@@ -36,7 +36,7 @@ class CrossXgbRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4, random_state=42)
         def objective(trial):
             param_grid = {
                 'max_depth': trial.suggest_int('max_depth', 6, 15),
@@ -76,7 +76,7 @@ class CrossXgbRegression(object):
             self.optuna_tuning(X, y)
 
         folds = KFold(n_splits=self.n_fold, shuffle=True, random_state=889)
-        MSEs = []
+        RMSEs = []
         self.feature_importances_['feature'] = X.columns
 
         for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
@@ -93,11 +93,12 @@ class CrossXgbRegression(object):
 
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X.iloc[valid_index])
-            mse_ = mean_squared_error(y.iloc[valid_index], val)
-            print('MSE: {}'.format(mse_))
-            MSEs.append(mse_)
+            rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
+            print('MSE: {}'.format(rmse_))
+            RMSEs.append(rmse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
                                                                  seconds=time() - start_time))))
+        log(f'Average KFold RMSE: {np.mean(RMSEs)}')
         self.feature_importances_['average'] = self.feature_importances_[
             [x for x in self.feature_importances_.columns if x != "feature"]].mean(axis=1)
         self.feature_importances_ = self.feature_importances_.sort_values(by="average", ascending=False)
