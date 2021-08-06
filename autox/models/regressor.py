@@ -72,6 +72,7 @@ class CrossXgbRegression(object):
 
     def fit(self, X, y, tuning=True):
         log(X.shape)
+        self.feature_importances_['feature'] = X.columns
         self.scaler = StandardScaler()
         X = self.scaler.fit_transform(X)
 
@@ -81,14 +82,13 @@ class CrossXgbRegression(object):
 
         folds = KFold(n_splits=self.n_fold, shuffle=True, random_state=889)
         RMSEs = []
-        self.feature_importances_['feature'] = X.columns
 
         for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
 
             start_time = time()
             print('Training on fold {}'.format(fold_n + 1))
-            X_train, y_train = X.iloc[train_index], y.iloc[train_index]
-            X_valid, y_valid = X.iloc[valid_index], y.iloc[valid_index]
+            X_train, y_train = X[train_index], y.iloc[train_index]
+            X_valid, y_valid = X[valid_index], y.iloc[valid_index]
             model = xgb.XGBRegressor(**self.params_, tree_method='gpu_hist')
             model.fit(X_train, y_train,
                       eval_set=[(X_valid, y_valid)],
@@ -96,7 +96,7 @@ class CrossXgbRegression(object):
             self.models.append(model)
 
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
-            val = model.predict(X.iloc[valid_index])
+            val = model.predict(X[valid_index])
             rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
             print('MSE: {}'.format(rmse_))
             RMSEs.append(rmse_)
