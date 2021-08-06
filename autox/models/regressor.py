@@ -10,10 +10,12 @@ from sklearn.model_selection import train_test_split
 import optuna
 from optuna.samplers import TPESampler
 import xgboost as xgb
+from sklearn.preprocessing import StandardScaler
 
 class CrossXgbRegression(object):
-    def __init__(self, params=None, n_fold=10):
+    def __init__(self, params=None, n_fold=5):
         self.models = []
+        self.scaler = None
         self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
         self.params_ = {
@@ -36,7 +38,7 @@ class CrossXgbRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4, random_state=42)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
         def objective(trial):
             param_grid = {
                 'max_depth': trial.suggest_int('max_depth', 6, 15),
@@ -70,6 +72,8 @@ class CrossXgbRegression(object):
 
     def fit(self, X, y, tuning=True):
         log(X.shape)
+        self.scaler = StandardScaler()
+        X = self.scaler.fit_transform(X)
 
         if tuning:
             log("[+]tuning params")
@@ -105,6 +109,7 @@ class CrossXgbRegression(object):
         self.feature_importances_.index = range(len(self.feature_importances_))
 
     def predict(self, test):
+        test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
                 result = model.predict(test) / self.n_fold
