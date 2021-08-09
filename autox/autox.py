@@ -30,6 +30,12 @@ class AutoX():
         self.dfs_['FE_all'] = None
         self.sub = None
 
+        # 识别任务类型
+        if self.dfs_[self.info_['train_name']][self.info_['target']].nunique() == 2:
+            self.info_['task_type'] = 'binary'
+        else:
+            self.info_['task_type'] = 'regression'
+
     def concat_train_test(self):
         self.info_['shape_of_train'] = len(self.dfs_[self.info_['train_name']])
         self.info_['shape_of_test'] = len(self.dfs_[self.info_['test_name']])
