@@ -49,9 +49,14 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 ```
 
 # 快速上手
-- 全自动: run_oneclick.py
+- 全自动: 适合于想要快速获得一个不错结果的用户。只需要配置最少的数据信息，就能完成机器学习全流程的构建。
 ```
-适合于想要快速获得一个不错结果的用户。只需要配置最少的数据信息，就能完成机器学习全流程的构建。
+from autox import AutoX
+path = data_dir
+autox = AutoX(target = 'loss', train_name = 'train.csv', test_name = 'test.csv', 
+               id = ['id'], path = path)
+sub = autox.get_submit()
+sub.to_csv("submission.csv", index = False)
 ```
 - 半自动: run_demo.ipynb
 ```
@@ -61,9 +66,9 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 # 效果对比：
 | index |data_type | data_name(link)     | AutoX         | AutoGluon   | H2o |
 | ----- |----- | ------------- | ---------------- | ----------------|----------------|
-| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | 1.1426              | 1.9466             | 1.1927|
+| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | 1.1267 | 1.9466 | 1.1927|
 | 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | x              | 10.3944 | 7.8895|
-| 3    |binary classification | [x](x)   | x              | x             | x|
+| 3    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)   | x              | 0.78229 | 0.79186 |
 
 
 # 数据类型

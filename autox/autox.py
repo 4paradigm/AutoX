@@ -2,8 +2,9 @@ from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression
+from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
 from .process_data import feature_combination, train_test_divide, clip_label
-from .process_data import feature_filter
+from .process_data import feature_filter, auto_label_encoder
 from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
@@ -79,6 +80,9 @@ class AutoX():
         self.dfs_['FE_count'] = featureCount.transform(df)
         log(f"featureCount ops: {featureCount.get_ops()}")
 
+        # label_encoder
+        df = auto_label_encoder(df, feature_type)
+
         # 特征合并
         log("feature combination")
         df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat']]
@@ -105,9 +109,12 @@ class AutoX():
 
             model_xgb = CrossXgbRegression()
             model_xgb.fit(train[used_features], train[target], tuning=True)
-        elif self.data_type == 'binary_classification':
-            # todo: 开发二分类模型
-            pass
+        elif self.data_type == 'binary':
+            model_lgb = CrossLgbBiClassifier()
+            model_lgb.fit(train[used_features], train[target], tuning=True)
+
+            model_xgb = CrossXgbBiClassifier()
+            model_xgb.fit(train[used_features], train[target], tuning=True)
 
         # 特征重要性
         fimp = model_lgb.feature_importances_

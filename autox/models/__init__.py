@@ -1,1 +1,2 @@
-from .regressor import CrossLgbRegression
+from .regressor import CrossLgbRegression, CrossXgbRegression
+from .classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
