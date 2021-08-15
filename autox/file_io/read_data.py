@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import warnings
 warnings.filterwarnings('ignore')
-from ..util import log
+from ..util import log, reduce_mem_usage
 
 def read_data_from_path(path, file_type='csv'):
     G_df_dict = {}
@@ -11,6 +11,8 @@ def read_data_from_path(path, file_type='csv'):
     for item in files:
         log('[+] read {}'.format(item))
         df = pd.read_csv(os.path.join(path, item))
+        # 内存优化
+        df = reduce_mem_usage(df)
         log('table = {}, shape = {}'.format(item, df.shape))
         name = item
         G_df_dict[name] = df
