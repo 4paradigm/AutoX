@@ -81,7 +81,7 @@ class AutoX():
         log(f"featureCount ops: {featureCount.get_ops()}")
 
         # label_encoder
-        df = auto_label_encoder(df, feature_type)
+        df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
 
         # 特征合并
         log("feature combination")

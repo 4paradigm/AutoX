@@ -25,5 +25,5 @@ def auto_label_encoder(df, df_feature_type=None,silence_cols=[]):
                 temp.index = range(len(temp))
                 temp[f] = temp[[f]].apply(lambda x: x.astype('category').cat.codes)
                 df_copy[f] = temp[f].values
-    log(label_encoder_list)
+    log(f"label_encoder_list: {label_encoder_list}")
     return df_copy
