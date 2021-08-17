@@ -51,8 +51,8 @@ class CrossTabnetRegression(object):
                 'gamma': trial.suggest_discrete_uniform('subsample', 1.0, 2.0, 0.1),
             }
             reg = TabNetRegressor(**param_grid)
-            reg.fit(X_train.values, y_train.values.reshape(-1,1),
-                    eval_set=[(X_valid.values, y_valid.values.reshape(-1,1))])
+            reg.fit(X_train, y_train.values.reshape(-1,1),
+                    eval_set=[(X_valid, y_valid.values.reshape(-1,1))])
             return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
 
         train_time = 1 * 10 * 60  # h * m * s
@@ -94,8 +94,8 @@ class CrossTabnetRegression(object):
         for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
             start_time = time()
             print('Training on fold {}'.format(fold_n + 1))
-            X_train, y_train = X.values[train_index,:], y.values[train_index]
-            X_valid, y_valid = X.values[valid_index,:], y.values[valid_index]
+            X_train, y_train = X[train_index,:], y.values[train_index]
+            X_valid, y_valid = X[valid_index,:], y.values[valid_index]
             model = TabNetRegressor(**self.params_)
             model.fit(X_train, y_train.reshape(-1,1), eval_set=[(X_valid, y_valid.reshape(-1,1))])
 
