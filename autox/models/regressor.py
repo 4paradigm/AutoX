@@ -20,7 +20,7 @@ class CrossTabnetRegression(object):
     def __init__(self, params=None, n_fold=10):
         self.models = []
         self.scaler = None
-        self.features_mean = None
+        self.features_median = None
         self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
         self.params_ = {
@@ -30,6 +30,8 @@ class CrossTabnetRegression(object):
             'optimizer_fn': optim.Adam,
             'optimizer_params': dict(lr=2e-2, weight_decay=1e-5),
             'mask_type': "entmax",
+            'max_epochs': 200,
+            'patience': 15
         }
         if params is not None:
             self.params_ = params
@@ -75,8 +77,8 @@ class CrossTabnetRegression(object):
         self.feature_importances_['feature'] = X.columns
 
         # fillna
-        self.features_mean = X.mean()
-        X = X.fillna(self.features_mean)
+        self.features_median = X.median()
+        X = X.fillna(self.features_median)
 
         # scaler
         self.scaler = StandardScaler()
@@ -112,7 +114,7 @@ class CrossTabnetRegression(object):
         self.feature_importances_.index = range(len(self.feature_importances_))
 
     def predict(self, test):
-        test = test.fillna(self.features_mean)
+        test = test.fillna(self.features_median)
         test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
