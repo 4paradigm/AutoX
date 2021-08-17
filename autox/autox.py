@@ -20,6 +20,7 @@ class AutoX():
         self.info_['test_name'] = test_name
         self.dfs_ = read_data_from_path(path)
         if Debug:
+            log("Debug mode, sample data")
             self.dfs_[train_name] = self.dfs_[train_name].sample(5000)
         self.info_['max_target'] = self.dfs_[train_name][target].max()
         self.info_['min_target'] = self.dfs_[train_name][target].min()
