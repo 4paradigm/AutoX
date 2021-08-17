@@ -9,7 +9,8 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, feature_type = {}, id = [], data_type = 'regression'):
+    def __init__(self, target, train_name, test_name, path, feature_type = {}, id = [], data_type = 'regression', Debug = False):
+        self.Debug = Debug
         self.data_type = data_type
         self.info_ = {}
         self.info_['id'] = id
@@ -18,6 +19,8 @@ class AutoX():
         self.info_['train_name'] = train_name
         self.info_['test_name'] = test_name
         self.dfs_ = read_data_from_path(path)
+        if Debug:
+            self.dfs_[train_name] = self.dfs_[train_name].sample(5000)
         self.info_['max_target'] = self.dfs_[train_name][target].max()
         self.info_['min_target'] = self.dfs_[train_name][target].min()
         if feature_type == {}:
