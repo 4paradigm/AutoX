@@ -14,10 +14,90 @@ from sklearn.preprocessing import StandardScaler
 from pytorch_tabnet.tab_model import TabNetRegressor
 
 class CrossTabnetRegression(object):
-    pass
-    # https://pypi.org/project/pytorch-tabnet/
+    def __init__(self, params=None, n_fold=10):
+        self.models = []
+        self.scaler = None
+        self.n_fold = n_fold
+        self.params_ = {
+            'n_steps': 11,
+            'gamma': 0.6,
+        }
+        if params is not None:
+            self.params_ = params
 
+    def get_params(self):
+        return self.params_
 
+    def set_params(self, params):
+        self.params_ = params
+
+    def optuna_tuning(self, X, y, Debug=False):
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4)
+
+        def objective(trial):
+            param_grid = {
+                'n_steps': trial.suggest_int('n_steps', 3, 10),
+                'gamma': trial.suggest_discrete_uniform('subsample', 1.0, 2.0, 0.1),
+            }
+            reg = TabNetRegressor(**param_grid)
+            reg.fit(X_train, y_train,
+                    eval_set=[(X_valid, y_valid)])
+            return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
+
+        train_time = 1 * 10 * 60  # h * m * s
+        if Debug:
+            train_time = 1 * 1 * 60  # h * m * s
+        study = optuna.create_study(direction='minimize', sampler=TPESampler(), study_name='TabNetRegressor')
+        study.optimize(objective, timeout=train_time)
+
+        log(f'Number of finished trials: {len(study.trials)}')
+        log('Best trial:')
+        trial = study.best_trial
+
+        log(f'\tValue: {trial.value}')
+        log('\tParams: ')
+        for key, value in trial.params.items():
+            log('\t\t{}: {}'.format(key, value))
+
+        self.params_ = trial.params
+
+    def fit(self, X, y, tuning=True, Debug=False):
+        log(X.shape)
+        self.scaler = StandardScaler()
+        X = self.scaler.fit_transform(X)
+        if tuning:
+            log("[+]tuning params")
+            self.optuna_tuning(X, y, Debug=Debug)
+
+        folds = KFold(n_splits=self.n_fold, shuffle=True)
+        RMSEs = []
+
+        for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
+            start_time = time()
+            print('Training on fold {}'.format(fold_n + 1))
+            X_train, y_train = X[train_index], y.iloc[train_index]
+            X_valid, y_valid = X[valid_index], y.iloc[valid_index]
+            model = TabNetRegressor(**self.params_)
+            model.fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
+
+            self.models.append(model)
+            val = model.predict(X[valid_index])
+            rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
+            print('MSE: {}'.format(rmse_))
+            RMSEs.append(rmse_)
+            print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
+                seconds=time() - start_time))))
+        log(f'Average KFold RMSE: {np.mean(RMSEs)}')
+
+    def predict(self, test):
+        test = self.scaler.transform(test)
+        for idx, model in enumerate(self.models):
+            if idx == 0:
+                result = model.predict(test)
+            else:
+                result += model.predict(test)
+        result /= self.n_fold
+        return result
 
 class CrossXgbRegression(object):
     def __init__(self, params=None, n_fold=10):
