@@ -1,7 +1,7 @@
 from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .file_io.read_data import read_data_from_path
-from .models.regressor import CrossLgbRegression, CrossXgbRegression
+from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
 from .process_data import feature_combination, train_test_divide, clip_label
 from .process_data import feature_filter, auto_label_encoder
@@ -113,6 +113,10 @@ class AutoX():
 
             model_xgb = CrossXgbRegression()
             model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+
+            model_tabnet = CrossTabnetRegression()
+            model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+
         elif self.data_type == 'binary':
             model_lgb = CrossLgbBiClassifier()
             model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
@@ -128,7 +132,8 @@ class AutoX():
         # 模型预测
         predict_lgb = model_lgb.predict(test[used_features])
         predict_xgb = model_xgb.predict(test[used_features])
-        predict = (predict_xgb + predict_lgb) / 2
+        predict_tabnet = model_tabnet.predict(test[used_features])
+        predict = (predict_xgb + predict_lgb + predict_tabnet) / 3
 
         # 预测结果后处理
         min_ = self.info_['min_target']
