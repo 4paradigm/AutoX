@@ -12,15 +12,24 @@ from optuna.samplers import TPESampler
 import xgboost as xgb
 from sklearn.preprocessing import StandardScaler
 from pytorch_tabnet.tab_model import TabNetRegressor
+import torch
+import torch.optim as optim
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 class CrossTabnetRegression(object):
     def __init__(self, params=None, n_fold=10):
         self.models = []
         self.scaler = None
+        self.features_mean = None
+        self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
         self.params_ = {
             'n_steps': 11,
             'gamma': 0.6,
+            'device_name': DEVICE,
+            'optimizer_fn': optim.Adam,
+            'optimizer_params': dict(lr=2e-2, weight_decay=1e-5),
+            'mask_type': "entmax",
         }
         if params is not None:
             self.params_ = params
@@ -63,8 +72,16 @@ class CrossTabnetRegression(object):
 
     def fit(self, X, y, tuning=True, Debug=False):
         log(X.shape)
+        self.feature_importances_['feature'] = X.columns
+
+        # fillna
+        self.features_mean = X.mean()
+        X = X.fillna(self.features_mean)
+
+        # scaler
         self.scaler = StandardScaler()
         X = self.scaler.fit_transform(X)
+
         if tuning:
             log("[+]tuning params")
             self.optuna_tuning(X, y, Debug=Debug)
@@ -75,12 +92,13 @@ class CrossTabnetRegression(object):
         for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
             start_time = time()
             print('Training on fold {}'.format(fold_n + 1))
-            X_train, y_train = X[train_index], y.iloc[train_index]
-            X_valid, y_valid = X[valid_index], y.iloc[valid_index]
+            X_train, y_train = X.values[train_index,:], y.values[train_index]
+            X_valid, y_valid = X.values[valid_index,:], y.values[valid_index]
             model = TabNetRegressor(**self.params_)
-            model.fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
+            model.fit(X_train, y_train.reshape(-1,1), eval_set=[(X_valid, y_valid.reshape(-1,1))])
 
             self.models.append(model)
+            self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
             rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
             print('MSE: {}'.format(rmse_))
@@ -88,8 +106,13 @@ class CrossTabnetRegression(object):
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
                 seconds=time() - start_time))))
         log(f'Average KFold RMSE: {np.mean(RMSEs)}')
+        self.feature_importances_['average'] = self.feature_importances_[
+            [x for x in self.feature_importances_.columns if x != "feature"]].mean(axis=1)
+        self.feature_importances_ = self.feature_importances_.sort_values(by="average", ascending=False)
+        self.feature_importances_.index = range(len(self.feature_importances_))
 
     def predict(self, test):
+        test = test.fillna(self.features_mean)
         test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
