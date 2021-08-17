@@ -44,7 +44,7 @@ class CrossXgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y):
+    def optuna_tuning(self, X, y, Debug=False):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4)
         def objective(trial):
             param_grid = {
@@ -63,6 +63,8 @@ class CrossXgbRegression(object):
             return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
 
         train_time = 1 * 10 * 60  # h * m * s
+        if Debug:
+            train_time = 1 * 1 * 60  # h * m * s
         study = optuna.create_study(direction='minimize', sampler=TPESampler(), study_name='XgbRegressor')
         study.optimize(objective, timeout=train_time)
 
@@ -79,7 +81,7 @@ class CrossXgbRegression(object):
         self.params_['eta'] = 0.01
         self.params_['tree_method'] = 'gpu_hist'
 
-    def fit(self, X, y, tuning=True):
+    def fit(self, X, y, tuning=True, Debug=False):
         log(X.shape)
         self.feature_importances_['feature'] = X.columns
         self.scaler = StandardScaler()
@@ -87,7 +89,7 @@ class CrossXgbRegression(object):
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y)
+            self.optuna_tuning(X, y, Debug=Debug)
 
         folds = KFold(n_splits=self.n_fold, shuffle=True)
         RMSEs = []
@@ -159,7 +161,7 @@ class CrossLgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y):
+    def optuna_tuning(self, X, y, Debug=False):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
 
         def objective(trial):
@@ -189,6 +191,8 @@ class CrossLgbRegression(object):
             return mse_
 
         train_time = 1 * 10 * 60  # h * m * s
+        if Debug:
+            train_time = 1 * 1 * 60  # h * m * s
         study = optuna.create_study(direction='minimize', sampler=TPESampler(), study_name='LgbRegressor')
         study.optimize(objective, timeout=train_time)
 
@@ -205,12 +209,12 @@ class CrossLgbRegression(object):
         self.params_['max_depth'] = trial.params['max_depth']
         self.N_round = trial.params['num_boost_round']
 
-    def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True):
+    def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True, Debug=False):
         log(X.shape)
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y)
+            self.optuna_tuning(X, y, Debug=Debug)
 
         if Early_Stopping_Rounds is not None:
             self.Early_Stopping_Rounds = Early_Stopping_Rounds

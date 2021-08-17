@@ -109,16 +109,16 @@ class AutoX():
         log("start training model")
         if self.data_type == 'regression':
             model_lgb = CrossLgbRegression()
-            model_lgb.fit(train[used_features], train[target], tuning=True)
+            model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
             model_xgb = CrossXgbRegression()
-            model_xgb.fit(train[used_features], train[target], tuning=True)
+            model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
         elif self.data_type == 'binary':
             model_lgb = CrossLgbBiClassifier()
-            model_lgb.fit(train[used_features], train[target], tuning=True)
+            model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
             model_xgb = CrossXgbBiClassifier()
-            model_xgb.fit(train[used_features], train[target], tuning=True)
+            model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
         # 特征重要性
         fimp = model_lgb.feature_importances_
