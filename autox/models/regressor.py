@@ -51,8 +51,8 @@ class CrossTabnetRegression(object):
                 'gamma': trial.suggest_discrete_uniform('subsample', 1.0, 2.0, 0.1),
             }
             reg = TabNetRegressor(**param_grid)
-            reg.fit(X_train, y_train,
-                    eval_set=[(X_valid, y_valid)])
+            reg.fit(X_train.values, y_train.values.reshape(-1,1),
+                    eval_set=[(X_valid.values, y_valid.values.reshape(-1,1))])
             return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
 
         train_time = 1 * 10 * 60  # h * m * s
