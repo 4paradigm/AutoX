@@ -48,7 +48,7 @@ class CrossTabnetRegression(object):
         def objective(trial):
             param_grid = {
                 'n_steps': trial.suggest_int('n_steps', 3, 10),
-                'gamma': trial.suggest_discrete_uniform('subsample', 1.0, 2.0, 0.1),
+                'gamma': trial.suggest_discrete_uniform('gamma', 1.0, 2.0, 0.1),
             }
             reg = TabNetRegressor(**param_grid)
             reg.fit(X_train, y_train.values.reshape(-1,1),
