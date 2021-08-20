@@ -66,9 +66,9 @@ sub.to_csv("submission.csv", index = False)
 # 效果对比：
 | index |data_type | data_name(link)     | AutoX         | AutoGluon   | H2o |
 | ----- |----- | ------------- | ---------------- | ----------------|----------------|
-| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | 1.1267 | 1.9466 | 1.1927|
-| 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | x              | 10.3944 | 7.8895|
-| 3    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)   | x              | 0.78229 | 0.79186 |
+| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | 1.1231 | 1.9466 | 1.1927|
+| 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | 7.87731 | 10.3944 | 7.8895|
+| 3    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)   | x | 0.78229 | 0.79186 |
 
 
 # 数据类型
@@ -133,7 +133,7 @@ AutoX类自动为用户管理数据集和数据集信息。
 - info_['id']: List，用于标识数据表唯一的Key
 - info_['target']: String，用于标识数据表的标签列
 - info_['shape_of_train']: Int，train数据集的数据样本条数
-- info_['shape_of_train']: Int，test数据集的数据样本条数
+- info_['shape_of_test']: Int，test数据集的数据样本条数
 - info_['feature_type']: Dict of Dict，标识数据表中特征列的数据类型
 - info_['train_name']: String，用于训练集主表表名
 - info_['test_name']: String，用于测试集主表表名
