@@ -1,3 +1,5 @@
+[English](./README_EN.md) | 简体中文
+
 # AutoX是什么？
 AutoX一个高效的自动化机器学习工具，它主要针对于表格类型的数据挖掘竞赛。
 它的特点包括:
@@ -212,7 +214,7 @@ AutoX支持的模型融合方式包括一下两种，默认情况下，不进行
 
 # 比赛上分点总结：
 kaggle criteo: 对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。
-
+zhidemai: article_id隐含了时间信息，增加article_id的排序特征。例如，groupby(['date'])['article_id'].rank()。
 
 ## 错误排查
 |错误信息|解决办法|
