@@ -132,7 +132,7 @@ AutoX类自动为用户管理数据集和数据集信息。
 ```
 ## 属性
 ###  info_: info_属性用于保存数据集的信息。
-- info_['id']: List，用于标识数据表唯一的Key
+- info_['id']: List，用于标识样本的唯一Key
 - info_['target']: String，用于标识数据表的标签列
 - info_['shape_of_train']: Int，train数据集的数据样本条数
 - info_['shape_of_test']: Int，test数据集的数据样本条数
@@ -199,22 +199,26 @@ AutoX类自动为用户管理数据集和数据集信息。
 
 ## 模型训练
 ```
-AutoX目前支持以下模型，默认情况下，会对Lightgbm模型进行训练：
-1. Lightgbm；
-2. AutoX 深度神经网络。
+AutoX目前支持以下模型：
+1. Lightgbm
+2. Xgboost
+3. TabNet
 ```
 
 ## 模型融合
 ```
-AutoX支持的模型融合方式包括一下两种，默认情况下，不进行融合。
+AutoX支持的模型融合方式包括一下两种，默认情况下，使用Bagging的方式进行融合。
 1. Stacking；
 2. Bagging。
 ```
 
 
 # 比赛上分点总结：
-kaggle criteo: 对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。
-zhidemai: article_id隐含了时间信息，增加article_id的排序特征。例如，groupby(['date'])['article_id'].rank()。
+|比赛|magics|
+|------|------|
+|kaggle criteo|对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。|
+|zhidemai|article_id隐含了时间信息，增加article_id的排序特征。例如，groupby(['date'])['article_id'].rank()。|
+
 
 ## 错误排查
 |错误信息|解决办法|
