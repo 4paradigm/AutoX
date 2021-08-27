@@ -10,7 +10,7 @@ setup(name="autox",
         install_requires=[
             'lightgbm',
             'xgboost',
-            'pytorch-tabnet',
+            # 'pytorch-tabnet',
             'torch',
             'numpy',
             'pandas',
