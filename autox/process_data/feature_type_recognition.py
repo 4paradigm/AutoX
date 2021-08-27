@@ -32,7 +32,7 @@ def get_data_type(df, col):
         return FEATURE_TYPE['datetime']
     if detect_TIMESTAMP(df, col):
         return FEATURE_TYPE['timestamp']
-    if df[col].dtypes == object or df[col].dtypes == bool or df[col].dtypes == 'category':
+    if df[col].dtypes == object or df[col].dtypes == bool or str(df[col].dtypes) == 'category':
         return FEATURE_TYPE['cat']
     if 'int' in str(df[col].dtype) or 'float' in str(df[col].dtype):
         return FEATURE_TYPE['num']
