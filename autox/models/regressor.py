@@ -138,7 +138,8 @@ class CrossXgbRegression(object):
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
-            'tree_method': 'gpu_hist'
+            'tree_method': 'gpu_hist',
+            'verbose_eval': 100
         }
         if params is not None:
             self.params_ = params

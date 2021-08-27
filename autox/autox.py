@@ -2,7 +2,7 @@ from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
-from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
+from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
 from .process_data import feature_combination, train_test_divide, clip_label
 from .process_data import feature_filter, auto_label_encoder
 from .process_data.feature_type_recognition import Feature_type_recognition
@@ -114,8 +114,8 @@ class AutoX():
             model_xgb = CrossXgbRegression()
             model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
-            model_tabnet = CrossTabnetRegression()
-            model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            # model_tabnet = CrossTabnetRegression()
+            # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
         elif self.data_type == 'binary':
             model_lgb = CrossLgbBiClassifier()
@@ -123,6 +123,9 @@ class AutoX():
 
             model_xgb = CrossXgbBiClassifier()
             model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+
+            # model_tabnet = CrossTabnetBiClassifier()
+            # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
         # 特征重要性
         fimp = model_lgb.feature_importances_
@@ -132,8 +135,8 @@ class AutoX():
         # 模型预测
         predict_lgb = model_lgb.predict(test[used_features])
         predict_xgb = model_xgb.predict(test[used_features])
-        predict_tabnet = model_tabnet.predict(test[used_features])
-        predict = (predict_xgb + predict_lgb + predict_tabnet) / 3
+        # predict_tabnet = model_tabnet.predict(test[used_features])
+        predict = (predict_xgb + predict_lgb) / 2
 
         # 预测结果后处理
         min_ = self.info_['min_target']
