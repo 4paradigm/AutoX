@@ -43,7 +43,7 @@ class CrossTabnetRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y, Debug=False):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4)
 
         def objective(trial):
             param_grid = {
@@ -150,7 +150,7 @@ class CrossXgbRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y, Debug=False):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.4)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4)
         def objective(trial):
             param_grid = {
                 'max_depth': trial.suggest_int('max_depth', 6, 15),
@@ -267,7 +267,7 @@ class CrossLgbRegression(object):
         self.params_ = params
 
     def optuna_tuning(self, X, y, Debug=False):
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
         def objective(trial):
             param_grid = {
