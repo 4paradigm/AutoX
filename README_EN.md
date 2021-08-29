@@ -1,6 +1,6 @@
 English | [简体中文](./README.md)
 
-# What is AutoX?
+# What-is-AutoX?
 AutoX is an efficient automl tool, which is mainly aimed at data mining competitions with tabular data.
 Its features include:
 - SOTA: AutoX outperforms other solutions in many competition datasets(see [Evaluation](#Evaluation)).
@@ -10,15 +10,15 @@ Its features include:
 - Out of the box: Providing flexible modules which can be used alone.
 - Summary of magics: Organize and publish magics of competitions.
 
-# Table of Contents
+# Table-of-Contents
 <!-- TOC -->
 
-- [What is AutoX?](#What is AutoX?)
-- [Table of Contents](#Table of Contents)
+- [What is AutoX?](#What-is-AutoX?)
+- [Table of Contents](#Table-of-Contents)
 - [Installation](#Installation)
 - [Architecture](#Architecture)
-- [Quick Start](#Quick Start)
-- [Summary of Magics](#Summary of Magics)
+- [Quick Start](#Quick-Start)
+- [Summary of Magics](#Summary-of-Magics)
 - [Evaluation](#Evaluation)
 
 <!-- /TOC -->
@@ -50,7 +50,7 @@ Its features include:
 ├── README.md
 ```
 
-# Quick Start
+# Quick-Start
 - Full-Automl
 ```
 from autox import AutoX
@@ -70,7 +70,7 @@ sub.to_csv("submission.csv", index = False)
 | 3    |regression | [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)   | rmse | 0.13043 | 0.13104 | 0.13161 |
 | 4    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
 
-# ata type
+# Data type
 - cat: Categorical, Categorical variable without order.
 - ord: Ordinal, Categorical variable with order.
 - num: Numeric, Numeric variable.
@@ -178,7 +178,7 @@ AutoX supports two ensemble methods(Bagging will be used in default).
 2. Bagging。
 ```
 
-# Summary of Magics
+# Summary-of-Magics
 |competition|magics|
 |------|------|
 |kaggle criteo||
