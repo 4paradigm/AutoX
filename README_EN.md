@@ -4,7 +4,7 @@ English | [简体中文](./README.md)
 AutoX is an efficient automl tool, mainly aimed at data mining competitions with tabular data.
 Its features include:
 - SOTA: AutoX outperforms other solutions in many competition datasets(see [Evaluation](#Evaluation)).
-- Easy to use: the interface design is similar to sklearn.
+- Easy to use: The design of interfaces is similar to sklearn.
 - Generic & Universal: Supporting tabular data, including binary classification, multi-class classification and regression problems.
 - Auto: Fully automated pipeline without human-intervention.
 - Out of the box: Providing flexible modules which can be used alone.
