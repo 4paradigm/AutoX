@@ -68,10 +68,11 @@ sub.to_csv("submission.csv", index = False)
 # 效果对比：
 | index |data_type | data_name(link)  | metric | AutoX         | AutoGluon   | H2o |
 | ----- |----- | ------------- | ----------- |---------------- | ----------------|----------------|
-| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | mse | 1.0486 | 1.9466 | 1.1927|
+| 1    |regression | [zhidemai](https://www.automl.ai/competitions/19)   | mse | 1.0034 | 1.9466 | 1.1927|
 | 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | rmse | 7.87731 | 10.3944 | 7.8895|
 | 3    |regression | [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)   | rmse | 0.13043 | 0.13104 | 0.13161 |
 | 4    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
+| 5    |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | x | 0.724925 | 0.907818 |
 
 
 # 数据类型
@@ -80,6 +81,50 @@ sub.to_csv("submission.csv", index = False)
 - num: Numeric，连续型变量
 - datetime: Datetime型时间变量
 - timestamp: imestamp型时间变量
+
+# 表关系
+```
+"relations": [ # 表关系(可以包含为1-1, 1-M, M-1, M-M四种)
+        {
+            "related_to_main_table": "true", # 是否为和主表的关系
+            "left_entity": "overdue",  # 左表名字
+            "left_on": ["new_user_id"],  # 左表拼表键
+            "right_entity": "userinfo",  # 右表名字
+            "right_on": ["new_user_id"], # 右表拼表键
+            "type": "1-1" # 左表与右表的连接关系
+        },
+        {
+            "related_to_main_table": "true",
+            "left_entity": "overdue",
+            "left_on": ["new_user_id"],
+            "left_time_col": "flag1",
+            "right_entity": "bank",
+            "right_on": ["new_user_id"],
+            "right_time_col": "flag1",
+            "type": "1-M"
+        },
+        {
+            "related_to_main_table": "true",
+            "left_entity": "overdue",
+            "left_on": ["new_user_id"],
+            "left_time_col": "flag1",
+            "right_entity": "browse",
+            "right_on": ["new_user_id"],
+            "right_time_col": "flag1",
+            "type": "1-M"
+        },
+        {
+            "related_to_main_table": "true",
+            "left_entity": "overdue",
+            "left_on": ["new_user_id"],
+            "left_time_col": "flag1",
+            "right_entity": "bill",
+            "right_on": ["new_user_id"],
+            "right_time_col": "flag1",
+            "type": "1-M"
+        }
+    ]
+```
 
 # pipeline的逻辑
 - 1.初始化AutoX类

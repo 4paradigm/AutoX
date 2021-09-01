@@ -9,13 +9,14 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, feature_type = {}, id = [], data_type = 'regression', Debug = False):
+    def __init__(self, target, train_name, test_name, path, feature_type = {}, relations = [], id = [], data_type = 'regression', Debug = False):
         self.Debug = Debug
         self.data_type = data_type
         self.info_ = {}
         self.info_['id'] = id
         self.info_['target'] = target
         self.info_['feature_type'] = feature_type
+        self.info_['relations'] = relations
         self.info_['train_name'] = train_name
         self.info_['test_name'] = test_name
         self.dfs_ = read_data_from_path(path)
@@ -30,6 +31,7 @@ class AutoX():
                 feature_type_recognition = Feature_type_recognition()
                 feature_type = feature_type_recognition.fit(df)
                 self.info_['feature_type'][table_name] = feature_type
+        self.join_simple_tables()
         self.concat_train_test()
 
         self.dfs_['FE_all'] = None
@@ -40,6 +42,26 @@ class AutoX():
             self.info_['task_type'] = 'binary'
         else:
             self.info_['task_type'] = 'regression'
+
+    def join_simple_tables(self):
+        simple_relations = [x for x in self.info_['relations'] if x['type'] == '1-1' and x['related_to_main_table'] == 'true']
+        for relation in simple_relations:
+            left_table_name = relation['left_entity']
+            right_table_name = relation['right_entity']
+            left_on = relation['left_on']
+            right_on = relation['right_on']
+            if right_table_name in [self.info_['train_name'], self.info_['test_name']]:
+                left_table_name, right_table_name = right_table_name, left_table_name
+                left_on, right_on = right_on, left_on
+
+            skip_name = right_on
+            merge_table_name = right_table_name
+            merge_table = self.dfs_[merge_table_name].copy()
+            merge_table.columns = [x if x in skip_name else merge_table_name + "__" + x for x in merge_table.columns]
+
+            self.dfs_[left_table_name] = self.dfs_[left_table_name].merge(merge_table, left_on=left_on,
+                                                                            right_on=right_on, how='left')
+            del merge_table
 
     def concat_train_test(self):
         self.info_['shape_of_train'] = len(self.dfs_[self.info_['train_name']])
