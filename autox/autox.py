@@ -57,11 +57,13 @@ class AutoX():
             skip_name = right_on
             merge_table_name = right_table_name
             merge_table = self.dfs_[merge_table_name].copy()
-            merge_table.columns = [x if x in skip_name else merge_table_name + "__" + x for x in merge_table.columns]
 
             self.dfs_[left_table_name] = self.dfs_[left_table_name].merge(merge_table, left_on=left_on,
                                                                             right_on=right_on, how='left')
             del merge_table
+            for key_ in self.info_['feature_type'][merge_table_name]:
+                if key_ not in self.info_['feature_type'][left_table_name] and key_ not in skip_name:
+                    self.info_['feature_type'][left_table_name][key_] = self.info_['feature_type'][merge_table_name][key_]
 
     def concat_train_test(self):
         self.info_['shape_of_train'] = len(self.dfs_[self.info_['train_name']])
