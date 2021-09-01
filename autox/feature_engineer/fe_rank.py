@@ -34,7 +34,7 @@ class FeatureRank:
                 for agg_col in self.df_feature_type.keys():
                     if group_col == agg_col:
                         continue
-                    if agg_col not in self.silence_agg_cols:
+                    if self.df_feature_type[agg_col] == FEATURE_TYPE['num'] and agg_col not in self.silence_agg_cols:
                         self.ops[(group_col)][agg_col] = ['rank']
 
         if not self.select_all:
