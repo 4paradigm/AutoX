@@ -4,8 +4,9 @@ from ..util import log
 def feature_filter(train, test, id_, target):
     not_used = id_ + [target]
 
+    used_features = test.describe().columns
     # 过滤掉test中全为nan的特征
-    for col in tqdm(test.columns):
+    for col in tqdm(used_features):
         # test中全为Nan的特征
         if test.loc[test[col].isnull()].shape[0] == test.shape[0]:
             if col not in not_used:
@@ -16,5 +17,5 @@ def feature_filter(train, test, id_, target):
             if col not in not_used:
                 not_used += [col]
     log(f"filtered features: {not_used}")
-    used_features = [x for x in list(train.describe().columns) if x not in not_used]
+    used_features = [x for x in used_features if x not in not_used]
     return used_features

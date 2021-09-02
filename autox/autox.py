@@ -116,8 +116,8 @@ class AutoX():
         df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat']]
         self.dfs_['FE_all'] = feature_combination(df_list)
 
-        # 内存优化
-        self.dfs_['FE_all'] = reduce_mem_usage(self.dfs_['FE_all'])
+        # # 内存优化
+        # self.dfs_['FE_all'] = reduce_mem_usage(self.dfs_['FE_all'])
 
         # train和test数据切分
         train_length = self.info_['shape_of_train']
