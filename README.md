@@ -72,7 +72,7 @@ sub.to_csv("submission.csv", index = False)
 | 2    |regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | rmse | 7.87731 | 10.3944 | 7.8895|
 | 3    |regression | [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)   | rmse | 0.13043 | 0.13104 | 0.13161 |
 | 4    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
-| 5    |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | x | 0.724925 | 0.907818 |
+| 5    |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
 
 
 # 数据类型
