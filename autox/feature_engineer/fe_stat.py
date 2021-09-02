@@ -49,7 +49,7 @@ class FeatureStat:
                 # 通过统计信息进行筛选
                 del_group_cols = []
                 for group_col in self.ops.keys():
-                    if df[group_col].nunique() > df.shape[0] * 0.2:
+                    if df[group_col].nunique() > df.shape[0] * 0.2  or df[group_col].nunique() < 5:
                         del_group_cols.append(group_col)
                 for group_col in del_group_cols:
                     del self.ops[group_col]
