@@ -108,6 +108,7 @@ class AutoX():
             log(f"featureStat ops: {featureStat.get_ops()}")
         else:
             self.dfs_['FE_stat'] = None
+            log("ignore featureStat")
 
 
         # count特征
@@ -134,6 +135,7 @@ class AutoX():
             log(f"featureRank ops: {featureRank.get_ops()}")
         else:
             self.dfs_['FE_rank'] = None
+            log("ignore featureRank")
 
         # label_encoder
         df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
