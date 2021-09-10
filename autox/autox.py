@@ -1,5 +1,6 @@
 from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
+from .feature_engineer.fe_rank import FeatureRank
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
@@ -98,22 +99,48 @@ class AutoX():
         featureStat = FeatureStat()
         featureStat.fit(df, df_feature_type=feature_type, silence_group_cols= id_ + [target],
                         silence_agg_cols= id_ + [target], select_all=False)
-        self.dfs_['FE_stat'] = featureStat.transform(df)
-        log(f"featureStat ops: {featureStat.get_ops()}")
+
+        fe_stat_cnt = 0
+        for key_ in featureStat.get_ops().keys():
+            fe_stat_cnt += len(featureStat.get_ops()[key_])
+        if fe_stat_cnt < 1500:
+            self.dfs_['FE_stat'] = featureStat.transform(df)
+            log(f"featureStat ops: {featureStat.get_ops()}")
+        else:
+            self.dfs_['FE_stat'] = None
+
 
         # count特征
         log("feature engineer: Count")
+        # degree自动调整
         featureCount = FeatureCount()
         featureCount.fit(df, degree=2, df_feature_type=feature_type, silence_cols= id_ + [target], select_all=False)
+        if len(featureCount.get_ops()) > 500:
+            featureCount = FeatureCount()
+            featureCount.fit(df, degree=1, df_feature_type=feature_type, silence_cols=id_ + [target], select_all=False)
         self.dfs_['FE_count'] = featureCount.transform(df)
         log(f"featureCount ops: {featureCount.get_ops()}")
+
+
+        # rank特征
+        log("feature engineer: Rank")
+        featureRank = FeatureRank()
+        featureRank.fit(df, df_feature_type=feature_type, select_all=False)
+        fe_rank_cnt = 0
+        for key_ in featureRank.get_ops().keys():
+            fe_rank_cnt += len(featureRank.get_ops()[key_])
+        if fe_rank_cnt < 500:
+            self.dfs_['FE_rank'] = featureRank.transform(df)
+            log(f"featureRank ops: {featureRank.get_ops()}")
+        else:
+            self.dfs_['FE_rank'] = None
 
         # label_encoder
         df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
 
         # 特征合并
         log("feature combination")
-        df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat']]
+        df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank']]
         self.dfs_['FE_all'] = feature_combination(df_list)
 
         # # 内存优化
