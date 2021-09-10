@@ -10,11 +10,11 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, feature_type = {}, relations = [], id = [], data_type = 'regression', Debug = False):
+    def __init__(self, target, train_name, test_name, path, feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
         self.Debug = Debug
-        self.data_type = data_type
         self.info_ = {}
         self.info_['id'] = id
+        self.info_['task_type'] = task_type
         self.info_['target'] = target
         self.info_['feature_type'] = feature_type
         self.info_['relations'] = relations
@@ -160,7 +160,7 @@ class AutoX():
 
         # 模型训练
         log("start training model")
-        if self.data_type == 'regression':
+        if self.info_['task_type'] == 'regression':
             model_lgb = CrossLgbRegression()
             model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
@@ -170,7 +170,7 @@ class AutoX():
             # model_tabnet = CrossTabnetRegression()
             # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
-        elif self.data_type == 'binary':
+        elif self.info_['task_type'] == 'binary':
             model_lgb = CrossLgbBiClassifier()
             model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
