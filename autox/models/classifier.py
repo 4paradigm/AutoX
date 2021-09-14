@@ -60,7 +60,7 @@ class CrossXgbBiClassifier(object):
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric='auc',
                     verbose=False)
-            return roc_auc_score(y_valid, reg.predict(X_valid))
+            return roc_auc_score(y_valid, reg.predict_proba(X_valid)[:,1])
 
         train_time = 1 * 10 * 60  # h * m * s
         if Debug:
@@ -107,7 +107,7 @@ class CrossXgbBiClassifier(object):
 
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
-            val = model.predict(X[valid_index])
+            val = model.predict_proba(X[valid_index])[:,1]
             auc_ = roc_auc_score(y.iloc[valid_index], val)
             print('AUC: {}'.format(auc_))
             AUCs.append(auc_)
@@ -123,9 +123,9 @@ class CrossXgbBiClassifier(object):
         test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
-                result = model.predict(test)
+                result = model.predict_proba(test)[:,1]
             else:
-                result += model.predict(test)
+                result += model.predict_proba(test)[:,1]
         result /= self.n_fold
         return result
 
