@@ -31,23 +31,23 @@ class FeatureDimensionReduction:
 
         # tSVD
         self.tsvd = TruncatedSVD(n_components=self.n_comp, random_state=420)
-        self.tsvd.fit(train)
+        self.tsvd.fit(train[self.used_features].fillna(0))
 
         # PCA
-        self.pca = PCA(n_components=self.n_comp, random_state=420)
-        self.pca.fit(train)
+        self.pca = PCA(n_components=self.n_comp, random_state=420, svd_solver='full')
+        self.pca.fit(train[self.used_features].fillna(0))
 
         # ICA
         self.ica = FastICA(n_components=self.n_comp, random_state=420)
-        self.ica.fit(train)
+        self.ica.fit(train[self.used_features].fillna(0))
 
         # GRP
         self.grp = GaussianRandomProjection(n_components=self.n_comp, eps=0.1, random_state=420)
-        self.grp.fit(train)
+        self.grp.fit(train[self.used_features].fillna(0))
 
         # SRP
         self.srp = SparseRandomProjection(n_components=self.n_comp, dense_output=True, random_state=420)
-        self.srp.fit(train)
+        self.srp.fit(train[self.used_features].fillna(0))
 
     def transform(self, df):
         result = pd.DataFrame()
