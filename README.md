@@ -74,7 +74,7 @@ sub.to_csv("submission.csv", index = False)
 | 4    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
 | 5    |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
 | 6    |binary classification | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
-| 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.78954 |  |  |
+| 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87141 | 0.81025 | 0.79039 |
 
 
 # 数据类型
@@ -266,6 +266,7 @@ AutoX支持的模型融合方式包括一下两种，默认情况下，使用Bag
 |------|------|
 |kaggle criteo|对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。|
 |zhidemai|article_id隐含了时间信息，增加article_id的排序特征。例如，groupby(['date'])['article_id'].rank()。|
+|kaggle StumbleUpon|以文本列特征作为输入，使用Bert模型进行训练。|
 
 
 ## 错误排查
