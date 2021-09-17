@@ -1,6 +1,7 @@
 from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .feature_engineer.fe_rank import FeatureRank
+from .feature_engineer.fe_nlp import FeatureNlp
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
@@ -110,6 +111,12 @@ class AutoX():
             self.dfs_['FE_stat'] = None
             log("ignore featureStat")
 
+        # nlp特征
+        log("feature engineer: NLP")
+        featureNlp = FeatureNlp()
+        featureNlp.fit(df, target, df_feature_type=feature_type, silence_cols=id_, select_all=False)
+        self.dfs_['FE_nlp'] = featureNlp.transform(df)
+        log(f"featureNlp ops: {featureNlp.get_ops()}")
 
         # count特征
         log("feature engineer: Count")
