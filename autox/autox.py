@@ -149,7 +149,7 @@ class AutoX():
 
         # 特征合并
         log("feature combination")
-        df_list = [df, self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank']]
+        df_list = [df, self.dfs_['FE_nlp'], self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank']]
         self.dfs_['FE_all'] = feature_combination(df_list)
 
         # # 内存优化
