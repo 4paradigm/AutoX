@@ -74,7 +74,7 @@ sub.to_csv("submission.csv", index = False)
 | 4    |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
 | 5    |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
 | 6    |binary classification | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
-| 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87141 | 0.81025 | 0.79039 |
+| 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87310 | 0.81025 | 0.79039 |
 
 
 # 数据类型
