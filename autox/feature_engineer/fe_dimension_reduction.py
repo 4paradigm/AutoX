@@ -30,8 +30,8 @@ class FeatureDimensionReduction:
         self.used_features = used_features
 
         # tSVD
-        self.tsvd = TruncatedSVD(n_components=self.n_comp, random_state=420)
-        self.tsvd.fit(train[self.used_features].fillna(0))
+        # self.tsvd = TruncatedSVD(n_components=self.n_comp, random_state=420)
+        # self.tsvd.fit(train[self.used_features].fillna(0))
 
         # PCA
         self.pca = PCA(n_components=self.n_comp, random_state=420, svd_solver='full')
@@ -51,14 +51,14 @@ class FeatureDimensionReduction:
 
     def transform(self, df):
         result = pd.DataFrame()
-        tsvd_results = self.tsvd.transform(df[self.used_features])
+        # tsvd_results = self.tsvd.transform(df[self.used_features])
         pca_results  = self.pca.transform(df[self.used_features])
         ica_results  = self.ica.transform(df[self.used_features])
         grp_results  = self.grp.transform(df[self.used_features])
         srp_results  = self.srp.transform(df[self.used_features])
 
         for i in range(1, self.n_comp + 1):
-            result['tsvd_' + str(i)] = tsvd_results[:, i - 1]
+            # result['tsvd_' + str(i)] = tsvd_results[:, i - 1]
             result['pca_' + str(i)] = pca_results[:, i - 1]
             result['ica_' + str(i)] = ica_results[:, i - 1]
             result['grp_' + str(i)] = grp_results[:, i - 1]
