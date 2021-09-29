@@ -26,7 +26,7 @@ class FeatureDenoisingAutoencoder:
         dataset = df.copy()
         dataset.drop(id_column + [target], axis=1, inplace=True)
 
-        used_features = df.describe().columns
+        used_features = dataset.describe().columns
         used_features = [x for x in used_features if x not in silence_cols]
         self.used_features = used_features
 
