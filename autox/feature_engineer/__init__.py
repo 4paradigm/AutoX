@@ -5,3 +5,5 @@ from .fe_target_encoding import FeatureTargetEncoding
 from .fe_dimension_reduction import FeatureDimensionReduction
 from .fe_nlp import FeatureNlp
 from .fe_denoising_autoencoder import FeatureDenoisingAutoencoder
+from .fe_shift import FeatureShift
+from .fe_diff import FeatureDiff
