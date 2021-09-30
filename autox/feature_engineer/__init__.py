@@ -7,3 +7,4 @@ from .fe_nlp import FeatureNlp
 from .fe_denoising_autoencoder import FeatureDenoisingAutoencoder
 from .fe_shift import FeatureShift
 from .fe_diff import FeatureDiff
+from .fe_cumsum import FeatureCumsum
