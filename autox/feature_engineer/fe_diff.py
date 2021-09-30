@@ -63,7 +63,7 @@ class FeatureDiff:
         for group_col in tqdm(self.ops.keys()):
             agg_cols = self.ops[group_col]
             for agg_col in agg_cols:
-                for i in [-1, 1]:
+                for i in [-30, -24, -7, -3, -2, -1, 1, 2, 3, 7, 24, 30]:
                     shift_value = df.groupby(group_col)[agg_col].shift(i).values
                     origin_value = df.groupby(group_col)[agg_col].shift(0).values
                     if type(group_col) == tuple:
