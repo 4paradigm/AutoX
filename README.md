@@ -76,6 +76,7 @@ sub.to_csv("submission.csv", index = False)
 | 6    |binary classification | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
 | 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87310 | 0.81025 | 0.79039 |
 | 8    |binary classification | [santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | 0.89196 | 0.64643 | 0.88775 |
+| 9    |regression | [ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | 0.755 | 8.434 | 4.221 |
 
 
 # 数据类型
@@ -268,6 +269,9 @@ AutoX支持的模型融合方式包括一下两种，默认情况下，使用Bag
 |kaggle criteo|对于nunique很大的特征列，进行分桶操作。例如，对于nunique大于10000的特征，做hash后截断保留4位，再进行label_encode。|
 |zhidemai|article_id隐含了时间信息，增加article_id的排序特征。例如，groupby(['date'])['article_id'].rank()。|
 |kaggle StumbleUpon|以文本列特征作为输入，使用Bert模型进行训练。|
+|kaggle ventilator|对breath_id聚合的shift、diff、cumsum特征 |
+|kaggle Santander|识别出fake test，剔除之后再和train合并，构造全局的count特征。识别的方法：真实的样本至少有一个特征对应的值是全局唯一的，而fake的样本没有全局唯一的特征值。参考: [List of Fake Samples and Public/Private LB split](https://www.kaggle.com/yag320/list-of-fake-samples-and-public-private-lb-split)|
+
 
 
 ## 错误排查
