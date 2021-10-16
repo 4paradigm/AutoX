@@ -61,7 +61,7 @@ class AutoX():
             merge_table = self.dfs_[merge_table_name].copy()
 
             # rename
-            merge_table.columns = [x if x not in skip_name else merge_table_name + '__' + x for x in merge_table.columns]
+            merge_table.columns = [x if x in skip_name else merge_table_name + '__' + x for x in merge_table.columns]
 
             self.dfs_[left_table_name] = self.dfs_[left_table_name].merge(merge_table, left_on=left_on,
                                                                             right_on=right_on, how='left')
