@@ -19,7 +19,7 @@ def detect_TIMESTAMP(df, col):
 
 def detect_DATETIME(df, col):
     is_DATETIME = False
-    if df[col].dtypes in ['object', 'category']:
+    if df[col].dtypes == 'object' or df[col].dtypes == 'category':
         is_DATETIME = True
         try:
             pd.to_datetime(df[col])
