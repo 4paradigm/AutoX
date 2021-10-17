@@ -45,7 +45,7 @@ class FeatureTime:
             df_copy[prefix + 'weekofyear'] = df_copy[col].dt.weekofyear
             df_copy[prefix + 'dayofweek'] = df_copy[col].dt.dayofweek
 
-        df.drop(self.ops, axis=1, inplace=True)
+        df_copy.drop(self.ops, axis=1, inplace=True)
         return df_copy
 
     def fit_transform(self, df, df_feature_type = None, silence_cols = []):
