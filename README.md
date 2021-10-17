@@ -77,7 +77,7 @@ sub.to_csv("submission.csv", index = False)
 | 7    |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87310 | 0.81025 | 0.79039 |
 | 8    |binary classification | [santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | 0.89196 | 0.64643 | 0.88775 |
 | 9    |regression | [ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | 0.755 | 8.434 | 4.221 |
-| 10    |regression | [Store Sales - Time Series Forecasting](https://www.kaggle.com/c/store-sales-time-series-forecasting/)| RMSLE |  | 2.06388 | 1.72373 |
+| 10    |regression | [Allstate Claims Severity](https://www.kaggle.com/c/allstate-claims-severity)| mae |  | 1173.35917 | 1163.12014 |
 
 
 # 数据类型
