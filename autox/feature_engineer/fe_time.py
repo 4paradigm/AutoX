@@ -23,7 +23,7 @@ class FeatureTime:
 
         for feature in self.df_feature_type.keys():
             if self.df_feature_type[feature] == FEATURE_TYPE['datetime'] and feature not in self.silence_cols:
-                self.ops.append([feature])
+                self.ops.append(feature)
 
     def get_ops(self):
         return self.ops
