@@ -53,7 +53,7 @@ class CrossTabnetRegression(object):
             reg = TabNetRegressor(**param_grid)
             reg.fit(X_train, y_train.values.reshape(-1,1),
                     eval_set=[(X_valid, y_valid.values.reshape(-1,1))])
-            return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
+            return mean_squared_error(y_valid, reg.predict(X_valid), squared=True)
 
         train_time = 1 * 10 * 60  # h * m * s
         if Debug:
@@ -102,9 +102,9 @@ class CrossTabnetRegression(object):
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
-            rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
-            print('MSE: {}'.format(rmse_))
-            RMSEs.append(rmse_)
+            mse_ = mean_squared_error(y.iloc[valid_index], val, squared=True)
+            print('MSE: {}'.format(mse_))
+            RMSEs.append(mse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
                 seconds=time() - start_time))))
         log(f'Average KFold RMSE: {np.mean(RMSEs)}')
@@ -168,7 +168,7 @@ class CrossXgbRegression(object):
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric=metric,
                     verbose=False)
-            return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
+            return mean_squared_error(y_valid, reg.predict(X_valid), squared=True)
 
         train_time = 1 * 10 * 60  # h * m * s
         if Debug:
@@ -215,7 +215,7 @@ class CrossXgbRegression(object):
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
-            mse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
+            mse_ = mean_squared_error(y.iloc[valid_index], val, squared=True)
             print('MSE: {}'.format(mse_))
             RMSEs.append(mse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
