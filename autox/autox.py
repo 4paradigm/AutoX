@@ -233,20 +233,20 @@ class AutoX():
         log("start training model")
         if self.info_['task_type'] == 'regression':
             model_lgb = CrossLgbRegression(metric=self.info_['metric'])
-            model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            model_lgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
 
             model_xgb = CrossXgbRegression(metric=self.info_['metric'])
-            model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            model_xgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
 
             # model_tabnet = CrossTabnetRegression()
             # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
         elif self.info_['task_type'] == 'binary':
             model_lgb = CrossLgbBiClassifier()
-            model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            model_lgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
 
             model_xgb = CrossXgbBiClassifier()
-            model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            model_xgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
 
             # model_tabnet = CrossTabnetBiClassifier()
             # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
