@@ -135,7 +135,7 @@ class CrossXgbRegression(object):
             'eta': 0.01,
             'max_depth': 11,
             'subsample': 0.6,
-            'n_estimators': 1700,
+            'n_estimators': 3000,
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
@@ -158,7 +158,7 @@ class CrossXgbRegression(object):
             param_grid = {
                 'max_depth': trial.suggest_int('max_depth', 6, 15),
                 'subsample': trial.suggest_discrete_uniform('subsample', 0.6, 1.0, 0.1),
-                'n_estimators': trial.suggest_int('n_estimators', 500, 2000, 100),
+                'n_estimators': trial.suggest_int('n_estimators', 500, 3500, 100),
                 'eta': 0.01,
                 'reg_alpha': trial.suggest_int('reg_alpha', 1, 50),
                 'reg_lambda': trial.suggest_int('reg_lambda', 5, 100),
@@ -210,7 +210,7 @@ class CrossXgbRegression(object):
             X_valid, y_valid = X[valid_index], y.iloc[valid_index]
             model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
-                      eval_set=[(X_valid, y_valid)], verbose=100)
+                      eval_set=[(X_valid, y_valid)], verbose=100, early_stopping_rounds=100)
 
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
