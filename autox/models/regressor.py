@@ -125,11 +125,12 @@ class CrossTabnetRegression(object):
         return result
 
 class CrossXgbRegression(object):
-    def __init__(self, params=None, n_fold=10):
+    def __init__(self, metric, params=None, n_fold=10):
         self.models = []
         self.scaler = None
         self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
+        self.metric = metric
         self.params_ = {
             'eta': 0.01,
             'max_depth': 11,
@@ -143,6 +144,7 @@ class CrossXgbRegression(object):
         }
         if params is not None:
             self.params_ = params
+        self.params_['eval_metric'] = self.metric
 
     def get_params(self):
         return self.params_
@@ -150,7 +152,7 @@ class CrossXgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y, Debug=False):
+    def optuna_tuning(self, X, y, metric, Debug=False):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4)
         def objective(trial):
             param_grid = {
@@ -164,7 +166,7 @@ class CrossXgbRegression(object):
             }
             reg = xgb.XGBRegressor(tree_method='gpu_hist', **param_grid)
             reg.fit(X_train, y_train,
-                    eval_set=[(X_valid, y_valid)], eval_metric='rmse',
+                    eval_set=[(X_valid, y_valid)], eval_metric=metric,
                     verbose=False)
             return mean_squared_error(y_valid, reg.predict(X_valid), squared=False)
 
@@ -195,7 +197,7 @@ class CrossXgbRegression(object):
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y, Debug=Debug)
+            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug)
 
         folds = KFold(n_splits=self.n_fold, shuffle=True)
         RMSEs = []
@@ -208,8 +210,7 @@ class CrossXgbRegression(object):
             X_valid, y_valid = X[valid_index], y.iloc[valid_index]
             model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
-                      eval_set=[(X_valid, y_valid)],
-                      eval_metric='rmse', verbose=False)
+                      eval_set=[(X_valid, y_valid)], verbose=False)
 
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
@@ -236,13 +237,13 @@ class CrossXgbRegression(object):
         return result
 
 class CrossLgbRegression(object):
-    def __init__(self, params=None, n_fold=5):
+    def __init__(self, metric, params=None, n_fold=5):
         self.models = []
         self.feature_importances_ = pd.DataFrame()
         self.n_fold = n_fold
+        self.metric = metric
         self.params_ = {
             'objective': 'regression',
-            'metric': 'mse',
             'boosting': 'gbdt',
             'learning_rate': 0.01,
             'num_leaves': 2 ** 5,
@@ -257,6 +258,7 @@ class CrossLgbRegression(object):
         }
         if params is not None:
             self.params_ = params
+        self.params_['metric'] = self.metric
         self.Early_Stopping_Rounds = 150
         self.N_round = 5000
         self.Verbose = 100
@@ -267,7 +269,7 @@ class CrossLgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y, Debug=False):
+    def optuna_tuning(self, X, y, metric, Debug=False):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
         def objective(trial):
@@ -276,7 +278,6 @@ class CrossLgbRegression(object):
                 'num_boost_round': trial.suggest_int('num_boost_round', 100, 8000),
                 'max_depth': trial.suggest_int('max_depth', 3, 9),
                 'objective': 'regression',
-                'metric': 'mse',
                 'boosting': 'gbdt',
                 'learning_rate': 0.01,
                 'bagging_fraction': 0.95,
@@ -287,6 +288,7 @@ class CrossLgbRegression(object):
                 'max_bin': 100,
                 'verbose': -1
             }
+            param_grid['metric'] = metric
             trn_data = lgb.Dataset(X_train, label=y_train, categorical_feature="")
             val_data = lgb.Dataset(X_valid, label=y_valid, categorical_feature="")
             clf = lgb.train(param_grid, trn_data, valid_sets=[trn_data, val_data], verbose_eval=False,
@@ -320,7 +322,7 @@ class CrossLgbRegression(object):
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y, Debug=Debug)
+            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug)
 
         if Early_Stopping_Rounds is not None:
             self.Early_Stopping_Rounds = Early_Stopping_Rounds

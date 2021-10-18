@@ -15,7 +15,7 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
+    def __init__(self, target, train_name, test_name, path, metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
         self.Debug = Debug
         self.info_ = {}
         self.info_['id'] = id
@@ -25,6 +25,7 @@ class AutoX():
         self.info_['relations'] = relations
         self.info_['train_name'] = train_name
         self.info_['test_name'] = test_name
+        self.info_['metric'] = metric
         self.dfs_ = read_data_from_path(path)
         if Debug:
             log("Debug mode, sample data")
@@ -231,10 +232,10 @@ class AutoX():
         # 模型训练
         log("start training model")
         if self.info_['task_type'] == 'regression':
-            model_lgb = CrossLgbRegression()
+            model_lgb = CrossLgbRegression(metric=self.info_['metric'])
             model_lgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
-            model_xgb = CrossXgbRegression()
+            model_xgb = CrossXgbRegression(metric=self.info_['metric'])
             model_xgb.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
 
             # model_tabnet = CrossTabnetRegression()
