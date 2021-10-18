@@ -272,6 +272,7 @@ AutoX支持的模型融合方式包括一下两种，默认情况下，使用Bag
 |kaggle StumbleUpon|以文本列特征作为输入，使用Bert模型进行训练。|
 |kaggle ventilator|对breath_id聚合的shift、diff、cumsum特征 |
 |kaggle Santander|识别出fake test，剔除之后再和train合并，构造全局的count特征。识别的方法：真实的样本至少有一个特征对应的值是全局唯一的，而fake的样本没有全局唯一的特征值。参考: [List of Fake Samples and Public/Private LB split](https://www.kaggle.com/yag320/list-of-fake-samples-and-public-private-lb-split)|
+|kaggle Allstate Claims Severity|通过模型融合上分|
 
 
 

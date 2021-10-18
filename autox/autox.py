@@ -2,6 +2,10 @@ from .feature_engineer.fe_count import FeatureCount
 from .feature_engineer.fe_stat import FeatureStat
 from .feature_engineer.fe_rank import FeatureRank
 from .feature_engineer.fe_nlp import FeatureNlp
+from .feature_engineer.fe_time import FeatureTime
+from .feature_engineer.fe_cumsum import FeatureCumsum
+from .feature_engineer.fe_shift import FeatureShift
+from .feature_engineer.fe_diff import FeatureDiff
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
@@ -97,6 +101,62 @@ class AutoX():
         log("start feature engineer")
         df = self.dfs_['train_test']
         feature_type = self.info_['feature_type']['train_test']
+
+        # 时间特征
+        log("feature engineer: time")
+        featureTime = FeatureTime()
+        featureTime.fit(df, df_feature_type=feature_type, silence_cols=id_ + [target])
+        log(f"featureTime ops: {featureTime.get_ops()}")
+        self.dfs_['FE_time'] = featureTime.transform(df)
+
+
+        # cumsum特征
+        log("feature engineer: Cumsum")
+        featureCumsum = FeatureCumsum()
+        featureCumsum.fit(df, df_feature_type=feature_type, silence_group_cols=id_ + [target],
+                          silence_agg_cols=id_ + [target], select_all=False)
+        fe_cumsum_cnt = 0
+        for key_ in featureCumsum.get_ops().keys():
+            fe_cumsum_cnt += len(featureCumsum.get_ops()[key_])
+        if fe_cumsum_cnt < 30:
+            self.dfs_['FE_cumsum'] = featureCumsum.transform(df)
+            log(f"featureCumsum ops: {featureCumsum.get_ops()}")
+        else:
+            self.dfs_['FE_cumsum'] = None
+            log("ignore featureCumsum")
+
+
+        # shift特征
+        log("feature engineer: Shift")
+        featureShift = FeatureShift()
+        featureShift.fit(df, df_feature_type=feature_type, silence_group_cols=id_ + [target],
+                         silence_agg_cols=id_ + [target], select_all=False)
+        fe_shift_cnt = 0
+        for key_ in featureShift.get_ops().keys():
+            fe_shift_cnt += len(featureShift.get_ops()[key_])
+        if fe_shift_cnt < 30:
+            self.dfs_['FE_shift'] = featureShift.transform(df)
+            log(f"featureShift ops: {featureShift.get_ops()}")
+        else:
+            self.dfs_['FE_shift'] = None
+            log("ignore featureShift")
+
+
+        # diff特征
+        log("feature engineer: Diff")
+        featureDiff = FeatureDiff()
+        featureDiff.fit(df, df_feature_type=feature_type, silence_group_cols=id_ + [target],
+                        silence_agg_cols=id_ + [target], select_all=False)
+        fe_diff_cnt = 0
+        for key_ in featureDiff.get_ops().keys():
+            fe_diff_cnt += len(featureDiff.get_ops()[key_])
+        if fe_diff_cnt < 30:
+            self.dfs_['FE_diff'] = featureDiff.transform(df)
+            log(f"featureDiff ops: {featureDiff.get_ops()}")
+        else:
+            self.dfs_['FE_diff'] = None
+            log("ignore featureDiff")
+
 
         # 统计特征
         log("feature engineer: Stat")
