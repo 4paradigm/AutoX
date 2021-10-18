@@ -210,14 +210,14 @@ class CrossXgbRegression(object):
             X_valid, y_valid = X[valid_index], y.iloc[valid_index]
             model = xgb.XGBRegressor(**self.params_)
             model.fit(X_train, y_train,
-                      eval_set=[(X_valid, y_valid)], verbose=False)
+                      eval_set=[(X_valid, y_valid)], verbose=100)
 
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
-            rmse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
-            print('MSE: {}'.format(rmse_))
-            RMSEs.append(rmse_)
+            mse_ = mean_squared_error(y.iloc[valid_index], val, squared=False)
+            print('MSE: {}'.format(mse_))
+            RMSEs.append(mse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
                                                                  seconds=time() - start_time))))
         log(f'Average KFold RMSE: {np.mean(RMSEs)}')
@@ -260,7 +260,7 @@ class CrossLgbRegression(object):
             self.params_ = params
         self.params_['metric'] = self.metric
         self.Early_Stopping_Rounds = 150
-        self.N_round = 5000
+        self.N_round = 8000
         self.Verbose = 100
 
     def get_params(self):
