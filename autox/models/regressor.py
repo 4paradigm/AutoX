@@ -145,6 +145,7 @@ class CrossXgbRegression(object):
         if params is not None:
             self.params_ = params
         self.params_['eval_metric'] = self.metric
+        self.log1p = None
 
     def get_params(self):
         return self.params_
@@ -152,7 +153,7 @@ class CrossXgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y, metric, Debug=False):
+    def optuna_tuning(self, X, y, metric, Debug=False, log1p=True):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4)
         def objective(trial):
             param_grid = {
@@ -168,7 +169,11 @@ class CrossXgbRegression(object):
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric=metric,
                     verbose=False)
-            return mean_squared_error(y_valid, reg.predict(X_valid), squared=True)
+            if log1p:
+                mse_ = mean_squared_error(np.expm1(y_valid), np.expm1(reg.predict(X_valid)), squared=True)
+            else:
+                mse_ = mean_squared_error(y_valid, reg.predict(X_valid), squared=True)
+            return mse_
 
         train_time = 1 * 10 * 60  # h * m * s
         if Debug:
@@ -189,15 +194,18 @@ class CrossXgbRegression(object):
         self.params_['eta'] = 0.01
         self.params_['tree_method'] = 'gpu_hist'
 
-    def fit(self, X, y, tuning=True, Debug=False):
+    def fit(self, X, y, tuning=True, Debug=False, log1p=True):
         log(X.shape)
+        self.log1p = log1p
         self.feature_importances_['feature'] = X.columns
         self.scaler = StandardScaler()
         X = self.scaler.fit_transform(X)
+        if log1p:
+            y = np.log1p(y)
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug)
+            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug, log1p=log1p)
 
         folds = KFold(n_splits=self.n_fold, shuffle=True)
         RMSEs = []
@@ -215,7 +223,10 @@ class CrossXgbRegression(object):
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
             val = model.predict(X[valid_index])
-            mse_ = mean_squared_error(y.iloc[valid_index], val, squared=True)
+            if log1p:
+                mse_ = mean_squared_error(np.expm1(y.iloc[valid_index]), np.expm1(val), squared=True)
+            else:
+                mse_ = mean_squared_error(y.iloc[valid_index], val, squared=True)
             print('MSE: {}'.format(mse_))
             RMSEs.append(mse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
@@ -234,6 +245,8 @@ class CrossXgbRegression(object):
             else:
                 result += model.predict(test)
         result /= self.n_fold
+        if self.log1p:
+            result = np.expm1(result)
         return result
 
 class CrossLgbRegression(object):
@@ -262,6 +275,7 @@ class CrossLgbRegression(object):
         self.Early_Stopping_Rounds = 150
         self.N_round = 8000
         self.Verbose = 100
+        self.log1p = None
 
     def get_params(self):
         return self.params_
@@ -269,7 +283,7 @@ class CrossLgbRegression(object):
     def set_params(self, params):
         self.params_ = params
 
-    def optuna_tuning(self, X, y, metric, Debug=False):
+    def optuna_tuning(self, X, y, metric, Debug=False, log1p=True):
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
         def objective(trial):
@@ -294,7 +308,10 @@ class CrossLgbRegression(object):
             clf = lgb.train(param_grid, trn_data, valid_sets=[trn_data, val_data], verbose_eval=False,
                             early_stopping_rounds=self.Early_Stopping_Rounds)
             pred_val = clf.predict(X_valid)
-            mse_ = mean_squared_error(y_valid, pred_val)
+            if log1p:
+                mse_ = mean_squared_error(np.expm1(y_valid), np.expm1(pred_val))
+            else:
+                mse_ = mean_squared_error(y_valid, pred_val)
 
             return mse_
 
@@ -317,12 +334,15 @@ class CrossLgbRegression(object):
         self.params_['max_depth'] = trial.params['max_depth']
         self.N_round = trial.params['num_boost_round']
 
-    def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True, Debug=False):
+    def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True, Debug=False, log1p=True):
         log(X.shape)
+        self.log1p = log1p
+        if log1p:
+            y = np.log1p(y)
 
         if tuning:
             log("[+]tuning params")
-            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug)
+            self.optuna_tuning(X, y, metric=self.metric, Debug=Debug, log1p=log1p)
 
         if Early_Stopping_Rounds is not None:
             self.Early_Stopping_Rounds = Early_Stopping_Rounds
@@ -350,7 +370,10 @@ class CrossLgbRegression(object):
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importance()
             val = model.predict(X.iloc[valid_index])
-            mse_ = mean_squared_error(y.iloc[valid_index], val)
+            if log1p:
+                mse_ = mean_squared_error(np.expm1(y.iloc[valid_index]), np.expm1(val))
+            else:
+                mse_ = mean_squared_error(y.iloc[valid_index], val)
             print('MSE: {}'.format(mse_))
             MSEs.append(mse_)
             print('Fold {} finished in {}'.format(fold_n + 1, str(datetime.timedelta(
@@ -366,4 +389,6 @@ class CrossLgbRegression(object):
                 result = model.predict(test) / self.n_fold
             else:
                 result += model.predict(test) / self.n_fold
+        if self.log1p:
+            result = np.expm1(result)
         return result
