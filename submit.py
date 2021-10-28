@@ -13,7 +13,7 @@ def get_run_sh(hdfs_env, hdfs_input, path_src, time_str, app_name, mem):
 
     # python_cmd = 'python -u main.py {} {} | tee {}/log.txt'.format(path_input, path_output, path_output)
     # python_cmd = 'python -u fengdian_ensemble.py {} -1 {} | tee {}/log.txt'.format(path_output, path_input, path_output)
-    python_cmd = f'python -u run.py {path_input} | tee {path_output}/kaggle_house_price.log'
+    python_cmd = f'python -u run.py {path_input} {path_output} | tee {path_output}/kaggle_house_price.log'
 
     cmd_hdfs_get = 'hdfs dfs -get {}/{}/ .'.format(hdfs_input, name_output)
     file = open('cmd_hdfs_get.sh', 'a')
@@ -63,7 +63,7 @@ def get_run_sh(hdfs_env, hdfs_input, path_src, time_str, app_name, mem):
     s += ['echo "[+] output......"']
     s += ['mkdir {}'.format(name_output)]
     s += ['hdfs dfs -put -f -p {}/ {}/'.format(name_output, hdfs_input)]
-    s += ['hdfs dfs -put -f src.tar.gz {}/{}/'.format(hdfs_input, name_output)]
+    s += ['hdfs dfs -put -f autox.tar.gz {}/{}/'.format(hdfs_input, name_output)]
     s += ['hdfs dfs -put -f run.sh {}/{}/'.format(hdfs_input, name_output)]
     s += ['hdfs dfs -put -f yarn.sh {}/{}/'.format(hdfs_input, name_output)]
     s += ['hdfs dfs -put -f submit.py {}/{}/'.format(hdfs_input, name_output)]
@@ -101,7 +101,7 @@ def get_yarn_sh(appname, mem=65536, queue='pico'):
     s += ['  --num_containers=1 \\']
     s += ['  --shell_env HADOOP_USER_NAME=`whoami`\\']
     s += ['  --shell_env WEBHDFS_USER=`whoami` \\']
-    s += ['  --file src.tar.gz \\']
+    s += ['  --file autox.tar.gz \\']
     s += ['  --file submit.py \\']
     s += ['  --file run.sh \\']
     s += ['  --file yarn.sh']
@@ -159,7 +159,7 @@ def tar_src(path_src):
     return path_src
 
 
-path_src = 'src'
+path_src = 'autox'
 path_src = tar_src(path_src)
 if path_src is None:
     print('[+] src not exist!')

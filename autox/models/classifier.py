@@ -33,7 +33,7 @@ class CrossXgbBiClassifier(object):
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
-            'tree_method': 'gpu_hist'
+            # 'tree_method': 'gpu_hist'
         }
         if params is not None:
             self.params_ = params
@@ -56,7 +56,7 @@ class CrossXgbBiClassifier(object):
                 'reg_lambda': trial.suggest_int('reg_lambda', 5, 100),
                 'min_child_weight': trial.suggest_int('min_child_weight', 5, 20),
             }
-            reg = xgb.XGBClassifier(tree_method='gpu_hist', **param_grid)
+            reg = xgb.XGBClassifier(**param_grid) # tree_method='gpu_hist',
             reg.fit(X_train, y_train,
                     eval_set=[(X_valid, y_valid)], eval_metric='auc',
                     verbose=False)
@@ -79,7 +79,7 @@ class CrossXgbBiClassifier(object):
 
         self.params_ = trial.params
         self.params_['eta'] = 0.01
-        self.params_['tree_method'] = 'gpu_hist'
+        # self.params_['tree_method'] = 'gpu_hist'
 
     def fit(self, X, y, tuning=True, Debug=False):
         log(X.shape)
