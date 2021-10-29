@@ -13,13 +13,10 @@ path_output = pa.path_output[0]
 print("path_input: ", path_input)
 print("path_output: ", path_output)
 
-
 # 配置数据信息, 选择数据集
-data_name = 'allstate_claims'
-path = f'{path_input}/{data_name}'
-
+data_name = path_input.split('/')[-1]
 autox = AutoX(target = 'loss', train_name = 'train.csv', test_name = 'test.csv',
-               id = ['id'], path = path, metric = 'mae')
+               id = ['id'], path = path_input, metric = 'mae')
 
 sub = autox.get_submit()
 
