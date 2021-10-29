@@ -15,8 +15,14 @@ print("path_output: ", path_output)
 
 # 配置数据信息, 选择数据集
 data_name = path_input.split('/')[-1]
-autox = AutoX(target = 'loss', train_name = 'train.csv', test_name = 'test.csv',
-               id = ['id'], path = path_input, metric = 'mae')
+
+# allstate_claims
+# autox = AutoX(target = 'loss', train_name = 'train.csv', test_name = 'test.csv',
+#                id = ['id'], path = path_input, metric = 'mae')
+
+# stumbleupon
+autox = AutoX(target = 'label', train_name = 'train.csv', test_name = 'test.csv',
+               id = ['urlid'], path = path_input)
 
 sub = autox.get_submit()
 
