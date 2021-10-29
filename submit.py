@@ -72,7 +72,7 @@ def get_run_sh(hdfs_env, hdfs_input, path_src, time_str, app_name, mem):
     s += ['# run']
     s += ['echo "[+] run......"']
     s += ['pwd']
-    s += ['cd src/']
+    s += ['cd autox/']
     s += ['which python']
     s += ['pwd']
     s += ['echo "{}"'.format(python_cmd)]
