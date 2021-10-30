@@ -196,6 +196,8 @@ class CrossXgbRegression(object):
 
     def fit(self, X, y, tuning=True, Debug=False, log1p=True):
         log(X.shape)
+        if y.min() < 0:
+            log1p = False
         self.log1p = log1p
         self.feature_importances_['feature'] = X.columns
         self.scaler = StandardScaler()
@@ -336,8 +338,10 @@ class CrossLgbRegression(object):
 
     def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True, Debug=False, log1p=True):
         log(X.shape)
+        if y.min() < 0:
+            log1p = False
         self.log1p = log1p
-        if log1p and y.min() >= 0:
+        if log1p:
             y = np.log1p(y)
 
         if tuning:
