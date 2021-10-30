@@ -337,7 +337,7 @@ class CrossLgbRegression(object):
     def fit(self, X, y, Early_Stopping_Rounds=None, N_round=None, Verbose=None, tuning=True, Debug=False, log1p=True):
         log(X.shape)
         self.log1p = log1p
-        if log1p:
+        if log1p and y.min() >= 0:
             y = np.log1p(y)
 
         if tuning:
