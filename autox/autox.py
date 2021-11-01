@@ -223,7 +223,7 @@ class AutoX():
 
         # 特征合并
         log("feature combination")
-        df_list = [df, self.dfs_['FE_nlp'], self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank'], self.dfs_['FE_shift'], self.dfs_['FE_diff'], self.dfs_['FE_cumsum']]
+        df_list = [df, self.dfs_['FE_nlp'], self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank'], self.dfs_['FE_shift'], self.dfs_['FE_diff'], self.dfs_['FE_cumsum'], self.dfs_['FE_One2M']]
         self.dfs_['FE_all'] = feature_combination(df_list)
 
         # # 内存优化
