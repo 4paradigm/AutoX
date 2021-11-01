@@ -6,6 +6,7 @@ from .feature_engineer.fe_time import FeatureTime
 from .feature_engineer.fe_cumsum import FeatureCumsum
 from .feature_engineer.fe_shift import FeatureShift
 from .feature_engineer.fe_diff import FeatureDiff
+from .feature_engineer.fe_one2M import FeatureOne2M
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
@@ -102,6 +103,15 @@ class AutoX():
         log("start feature engineer")
         df = self.dfs_['train_test']
         feature_type = self.info_['feature_type']['train_test']
+
+        # 1-M拼表特征
+        # one2M拼表特征
+        log("feature engineer: one2M")
+        featureOne2M = FeatureOne2M()
+        featureOne2M.fit(self.info_['relations'], self.info_['train_name'], self.info_['feature_type'])
+        log(f"featureOne2M ops: {featureOne2M.get_ops()}")
+        self.dfs_['FE_One2M'] = featureOne2M.transform(df, self.dfs_)
+
 
         # 时间特征
         log("feature engineer: time")
