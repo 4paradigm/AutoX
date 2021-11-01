@@ -80,7 +80,7 @@ sub.to_csv("submission.csv", index = False)
 | 10    |regression | [Allstate Claims Severity](https://www.kaggle.com/c/allstate-claims-severity)| mae | single-table | 1137.07885 | 1173.35917 | 1163.12014 |
 | 11    |regression | [Restaurant Revenue](https://www.kaggle.com/c/restaurant-revenue-prediction/)| rmse | single-table | 2133204.32146 | 31913829.59876 | 28958013.69639 |
 | 12    |binary classification | [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/)| auc | multi-table |  | 0.51006 | 0.74600 |
-| 13    |regression | [Elo Merchant Category Recommendation](https://www.kaggle.com/c/elo-merchant-category-recommendation/)| rmse | multi-table |  | 3.80801 | 22.88899 |
+| 13    |regression | [Elo Merchant Category Recommendation](https://www.kaggle.com/c/elo-merchant-category-recommendation/)| rmse | multi-table | 3.72228 | 3.80801 | 22.88899 |
 
 
 # 数据类型
