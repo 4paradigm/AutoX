@@ -68,18 +68,18 @@ sub.to_csv("submission.csv", index = False)
 # 效果对比：
 |data_type | data_name(link)  | metric | single-table or multi-table | AutoX         | AutoGluon   | H2o |
 |----- | ------------- | ----------- |---------------- |---------------- | ----------------|----------------|
-|regression | [zhidemai](https://www.automl.ai/competitions/19)   | mse | single-table | 1.0034 | 1.9466 | 1.1927|
-|regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | rmse | single-table | 7.87731 | 10.3944 | 7.8895|
-|regression | [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)   | rmse | single-table | 0.13043 | 0.13104 | 0.13161 |
 |binary classification | [Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | single-table | 0.77751 | 0.78229 | 0.79186 |
 |binary classification | [IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | multi-table | 0.920809 | 0.724925 | 0.907818 |
 |binary classification | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | single-table | 0.78865 | 0.61141 | 0.78186 |
 |binary classification | [stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | single-table | 0.87177 | 0.81025 | 0.79039 |
 |binary classification | [santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | single-table | 0.89196 | 0.64643 | 0.88775 |
+|binary classification | [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/)| auc | multi-table |  | 0.51006 | 0.74600 |
+|regression | [zhidemai](https://www.automl.ai/competitions/19)   | mse | single-table | 1.0034 | 1.9466 | 1.1927|
+|regression | [Tabular Playground Series - Aug 2021](https://www.kaggle.com/c/tabular-playground-series-aug-2021)   | rmse | single-table | 7.87731 | 10.3944 | 7.8895|
+|regression | [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)   | rmse | single-table | 0.13043 | 0.13104 | 0.13161 |
 |regression | [ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | single-table | 0.755 | 8.434 | 4.221 |
 |regression | [Allstate Claims Severity](https://www.kaggle.com/c/allstate-claims-severity)| mae | single-table | 1137.07885 | 1173.35917 | 1163.12014 |
 |regression | [Restaurant Revenue](https://www.kaggle.com/c/restaurant-revenue-prediction/)| rmse | single-table | 2133204.32146 | 31913829.59876 | 28958013.69639 |
-|binary classification | [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/)| auc | multi-table |  | 0.51006 | 0.74600 |
 |regression | [Elo Merchant Category Recommendation](https://www.kaggle.com/c/elo-merchant-category-recommendation/)| rmse | multi-table | 3.72228 | 3.80801 | 22.88899 |
 
 
