@@ -16,7 +16,7 @@ from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
+    def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None, metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
         self.Debug = Debug
         self.info_ = {}
         self.info_['id'] = id
@@ -27,6 +27,9 @@ class AutoX():
         self.info_['train_name'] = train_name
         self.info_['test_name'] = test_name
         self.info_['metric'] = metric
+        self.info_['time_series'] = time_series
+        self.info_['ts_unit'] = ts_unit
+        self.info_['time_col'] = time_col
         self.dfs_ = read_data_from_path(path)
         if Debug:
             log("Debug mode, sample data")
@@ -110,8 +113,11 @@ class AutoX():
         featureOne2M = FeatureOne2M()
         featureOne2M.fit(self.info_['relations'], self.info_['train_name'], self.info_['feature_type'])
         log(f"featureOne2M ops: {featureOne2M.get_ops()}")
-        self.dfs_['FE_One2M'] = featureOne2M.transform(df, self.dfs_)
-
+        if len(featureOne2M.get_ops()) != 0:
+            self.dfs_['FE_One2M'] = featureOne2M.transform(df, self.dfs_)
+        else:
+            self.dfs_['FE_One2M'] = None
+            log("ignore featureOne2M")
 
         # 时间特征
         log("feature engineer: time")
