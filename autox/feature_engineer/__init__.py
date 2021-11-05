@@ -11,3 +11,4 @@ from .fe_cumsum import FeatureCumsum
 from .fe_time import FeatureTime
 from .fe_one2M import FeatureOne2M
 from .fe_shift_ts import FeatureShiftTS
+from .fe_rolling_stat_ts import FeatureRollingStatTS
