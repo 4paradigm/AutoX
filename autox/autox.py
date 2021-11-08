@@ -292,3 +292,113 @@ class AutoX():
         sub.index = range(len(sub))
 
         return sub
+
+    def get_submit_ts(self):
+
+        id_ = self.info_['id']
+        target = self.info_['target']
+
+        # 特征工程
+        log("start feature engineer")
+        df = self.dfs_['train_test']
+        feature_type = self.info_['feature_type']['train_test']
+
+        # 1-M拼表特征
+        # one2M拼表特征
+        log("feature engineer: one2M")
+        featureOne2M = FeatureOne2M()
+        featureOne2M.fit(self.info_['relations'], self.info_['train_name'], self.info_['feature_type'])
+        log(f"featureOne2M ops: {featureOne2M.get_ops()}")
+        if len(featureOne2M.get_ops()) != 0:
+            self.dfs_['FE_One2M'] = featureOne2M.transform(df, self.dfs_)
+        else:
+            self.dfs_['FE_One2M'] = None
+            log("ignore featureOne2M")
+
+        # 时间特征
+        log("feature engineer: time")
+        featureTime = FeatureTime()
+        featureTime.fit(df, df_feature_type=feature_type, silence_cols=id_ + [target])
+        log(f"featureTime ops: {featureTime.get_ops()}")
+        self.dfs_['FE_time'] = featureTime.transform(df)
+
+        # lag_ts特征
+        from autox.feature_engineer import FeatureShiftTS
+        log("feature engineer: ShiftTS")
+        featureShiftTS = FeatureShiftTS()
+        featureShiftTS.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
+        log(f"featureShiftTS ops: {featureShiftTS.get_ops()}")
+        log(f"featureShiftTS lags: {featureShiftTS.get_lags()}")
+        self.dfs_['FE_shift_ts'] = featureShiftTS.transform(df)
+
+        # rolling_stat_ts特征
+        from autox.feature_engineer import FeatureRollingStatTS
+        log("feature engineer: RollingStatTS")
+        featureRollingStatTS = FeatureRollingStatTS()
+        featureRollingStatTS.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
+        log(f"featureRollingStatTS ops: {featureRollingStatTS.get_ops()}")
+        log(f"featureRollingStatTS windows: {featureRollingStatTS.get_windows()}")
+        self.dfs_['FE_rollingStat_ts'] = featureRollingStatTS.transform(df)
+
+        # exp_weighted_mean_ts特征
+        from autox.feature_engineer import FeatureExpWeightedMean
+        log("feature engineer: ExpWeightedMean")
+        featureExpWeightedMean = FeatureExpWeightedMean()
+        featureExpWeightedMean.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
+        log(f"featureExpWeightedMean ops: {featureExpWeightedMean.get_ops()}")
+        log(f"featureExpWeightedMean lags: {featureExpWeightedMean.get_lags()}")
+        self.dfs_['FE_ewm'] = featureExpWeightedMean.transform(df)
+
+        # label_encoder
+        df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
+
+        # 特征合并
+        log("feature combination")
+        df_list = [df, self.dfs_['FE_One2M'], self.dfs_['FE_time'], self.dfs_['FE_shift_ts'], self.dfs_['FE_rollingStat_ts'], self.dfs_['FE_ewm']]
+        self.dfs_['FE_all'] = feature_combination(df_list)
+
+        # # 内存优化
+        # self.dfs_['FE_all'] = reduce_mem_usage(self.dfs_['FE_all'])
+
+        # train和test数据切分
+        train_length = self.info_['shape_of_train']
+        train, test = train_test_divide(self.dfs_['FE_all'], train_length)
+        log(f"shape of FE_all: {self.dfs_['FE_all'].shape}, shape of train: {train.shape}, shape of test: {test.shape}")
+
+        # 特征过滤
+        log("feature filter")
+        used_features = feature_filter(train, test, id_, target)
+        log(f"used_features: {used_features}")
+
+        # 模型训练
+        from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
+        log("start training model")
+        if self.info_['task_type'] == 'regression':
+            model_lgb = LgbRegressionTs()
+            model_lgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
+
+            model_xgb = XgbRegressionTs()
+            model_xgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
+
+        # 特征重要性
+        fimp = model_lgb.feature_importances_
+        log("feature importance")
+        log(fimp)
+
+        # 模型预测
+        predict_lgb = model_lgb.predict(test, used_features)
+        predict_xgb = model_xgb.predict(test, used_features)
+        # predict_tabnet = model_tabnet.predict(test[used_features])
+        predict = (predict_xgb + predict_lgb) / 2
+
+        # 预测结果后处理
+        min_ = self.info_['min_target']
+        max_ = self.info_['max_target']
+        predict = clip_label(predict, min_, max_)
+
+        # 获得结果
+        sub = test[id_]
+        sub[target] = predict
+        sub.index = range(len(sub))
+
+        return sub

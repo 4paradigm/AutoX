@@ -81,7 +81,7 @@ sub.to_csv("submission.csv", index = False)
 |regression | single-table |[House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/)  | rmse | 0.13043 | 0.13104 | 0.13161 |
 |regression | single-table |[Restaurant Revenue](https://www.kaggle.com/c/restaurant-revenue-prediction/)| rmse | 2133204.32146 | 31913829.59876 | 28958013.69639 |
 |regression | multi-table  |[Elo Merchant Category Recommendation](https://www.kaggle.com/c/elo-merchant-category-recommendation/)| rmse | 3.72228 | 3.80801 | 22.88899 |
-|regression-ts | single-table  |[Demand Forecasting](https://www.kaggle.com/c/demand-forecasting-kernels-only/)| smape | 13.84097 | 25.39182 | 18.89678 |
+|regression-ts | single-table  |[Demand Forecasting](https://www.kaggle.com/c/demand-forecasting-kernels-only/)| smape | 13.79223 | 25.39182 | 18.89678 |
 
 
 # 数据类型

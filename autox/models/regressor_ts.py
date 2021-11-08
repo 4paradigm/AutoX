@@ -92,9 +92,9 @@ class XgbRegressionTs(object):
     def predict(self, test, used_features):
         for idx, model in enumerate(self.models):
             if idx == 0:
-                result = model.predict(test)
+                result = model.predict(test[used_features])
             else:
-                result += model.predict(test)
+                result += model.predict(test[used_features])
         result /= len(self.models)
         if self.log1p:
             result = np.expm1(result)
