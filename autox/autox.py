@@ -31,6 +31,9 @@ class AutoX():
         self.info_['ts_unit'] = ts_unit
         self.info_['time_col'] = time_col
         self.dfs_ = read_data_from_path(path)
+        if time_series:
+            assert(ts_unit is not None)
+            assert(time_col is not None)
         if Debug:
             log("Debug mode, sample data")
             self.dfs_[train_name] = self.dfs_[train_name].sample(5000)
