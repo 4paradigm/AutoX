@@ -14,6 +14,8 @@ from .process_data import feature_combination, train_test_divide, clip_label
 from .process_data import feature_filter, auto_label_encoder
 from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
+from autox.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
+from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 
 class AutoX():
     def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None, metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
@@ -323,7 +325,6 @@ class AutoX():
         self.dfs_['FE_time'] = featureTime.transform(df)
 
         # lag_ts特征
-        from autox.feature_engineer import FeatureShiftTS
         log("feature engineer: ShiftTS")
         featureShiftTS = FeatureShiftTS()
         featureShiftTS.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
@@ -332,7 +333,6 @@ class AutoX():
         self.dfs_['FE_shift_ts'] = featureShiftTS.transform(df)
 
         # rolling_stat_ts特征
-        from autox.feature_engineer import FeatureRollingStatTS
         log("feature engineer: RollingStatTS")
         featureRollingStatTS = FeatureRollingStatTS()
         featureRollingStatTS.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
@@ -341,7 +341,6 @@ class AutoX():
         self.dfs_['FE_rollingStat_ts'] = featureRollingStatTS.transform(df)
 
         # exp_weighted_mean_ts特征
-        from autox.feature_engineer import FeatureExpWeightedMean
         log("feature engineer: ExpWeightedMean")
         featureExpWeightedMean = FeatureExpWeightedMean()
         featureExpWeightedMean.fit(df, id_, target, feature_type, self.info_['time_col'], self.info_['ts_unit'])
@@ -371,7 +370,6 @@ class AutoX():
         log(f"used_features: {used_features}")
 
         # 模型训练
-        from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
         log("start training model")
         if self.info_['task_type'] == 'regression':
             model_lgb = LgbRegressionTs()
