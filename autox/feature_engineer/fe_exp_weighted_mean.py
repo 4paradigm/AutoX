@@ -2,7 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 from datetime import timedelta
 
-def lag_features(df, lags, val, keys, alpha=0.95):
+def ewm_features(df, lags, val, keys, alpha=0.95):
     df_temp = df[keys + [val]]
     names = []
     for lag in lags:
@@ -62,7 +62,7 @@ class FeatureExpWeightedMean:
         df_copy.sort_values(by=self.time_col, axis=0, inplace=True)
 
         for i, col in tqdm(enumerate(self.ops)):
-            df_temp = lag_features(df_copy, self.lags, col, self.id_)
+            df_temp = ewm_features(df_copy, self.lags, col, self.id_)
             df_temp = df_temp.loc[df.index]
             if i == 0:
                 result = df_temp
