@@ -81,7 +81,7 @@ class AutoX():
                                                                             right_on=right_on, how='left')
             del merge_table
             for key_ in self.info_['feature_type'][merge_table_name]:
-                if key_ not in self.info_['feature_type'][left_table_name] and key_ not in skip_name:
+                if key_ not in skip_name:
                     self.info_['feature_type'][left_table_name][merge_table_name + '__' + key_] = self.info_['feature_type'][merge_table_name][key_]
 
     def concat_train_test(self):
