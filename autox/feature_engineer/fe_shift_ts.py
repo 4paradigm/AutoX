@@ -1,5 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
+from ..CONST import FEATURE_TYPE
 from datetime import timedelta
 
 def lag_features(df, lags, val, keys):
@@ -34,7 +35,8 @@ class FeatureShiftTS:
                 continue
             if df.loc[df[self.target].isnull(), col].nunique() == df.loc[df[self.target].isnull(), col].shape[0]:
                 continue
-            self.ops.append(col)
+            if self.df_feature_type[col] == FEATURE_TYPE['num']:
+                self.ops.append(col)
 
         if self.ts_unit == 'D':
             one_unit = timedelta(days=1)
