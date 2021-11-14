@@ -10,19 +10,19 @@ def roll_mean_features(df, windows, val, keys, op):
         names.append(name)
         if op == 'mean':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=7, win_type="triang").mean())
+                lambda x: x.shift(1).rolling(window=window, min_periods=3, win_type="triang").mean())
         if op == 'std':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=7).std())
+                lambda x: x.shift(1).rolling(window=window, min_periods=3).std())
         if op == 'median':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=7).median())
+                lambda x: x.shift(1).rolling(window=window, min_periods=3).median())
         if op == 'max':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=7).max())
+                lambda x: x.shift(1).rolling(window=window, min_periods=3).max())
         if op == 'min':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=7).min())
+                lambda x: x.shift(1).rolling(window=window, min_periods=3).min())
     return df[names]
 
 class FeatureRollingStatTS:
@@ -53,10 +53,15 @@ class FeatureRollingStatTS:
 
         if self.ts_unit == 'D':
             one_unit = timedelta(days=1)
-        intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+            intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
-        if self.ts_unit == 'D':
-            self.windows = [intervals+7, intervals+7*2, intervals * 2]
+            self.windows = [intervals+7, intervals+7*2, intervals*2]
+            self.windows = list(dict.fromkeys(self.windows))
+        if self.ts_unit == 'W':
+            one_unit = timedelta(days=7)
+            intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+            df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
+            self.windows = [intervals+3, intervals+4, intervals+5]
             self.windows = list(dict.fromkeys(self.windows))
 
     def get_ops(self):
