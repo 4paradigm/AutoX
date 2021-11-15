@@ -44,10 +44,13 @@ class XgbRegressionTs(object):
         self.log1p = log1p
         self.feature_importances_['feature'] = train[used_features].columns
         if log1p:
+            log("log1p!")
             train[target] = np.log1p(train[target])
 
         if ts_unit == 'D':
             one_unit = timedelta(days=1)
+        elif ts_unit == 'W':
+            one_unit = timedelta(days=7)
         intervals = int((pd.to_datetime(test[time_col].max()) - pd.to_datetime(test[time_col].min())) / one_unit + 1)
         split_time = pd.to_datetime(train[time_col].max()) - intervals * one_unit
         train_idx = train.loc[~(train[time_col] > str(split_time))].index
@@ -138,6 +141,7 @@ class LgbRegressionTs(object):
             log1p = False
         self.log1p = log1p
         if log1p:
+            log("log1p!")
             train[target] = np.log1p(train[target])
 
         if ts_unit == 'D':
