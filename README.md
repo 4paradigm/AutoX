@@ -18,8 +18,9 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 - [安装](#安装)
 - [架构](#架构)
 - [快速上手](#快速上手)
-- [比赛上分点总结](#比赛上分点总结)
 - [效果对比](#效果对比)
+- [加入社区](#加入社区)
+- [比赛上分点总结](#比赛上分点总结)
 
 <!-- /TOC -->
 # 安装
@@ -73,7 +74,7 @@ sub.to_csv("submission.csv", index = False)
 |binary classification | single-table |[santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | 0.89196 | 0.64643 | 0.88775 |
 |binary classification | single-table |[Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
 |binary classification | multi-table |[IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
-|binary classification | multi-table |[Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/)| auc |  |0.51006 | 0.74600 |
+|binary classification | single-table |[categorical_feature_encoding_challenge](https://www.kaggle.com/c/cat-in-the-dat/)| auc |  | 0.66070 |  |
 |regression | single-table |[ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | 0.755 | 8.434 | 4.221 |
 |regression | single-table |[Allstate Claims Severity](https://www.kaggle.com/c/allstate-claims-severity)| mae | 1137.07885 | 1173.35917 | 1163.12014 |
 |regression | single-table |[zhidemai](https://www.automl.ai/competitions/19)   | mse | 1.0034 | 1.9466 | 1.1927|
@@ -84,6 +85,11 @@ sub.to_csv("submission.csv", index = False)
 |regression-ts | single-table  |[Demand Forecasting](https://www.kaggle.com/c/demand-forecasting-kernels-only/)| smape | 13.79241 | 25.39182 | 18.89678 |
 |regression-ts | multi-table  |[Walmart Recruiting](https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/)| wmae | 4660.99174 | 5024.16179 | 5128.31622 |
 |regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.14230 | 0.20453 | 0.35757 |
+
+
+# 加入社区
+<img src="./img/qr_code.jpg" width = "500" height = "200" alt="AutoX社区" align=center />
+
 
 
 # 数据类型
