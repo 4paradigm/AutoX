@@ -88,7 +88,7 @@ sub.to_csv("submission.csv", index = False)
 
 
 # 加入社区
-<img src="./img/qr_code.jpg" width = "500" height = "500" alt="AutoX社区" align=center />
+<img src="./img/qr_code.jpg" width = "200" height = "200" alt="AutoX社区" align=center />
 
 
 
