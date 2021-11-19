@@ -29,7 +29,7 @@ class CrossXgbBiClassifier(object):
             'eta': 0.01,
             'max_depth': 5,
             'subsample': 0.6,
-            'n_estimators': 1700,
+            'n_estimators': 2500,
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
@@ -152,7 +152,7 @@ class CrossLgbBiClassifier(object):
         if params is not None:
             self.params_ = params
         self.Early_Stopping_Rounds = 150
-        self.N_round = 5000
+        self.N_round = 8000
         self.Verbose = 100
 
     def get_params(self):
