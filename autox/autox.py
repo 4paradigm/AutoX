@@ -11,7 +11,7 @@ from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
 from .process_data import feature_combination, train_test_divide, clip_label
-from .process_data import feature_filter, auto_label_encoder
+from .process_data import feature_filter, auto_encoder
 from .process_data.feature_type_recognition import Feature_type_recognition
 from .util import log, reduce_mem_usage
 from autox.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
@@ -230,7 +230,7 @@ class AutoX():
             log("ignore featureRank")
 
         # label_encoder
-        df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
+        df = auto_encoder(df, feature_type, silence_cols =id_ + [target])
 
         # 特征合并
         log("feature combination")
@@ -349,7 +349,7 @@ class AutoX():
         self.dfs_['FE_ewm'] = featureExpWeightedMean.transform(df)
 
         # label_encoder
-        df = auto_label_encoder(df, feature_type, silence_cols = id_ + [target])
+        df = auto_encoder(df, feature_type, silence_cols =id_ + [target])
 
         # 特征合并
         log("feature combination")
