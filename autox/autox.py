@@ -229,8 +229,8 @@ class AutoX():
             self.dfs_['FE_rank'] = None
             log("ignore featureRank")
 
-        # label_encoder
-        df = auto_encoder(df, feature_type, silence_cols =id_ + [target])
+        # auto_encoder
+        df = auto_encoder(df, feature_type)
 
         # 特征合并
         log("feature combination")
