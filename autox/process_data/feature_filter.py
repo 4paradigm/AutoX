@@ -12,6 +12,11 @@ def feature_filter(train, test, id_, target):
             if col not in not_used:
                 not_used += [col]
 
+        # nunique为1的特征
+        if train[col].nunique() == 1:
+            if col not in not_used:
+                not_used += [col]
+
         # test中的值都比train中的值要大(或小)的特征
         if test[col].min() > train[col].max() or test[col].max() < train[col].min():
             if col not in not_used:
