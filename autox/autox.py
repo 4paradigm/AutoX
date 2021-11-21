@@ -79,6 +79,9 @@ class AutoX():
 
             self.dfs_[left_table_name] = self.dfs_[left_table_name].merge(merge_table, left_on=left_on,
                                                                             right_on=right_on, how='left')
+            if left_on != right_on:
+                self.dfs_[left_table_name].drop(right_on, axis=1, inplace=True)
+
             del merge_table
             for key_ in self.info_['feature_type'][merge_table_name]:
                 if key_ not in skip_name:
