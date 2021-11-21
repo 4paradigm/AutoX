@@ -352,7 +352,7 @@ class AutoX():
         self.dfs_['FE_ewm'] = featureExpWeightedMean.transform(df)
 
         # label_encoder
-        df = auto_encoder(df, feature_type, silence_cols =id_ + [target])
+        df = auto_encoder(df, feature_type, id_)
 
         # 特征合并
         log("feature combination")
@@ -398,7 +398,7 @@ class AutoX():
         predict = clip_label(predict, min_, max_)
 
         # 获得结果
-        sub = test[id_]
+        sub = test[id_ + [self.info_['time_col']]]
         sub[target] = predict
         sub.index = range(len(sub))
 
