@@ -82,9 +82,10 @@ class XgbRegressionTs(object):
         gc.collect()
         X_train, y_train = train[used_features], train[target]
         X_valid, y_valid = train[used_features], train[target]
+        self.params_['n_estimators'] = int(model.get_booster().best_iteration * 1.15)
         model = xgb.XGBRegressor(**self.params_)
         model.fit(X_train, y_train,
-                  eval_set=[(X_valid, y_valid)], verbose=100, early_stopping_rounds=100)
+                  eval_set=[(X_valid, y_valid)], verbose=100)
         self.models.append(model)
         self.feature_importances_['feature_importance'] = model.feature_importances_
         if log1p:
