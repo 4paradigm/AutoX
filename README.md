@@ -52,19 +52,16 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 ```
 
 # 快速上手
-- 全自动: 适合于想要快速获得一个不错结果的用户。只需要配置最少的数据信息，就能完成机器学习全流程的构建。
-```
-from autox import AutoX
-path = data_dir
-autox = AutoX(target = 'loss', train_name = 'train.csv', test_name = 'test.csv', 
-               id = ['id'], path = path)
-sub = autox.get_submit()
-sub.to_csv("submission.csv", index = False)
-```
-- 半自动: run_demo.ipynb
-```
-适合于想要获得更优预测结果的用户。AutoX提供了易用且丰富的接口，用户可以方便地根据实际数据场景进行配置，以获得更优的预测结果。
-```
+## 单表数据集
+
+
+## 多表数据集
+
+
+## 时序数据集
+[2021阿里云供应链大赛-autox解决方案-colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
+
+
 
 # 效果对比：
 |data_type | data_name(link)  | metric | single-table or multi-table | AutoX         | AutoGluon   | H2o |
