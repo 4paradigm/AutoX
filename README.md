@@ -53,6 +53,7 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 
 # 快速上手
 ## 单表数据集
+[Kaggle_Santander-autox解决方案-colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
 
 
 ## 多表数据集
