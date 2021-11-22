@@ -10,6 +10,24 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 - 灵活性: 各组件解耦合，能单独使用，对于自动机器学习效果不满意的地方，可以结合专家知识，AutoX提供灵活的接口。
 - 比赛上分点总结：整理并公开历史比赛的上分点。
 
+# 快速上手
+## 单表数据集
+Kaggle_Santander
+- [colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
+- [kaggle-kernel](https://www.kaggle.com/poteman/autox-tutorial-santander/)
+
+2021神州信息极客大赛-贷款反欺诈
+- [datafountain notebook](https://work.datafountain.cn/forum?type=3&id=5843)
+
+
+## 多表数据集
+
+
+## 时序数据集
+2021阿里云供应链大赛
+- [colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
+
+
 # 目录
 <!-- TOC -->
 
@@ -50,18 +68,6 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 ├── setup.py
 ├── README.md
 ```
-
-# 快速上手
-## 单表数据集
-[Kaggle_Santander-autox解决方案-colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
-
-
-## 多表数据集
-
-
-## 时序数据集
-[2021阿里云供应链大赛-autox解决方案-colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
-
 
 
 # 效果对比：
