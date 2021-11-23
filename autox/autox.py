@@ -233,7 +233,7 @@ class AutoX():
             log("ignore featureRank")
 
         # auto_encoder
-        df = auto_encoder(df, feature_type)
+        df = auto_encoder(df, feature_type, id_)
 
         # 特征合并
         log("feature combination")

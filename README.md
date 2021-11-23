@@ -26,7 +26,7 @@ Kaggle_Santander
 ## 时序数据集
 2021阿里云供应链大赛
 - [colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
-
+- [阿里天池-两行代码解决供应链预测问题](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b172672PZvjjb&postId=306418)
 
 # 目录
 <!-- TOC -->

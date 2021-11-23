@@ -3,7 +3,7 @@ from tqdm import tqdm
 from ..util import log
 from sklearn.preprocessing import OrdinalEncoder
 
-def auto_encoder(df, df_feature_type, id = None):
+def auto_encoder(df, df_feature_type, id):
     df_copy = df.copy()
     label_encoder_list = []
     ordinal_encoder_list = []
