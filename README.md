@@ -12,19 +12,23 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 
 # 快速上手
 ## 单表数据集
-Kaggle_Santander
+Kaggle_Santander-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
 - [kaggle-kernel](https://www.kaggle.com/poteman/autox-tutorial-santander/)
 
-2021神州信息极客大赛-贷款反欺诈
+2021神州信息极客大赛-贷款反欺诈-AutoX解决方案:
 - [datafountain notebook](https://work.datafountain.cn/forum?type=3&id=5843)
+
+DC租金预测-AutoX解决方案:
+- [colab](https://colab.research.google.com/drive/1SxK_-_6oAE8OzDitXCy2JM29F9UE0Ujj?usp=sharing)
+- [DClab](https://www.dclab.run/project_content.html?type=myproject&id=5393)
 
 
 ## 多表数据集
 
 
 ## 时序数据集
-2021阿里云供应链大赛
+2021阿里云供应链大赛-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
 - [阿里天池-两行代码解决供应链预测问题](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b172672PZvjjb&postId=306418)
 
