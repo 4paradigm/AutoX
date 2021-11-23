@@ -19,6 +19,9 @@ Kaggle_Santander
 2021神州信息极客大赛-贷款反欺诈
 - [datafountain notebook](https://work.datafountain.cn/forum?type=3&id=5843)
 
+DC租金预测
+- [colab](https://colab.research.google.com/drive/1SxK_-_6oAE8OzDitXCy2JM29F9UE0Ujj?usp=sharing)
+- [DClab](https://www.dclab.run/project_content.html?type=myproject&id=5393)
 
 ## 多表数据集
 
