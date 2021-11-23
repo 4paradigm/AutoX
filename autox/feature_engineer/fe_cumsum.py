@@ -2,6 +2,8 @@ import pandas as pd
 from ..CONST import FEATURE_TYPE
 from autox.process_data import Feature_type_recognition
 from tqdm import tqdm
+import numpy as np
+from ..util import log
 
 class FeatureCumsum:
     def __init__(self):
@@ -69,6 +71,11 @@ class FeatureCumsum:
                 else:
                     name = f'{group_col}__{agg_col}__cumsum'
                 result[name] = cumsum_value
+
+        del_cols = list((result == np.inf).sum().index)
+        result.drop(del_cols, axis=1, inplace=True)
+        log(f"this cols with inf data, del them: {del_cols}")
+
         return result
 
     def fit_transform(self, df, target=None, df_feature_type=None, silence_group_cols=[], silence_agg_cols=None,
