@@ -44,14 +44,12 @@ class FeatureShiftTS:
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3, intervals + 7,
                              intervals + 7 * 2, intervals + 7 * 3, intervals + 30, intervals * 2, intervals * 3]
-            self.lags = list(dict.fromkeys(self.lags))
 
         if self.ts_unit == 'W':
             one_unit = timedelta(days=7)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
-            self.lags = list(dict.fromkeys(self.lags))
 
 
     def get_ops(self):

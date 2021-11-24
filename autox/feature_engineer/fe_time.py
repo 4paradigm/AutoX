@@ -44,7 +44,7 @@ class FeatureTime:
             df_copy[prefix + 'hour'] = df_copy[col].dt.hour
             df_copy[prefix + 'weekofyear'] = df_copy[col].dt.weekofyear
             df_copy[prefix + 'dayofweek'] = df_copy[col].dt.dayofweek
-            df_copy[prefix + 'is_wknd'] = df_copy[col].dt.dayofweek // 4
+            df_copy[prefix + 'is_wknd'] = df_copy[col].dt.dayofweek // 5
             df_copy[prefix + 'quarter'] = df_copy[col].dt.quarter
             df_copy[prefix + 'is_month_start'] = df_copy[col].dt.is_month_start.astype(int)
             df_copy[prefix + 'is_month_end'] = df_copy[col].dt.is_month_end.astype(int)
