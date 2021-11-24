@@ -96,7 +96,7 @@ DC租金预测-AutoX解决方案:
 
 
 # 加入社区
-<img src="./img/qr_code.jpg" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_1202.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 
 
