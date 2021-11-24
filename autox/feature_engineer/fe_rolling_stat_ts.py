@@ -10,19 +10,19 @@ def roll_mean_features(df, windows, val, keys, op):
         names.append(name)
         if op == 'mean':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=3, win_type="triang").mean())
+                lambda x: x.rolling(window=window, min_periods=3, win_type="triang").mean())
         if op == 'std':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=3).std())
+                lambda x: x.rolling(window=window, min_periods=3).std())
         if op == 'median':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=3).median())
+                lambda x: x.rolling(window=window, min_periods=3).median())
         if op == 'max':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=3).max())
+                lambda x: x.rolling(window=window, min_periods=3).max())
         if op == 'min':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.shift(1).rolling(window=window, min_periods=3).min())
+                lambda x: x.rolling(window=window, min_periods=3).min())
     return df[names]
 
 class FeatureRollingStatTS:
