@@ -25,6 +25,25 @@ def log(entry, level='info'):
 
     getattr(LOGGER, level)(f"{space} {entry}")
 
+
+def weighted_mae_lgb(preds, train_data, weight=10.0):
+    labels = train_data.get_label()
+
+    masks_small = (preds - labels) < 0
+    masks_big = (preds - labels) >= 0
+
+    loss = np.mean(abs(preds - labels) * masks_small * weight + abs(preds - labels) * masks_big)
+    return 'weighted_mae', loss, False
+
+def weighted_mae_xgb(preds, train_data, weight=10.0):
+    labels = train_data.get_label()
+
+    masks_small = (preds - labels) < 0
+    masks_big = (preds - labels) >= 0
+
+    loss = np.mean(abs(preds - labels) * masks_small * weight + abs(preds - labels) * masks_big)
+    return 'weighted_mae', loss
+
 def reduce_mem_usage(df):
     """ iterate through all the columns of a dataframe and modify the data type
         to reduce memory usage.

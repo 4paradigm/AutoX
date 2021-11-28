@@ -31,6 +31,8 @@ DC租金预测-AutoX解决方案:
 2021阿里云供应链大赛-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
 - [阿里天池-两行代码解决供应链预测问题](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b172672PZvjjb&postId=306418)
+- [阿里供应链预测-时序预测问题常用特征](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b17698aXo3jYP&postId=308014)
+
 
 # 目录
 <!-- TOC -->

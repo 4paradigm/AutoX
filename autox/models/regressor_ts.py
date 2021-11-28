@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
-from ..util import log
+from ..util import log, weighted_mae_lgb, weighted_mae_xgb
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 from datetime import timedelta
 import gc
@@ -37,7 +37,8 @@ class XgbRegressionTs(object):
     def set_params(self, params):
         self.params_ = params
 
-    def fit(self, train, test, used_features, target, time_col, ts_unit, log1p=True):
+    def fit(self, train, test, used_features, target, time_col, ts_unit, log1p=True, custom_metric=None,
+            weight_for_mae=10):
         log(train[used_features].shape)
         if train[target].min() < 0:
             log1p = False
@@ -62,8 +63,13 @@ class XgbRegressionTs(object):
         X_train, y_train = train.iloc[train_idx][used_features], train.iloc[train_idx][target]
         X_valid, y_valid = train.iloc[valid_idx][used_features], train.iloc[valid_idx][target]
         model = xgb.XGBRegressor(**self.params_)
-        model.fit(X_train, y_train,
-                  eval_set=[(X_valid, y_valid)], verbose=100, early_stopping_rounds=100)
+        if custom_metric == 'weighted_mae':
+            model.fit(X_train, y_train,
+                      eval_set=[(X_valid, y_valid)], verbose=100, early_stopping_rounds=100,
+                      eval_metric=weighted_mae_xgb(weight=weight_for_mae))
+        else:
+            model.fit(X_train, y_train,
+                      eval_set=[(X_valid, y_valid)], verbose=100, early_stopping_rounds=100)
 
         val = model.predict(train.iloc[valid_idx][used_features])
         if log1p:
@@ -136,7 +142,8 @@ class LgbRegressionTs(object):
     def set_params(self, params):
         self.params_ = params
 
-    def fit(self, train, test, used_features, target, time_col, ts_unit, Early_Stopping_Rounds=None, N_round=None, Verbose=None, log1p=True):
+    def fit(self, train, test, used_features, target, time_col, ts_unit, Early_Stopping_Rounds=None, N_round=None,
+            Verbose=None, log1p=True, custom_metric=None, weight_for_mae=10):
         log(train[used_features].shape)
         if train[target].min() < 0:
             log1p = False
@@ -171,9 +178,15 @@ class LgbRegressionTs(object):
         val_data = lgb.Dataset(train.iloc[valid_idx][used_features], label=train.iloc[valid_idx][target],
                                categorical_feature='')
 
-        model = lgb.train(self.params_, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data, val_data],
-                        verbose_eval=self.Verbose,
-                        early_stopping_rounds=self.Early_Stopping_Rounds)
+        if custom_metric=='weighted_mae':
+            model = lgb.train(self.params_, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data, val_data],
+                              verbose_eval=self.Verbose,
+                              early_stopping_rounds=self.Early_Stopping_Rounds,
+                              feval=weighted_mae_lgb(weight=weight_for_mae))
+        else:
+            model = lgb.train(self.params_, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data, val_data],
+                            verbose_eval=self.Verbose,
+                            early_stopping_rounds=self.Early_Stopping_Rounds)
         val = model.predict(train.iloc[valid_idx][used_features])
         if log1p:
             mse_ = mean_squared_error(np.expm1(train.iloc[valid_idx][target]), np.expm1(val))
