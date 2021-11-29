@@ -11,7 +11,7 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 - 比赛上分点总结：整理并公开历史比赛的上分点。
 
 # 快速上手
-## 单表数据集
+## 二分类问题
 Kaggle_Santander-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
 - [kaggle-kernel](https://www.kaggle.com/poteman/autox-tutorial-santander/)
@@ -19,19 +19,20 @@ Kaggle_Santander-AutoX解决方案:
 2021神州信息极客大赛-贷款反欺诈-AutoX解决方案:
 - [datafountain notebook](https://work.datafountain.cn/forum?type=3&id=5843)
 
+## 回归问题
 DC租金预测-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1SxK_-_6oAE8OzDitXCy2JM29F9UE0Ujj?usp=sharing)
 - [DClab](https://www.dclab.run/project_content.html?type=myproject&id=5393)
 
-
-## 多表数据集
-
-
-## 时序数据集
+## 时序预测问题(多表)
 2021阿里云供应链大赛-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1cw5ynTPqc5RWbVjQdvbnDHkq_1rTlxqe?usp=sharing)
 - [阿里天池-两行代码解决供应链预测问题](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b172672PZvjjb&postId=306418)
 - [阿里供应链预测-时序预测问题常用特征](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.3.6b17698aXo3jYP&postId=308014)
+
+## 表格数据集中包含图片数据
+kaggle petfinder-AutoX解决方案:
+- [automl for petfinder:预测宠物照片的流行度](https://www.kaggle.com/poteman/automl-for-petfinder-autox/settings?scriptVersionId=81061841)
 
 
 # 目录
