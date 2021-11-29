@@ -38,8 +38,8 @@ class AutoX():
         self.info_['image_info'] = image_info
         self.dfs_ = read_data_from_path(path)
         if image_info:
-            assert('img_path' in image_info.keys())
-            assert('img_col' in image_info.keys())
+            assert('image_path' in image_info.keys())
+            assert('image_col' in image_info.keys())
             assert('filename_extension' in image_info.keys())
         if time_series:
             assert(ts_unit is not None)
@@ -243,7 +243,7 @@ class AutoX():
         # image特征
         if self.info_['image_info']:
             self.dfs_['FE_image'] = fe_ima2vec(df, self.info_['image_info']['image_path'],
-                                               self.info_['image_info']['img_col'],
+                                               self.info_['image_info']['image_col'],
                                                self.info_['image_info']['filename_extension'])
         else:
             self.dfs_['FE_image'] = None
@@ -254,7 +254,9 @@ class AutoX():
 
         # 特征合并
         log("feature combination")
-        df_list = [df, self.dfs_['FE_nlp'], self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank'], self.dfs_['FE_shift'], self.dfs_['FE_diff'], self.dfs_['FE_cumsum'], self.dfs_['FE_One2M']]
+        df_list = [df, self.dfs_['FE_nlp'], self.dfs_['FE_count'], self.dfs_['FE_stat'], self.dfs_['FE_rank'], 
+                   self.dfs_['FE_shift'], self.dfs_['FE_diff'], self.dfs_['FE_cumsum'], self.dfs_['FE_One2M'], 
+                   self.dfs_['FE_image']]
         self.dfs_['FE_all'] = feature_combination(df_list)
 
         # # 内存优化
