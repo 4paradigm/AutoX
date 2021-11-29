@@ -16,7 +16,8 @@ setup(name="autox",
             'pandas',
             'sklearn',
             'tqdm',
-            'optuna'
+            'optuna',
+            'img2vec_pytorch'
         ],
         python_requires='>=3.6',
         # packages=[],
