@@ -32,7 +32,7 @@ DC租金预测-AutoX解决方案:
 
 ## 表格数据集中包含图片数据
 kaggle petfinder-AutoX解决方案:
-- [automl for petfinder:预测宠物照片的流行度](https://www.kaggle.com/poteman/automl-for-petfinder-autox/settings?scriptVersionId=81061841)
+- [automl for petfinder:预测宠物照片的流行度](https://www.kaggle.com/poteman/automl-for-petfinder-autox?scriptVersionId=81076747)
 
 
 # 目录
