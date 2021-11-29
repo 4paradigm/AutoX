@@ -13,3 +13,4 @@ from .fe_one2M import FeatureOne2M
 from .fe_shift_ts import FeatureShiftTS
 from .fe_rolling_stat_ts import FeatureRollingStatTS
 from .fe_exp_weighted_mean import FeatureExpWeightedMean
+from .fe_image2vec import fe_ima2vec

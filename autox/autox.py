@@ -7,6 +7,7 @@ from .feature_engineer.fe_cumsum import FeatureCumsum
 from .feature_engineer.fe_shift import FeatureShift
 from .feature_engineer.fe_diff import FeatureDiff
 from .feature_engineer.fe_one2M import FeatureOne2M
+from .feature_engineer import fe_ima2vec
 from .file_io.read_data import read_data_from_path
 from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
 from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
@@ -18,7 +19,9 @@ from autox.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, Feature
 from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 
 class AutoX():
-    def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None, metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression', Debug = False):
+    def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None,
+                 metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression',
+                 Debug = False, image_info={}):
         self.Debug = Debug
         self.info_ = {}
         self.info_['id'] = id
@@ -32,7 +35,12 @@ class AutoX():
         self.info_['time_series'] = time_series
         self.info_['ts_unit'] = ts_unit
         self.info_['time_col'] = time_col
+        self.info_['image_info'] = image_info
         self.dfs_ = read_data_from_path(path)
+        if image_info:
+            assert('img_path' in image_info.keys())
+            assert('img_col' in image_info.keys())
+            assert('filename_extension' in image_info.keys())
         if time_series:
             assert(ts_unit is not None)
             assert(time_col is not None)
@@ -231,6 +239,15 @@ class AutoX():
         else:
             self.dfs_['FE_rank'] = None
             log("ignore featureRank")
+
+        # image特征
+        if self.info_['image_info']:
+            self.dfs_['FE_image'] = fe_ima2vec(df, self.info_['image_info']['image_path'],
+                                               self.info_['image_info']['img_col'],
+                                               self.info_['image_info']['filename_extension'])
+        else:
+            self.dfs_['FE_image'] = None
+            log("ignore image feature")
 
         # auto_encoder
         df = auto_encoder(df, feature_type, id_)
