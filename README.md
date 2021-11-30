@@ -45,6 +45,7 @@ kaggle petfinder-AutoX解决方案:
 - [快速上手](#快速上手)
 - [效果对比](#效果对比)
 - [加入社区](#加入社区)
+- [TODO](#TODO)
 - [比赛上分点总结](#比赛上分点总结)
 
 <!-- /TOC -->
@@ -101,7 +102,16 @@ kaggle petfinder-AutoX解决方案:
 # 加入社区
 <img src="./img/qr_code_1202.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
+# TODO
+功能开发完成后，发布相应的使用demo
+- [ ] 多个label预测
+- [ ] 多分类任务
+- [ ] 环境制作: docker, pip等
+- [ ] 保存模型，支持inference上线
+- [ ] 提供特征重要性接口，返回构造好的特征，以及构造该特征的方法
+- [ ] 支持导出特征工程的结果，用户使用自定义模型进一步训练
 
+若有其他希望AutoX支持的功能，欢迎提issue!
 
 # 数据类型
 - cat: Categorical，类别型无序变量
