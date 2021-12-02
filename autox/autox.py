@@ -114,6 +114,37 @@ class AutoX():
         self.dfs_['FE_test'] = self.dfs_['FE_all'][self.info_['shape_of_train']:]
 
     def get_submit(self):
+        self.topk_feas = self.get_top_features(return_df = False)
+
+        # 模型训练
+        log("start training xgboost model")
+        if self.info_['task_type'] == 'regression':
+            self.model_xgb = CrossXgbRegression(metric=self.info_['metric'])
+            self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
+
+        elif self.info_['task_type'] == 'binary':
+            self.model_xgb = CrossXgbBiClassifier()
+            self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
+
+        # 模型预测
+        predict_lgb = self.model_lgb.predict(self.test[self.used_features])
+        predict_xgb = self.model_xgb.predict(self.test[self.used_features])
+        # predict_tabnet = model_tabnet.predict(test[used_features])
+        predict = (predict_xgb + predict_lgb) / 2
+
+        # 预测结果后处理
+        min_ = self.info_['min_target']
+        max_ = self.info_['max_target']
+        predict = clip_label(predict, min_, max_)
+
+        # 获得结果
+        sub = self.test[self.info_['id']]
+        sub[self.info_['target']] = predict
+        sub.index = range(len(sub))
+
+        return sub
+
+    def get_top_features(self, topk = 50, return_df = True):
 
         id_ = self.info_['id']
         target = self.info_['target']
@@ -157,7 +188,6 @@ class AutoX():
         else:
             self.dfs_['FE_cumsum'] = None
             log("ignore featureCumsum")
-
 
         # shift特征
         log("feature engineer: Shift")
@@ -264,44 +294,48 @@ class AutoX():
 
         # train和test数据切分
         train_length = self.info_['shape_of_train']
-        train, test = train_test_divide(self.dfs_['FE_all'], train_length)
-        log(f"shape of FE_all: {self.dfs_['FE_all'].shape}, shape of train: {train.shape}, shape of test: {test.shape}")
+        self.train, self.test = train_test_divide(self.dfs_['FE_all'], train_length)
+        log(f"shape of FE_all: {self.dfs_['FE_all'].shape}, shape of train: {self.train.shape}, shape of test: {self.test.shape}")
 
         # 特征过滤
         log("feature filter")
-        used_features = feature_filter(train, test, id_, target)
-        log(f"used_features: {used_features}")
+        self.used_features = feature_filter(self.train, self.test, id_, target)
+        log(f"used_features: {self.used_features}")
 
         # 模型训练
-        log("start training model")
+        log("start training lightgbm model")
         if self.info_['task_type'] == 'regression':
-            model_lgb = CrossLgbRegression(metric=self.info_['metric'])
-            model_lgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
-
-            model_xgb = CrossXgbRegression(metric=self.info_['metric'])
-            model_xgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
-
-            # model_tabnet = CrossTabnetRegression()
-            # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            self.model_lgb = CrossLgbRegression(metric=self.info_['metric'])
+            self.model_lgb.fit(self.train[self.used_features], self.train[target], tuning=False, Debug=self.Debug)
 
         elif self.info_['task_type'] == 'binary':
-            model_lgb = CrossLgbBiClassifier()
-            model_lgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
-
-            model_xgb = CrossXgbBiClassifier()
-            model_xgb.fit(train[used_features], train[target], tuning=False, Debug=self.Debug)
-
-            # model_tabnet = CrossTabnetBiClassifier()
-            # model_tabnet.fit(train[used_features], train[target], tuning=True, Debug=self.Debug)
+            self.model_lgb = CrossLgbBiClassifier()
+            self.model_lgb.fit(self.train[self.used_features], self.train[target], tuning=False, Debug=self.Debug)
 
         # 特征重要性
-        fimp = model_lgb.feature_importances_
+        fimp = self.model_lgb.feature_importances_
         log("feature importance")
         log(fimp)
 
+        topk_feas = [x for x in list(fimp['feature']) if x not in df.columns][:topk]
+        if return_df:
+            return topk_feas, self.train[id_ + topk_feas], self.test[id_ + topk_feas]
+        else:
+            return topk_feas
+
+    def get_submit_ts(self):
+
+        self.topk_feas = self.get_top_features_ts(return_df=False)
+
+        # 模型训练
+        log("start training xgboost model")
+        if self.info_['task_type'] == 'regression':
+            self.model_xgb = XgbRegressionTs()
+            self.model_xgb.fit(self.train, self.test, self.used_features, self.info_['target'], self.info_['time_col'], self.info_['ts_unit'])
+
         # 模型预测
-        predict_lgb = model_lgb.predict(test[used_features])
-        predict_xgb = model_xgb.predict(test[used_features])
+        predict_lgb = self.model_lgb.predict(self.test, self.used_features)
+        predict_xgb = self.model_xgb.predict(self.test, self.used_features)
         # predict_tabnet = model_tabnet.predict(test[used_features])
         predict = (predict_xgb + predict_lgb) / 2
 
@@ -311,13 +345,14 @@ class AutoX():
         predict = clip_label(predict, min_, max_)
 
         # 获得结果
-        sub = test[id_]
-        sub[target] = predict
+        sub = self.test[self.info_['id'] + [self.info_['time_col']]]
+        sub[self.info_['target']] = predict
         sub.index = range(len(sub))
 
         return sub
 
-    def get_submit_ts(self):
+
+    def get_top_features_ts(self, topk = 50, return_df = True):
 
         id_ = self.info_['id']
         target = self.info_['target']
@@ -383,42 +418,27 @@ class AutoX():
 
         # train和test数据切分
         train_length = self.info_['shape_of_train']
-        train, test = train_test_divide(self.dfs_['FE_all'], train_length)
-        log(f"shape of FE_all: {self.dfs_['FE_all'].shape}, shape of train: {train.shape}, shape of test: {test.shape}")
+        self.train, self.test = train_test_divide(self.dfs_['FE_all'], train_length)
+        log(f"shape of FE_all: {self.dfs_['FE_all'].shape}, shape of train: {self.train.shape}, shape of test: {self.test.shape}")
 
         # 特征过滤
         log("feature filter")
-        used_features = feature_filter(train, test, id_, target)
-        log(f"used_features: {used_features}")
+        self.used_features = feature_filter(self.train, self.test, id_, target)
+        log(f"used_features: {self.used_features}")
 
         # 模型训练
-        log("start training model")
+        log("start training lightgbm model")
         if self.info_['task_type'] == 'regression':
-            model_lgb = LgbRegressionTs()
-            model_lgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
-
-            model_xgb = XgbRegressionTs()
-            model_xgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
+            self.model_lgb = LgbRegressionTs()
+            self.model_lgb.fit(self.train, self.test, self.used_features, target, self.info_['time_col'], self.info_['ts_unit'])
 
         # 特征重要性
-        fimp = model_lgb.feature_importances_
+        fimp = self.model_lgb.feature_importances_
         log("feature importance")
         log(fimp)
 
-        # 模型预测
-        predict_lgb = model_lgb.predict(test, used_features)
-        predict_xgb = model_xgb.predict(test, used_features)
-        # predict_tabnet = model_tabnet.predict(test[used_features])
-        predict = (predict_xgb + predict_lgb) / 2
-
-        # 预测结果后处理
-        min_ = self.info_['min_target']
-        max_ = self.info_['max_target']
-        predict = clip_label(predict, min_, max_)
-
-        # 获得结果
-        sub = test[id_ + [self.info_['time_col']]]
-        sub[target] = predict
-        sub.index = range(len(sub))
-
-        return sub
+        topk_feas = [x for x in list(fimp['feature']) if x not in df.columns][:topk]
+        if return_df:
+            return topk_feas, self.train[id_ + topk_feas], self.test[id_ + topk_feas]
+        else:
+            return topk_feas
