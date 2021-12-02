@@ -96,11 +96,11 @@ kaggle petfinder-AutoX解决方案:
 |regression | multi-table  |[Elo Merchant Category Recommendation](https://www.kaggle.com/c/elo-merchant-category-recommendation/)| rmse | 3.72228 | 3.80801 | 22.88899 |
 |regression-ts | single-table  |[Demand Forecasting](https://www.kaggle.com/c/demand-forecasting-kernels-only/)| smape | 13.79241 | 25.39182 | 18.89678 |
 |regression-ts | multi-table  |[Walmart Recruiting](https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/)| wmae | 4660.99174 | 5024.16179 | 5128.31622 |
-|regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.14230 | 0.20453 | 0.35757 |
+|regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.13850 | 0.20453 | 0.35757 |
 
 
 # 加入社区
-<img src="./img/qr_code_1202.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_1203.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # TODO
 功能开发完成后，发布相应的使用demo
