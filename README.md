@@ -132,6 +132,7 @@ kaggle-Allstate获取topk重要的特征:
 - [ ] 支持导出特征工程的结果，用户使用自定义模型进一步训练
 
 若有其他希望AutoX支持的功能，欢迎提issue!
+欢迎填写[用户调研问卷](https://www.wjx.cn/vj/YOwSFHN.aspx)，让AutoX变得更好!
 
 # 数据类型
 - cat: Categorical，类别型无序变量
