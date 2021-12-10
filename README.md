@@ -120,7 +120,7 @@ kaggle-Allstate获取topk重要的特征:
 
 
 # 加入社区
-<img src="./img/qr_code_1203.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_1217.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # TODO
 功能开发完成后，发布相应的使用demo
