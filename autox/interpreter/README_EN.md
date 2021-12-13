@@ -2,21 +2,17 @@ English | [简体中文](./README.md)
 
 # interpretable-ml
 AutoX covers following interpretable machine learning methods:
-Golbel interpretation
-- tree-based model
+### Golbel interpretation
+- [tree-based model](./global_interpretation/global_surrogate_tree_demo.ipynb)
 
-Local interpretation
-- LIME
-- SHAP
+### Local interpretation
+- [LIME](./local_interpretation/lime_demo.ipynb)
+- [SHAP](./local_interpretation/shap_demo.ipynb)
 
-Feature importance of model
-- Lightgbm
-- LR
+### Influential interpretation
+- [nn](./influential_instances/influential_interpretation_nn.ipynb)
+- [nn_sgd](./influential_instances/influential_interpretation_nn_sgd.ipynb)
 
-Influential interpretation
-- nn
-- nn_sgd
-
-Prototypes and Criticisms
+### Prototypes and Criticisms
 - [MMD-critic](./prototypes_and_criticisms/mmd/MMD_demo.ipynb)
 - [ProtoDash algorithm](prototypes_and_criticisms/Protodash/ProtodashExplainer.ipynb)

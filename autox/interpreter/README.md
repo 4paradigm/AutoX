@@ -2,21 +2,17 @@
 
 # 模型可解释
 AutoX内置的模型可解释功能包括:
-全局代理模型
-- 树模型
+### 全局代理模型
+- [树模型](./global_interpretation/global_surrogate_tree_demo.ipynb)
 
-局部代理模型
-- LIME
-- SHAP
+### 局部代理模型
+- [LIME](./local_interpretation/lime_demo.ipynb)
+- [SHAP](./local_interpretation/shap_demo.ipynb)
 
-模型特征重要性排序
-- Lightgbm模型
-- LR模型
+### 影响力样本
+- [nn](./influential_instances/influential_interpretation_nn.ipynb)
+- [nn_sgd](./influential_instances/influential_interpretation_nn_sgd.ipynb)
 
-影响力样本
-- nn
-- nn_sgd
-
-代表性样本和非代表性样本
+### 代表性样本和非代表性样本
 - [MMD-critic](./prototypes_and_criticisms/mmd/MMD_demo.ipynb)
 - [ProtoDash algorithm](./prototypes_and_criticisms/Protodash/ProtodashExplainer.ipynb)

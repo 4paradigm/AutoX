@@ -1,0 +1,21 @@
+{
+    "entity_name" : "adult",
+    "label" : "income",
+    "task_type" : "binary",
+    "features" :
+        [{"name": "age", "type": "Numeric"},
+        {"name": "workclass", "type": "Category"},
+        {"name": "fnlwgt", "type": "Numeric"},
+        {"name": "education", "type": "Category"},
+        {"name": "education-num", "type": "Numeric"},
+        {"name": "marital-status", "type": "Category"},
+        {"name": "occupation", "type": "Category"},
+        {"name": "relationship", "type": "Category"},
+        {"name": "race", "type": "Category"},
+        {"name": "sex", "type": "Category"},
+        {"name": "capital-gain", "type": "Numeric"},
+        {"name": "capital-loss", "type": "Numeric"},
+        {"name": "hours-per-week", "type": "Numeric"},
+        {"name": "native-country", "type": "Category"},
+        {"name": "income", "type": "Category"}]
+}
