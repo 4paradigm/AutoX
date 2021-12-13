@@ -1,6 +1,6 @@
 from pathlib import Path
 import torch
-from kernels import rbf_kernel, local_rbf_kernel, change_gamma
+from .kernels import rbf_kernel, local_rbf_kernel, change_gamma
 
 
 class Dataset:

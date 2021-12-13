@@ -14,5 +14,5 @@ AutoX covers following interpretable machine learning methods:
 - [nn_sgd](interpreter_demo/influential_instances/influential_interpretation_nn_sgd.ipynb)
 
 ### Prototypes and Criticisms
-- [MMD-critic](interpreter_demo/prototypes_and_criticisms/mmd/MMD_demo.ipynb)
-- [ProtoDash algorithm](interpreter_demo/prototypes_and_criticisms/Protodash/ProtodashExplainer.ipynb)
+- [MMD-critic](interpreter_demo/prototypes_and_criticisms/MMD_demo.ipynb)
+- [ProtoDash algorithm](interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)

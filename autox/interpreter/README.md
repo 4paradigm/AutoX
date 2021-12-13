@@ -14,5 +14,5 @@ AutoX内置的模型可解释功能包括:
 - [nn_sgd](interpreter_demo/influential_instances/influential_interpretation_nn_sgd.ipynb)
 
 ### 代表性样本和非代表性样本
-- [MMD-critic](interpreter_demo/prototypes_and_criticisms/mmd/MMD_demo.ipynb)
-- [ProtoDash algorithm](interpreter_demo/prototypes_and_criticisms/Protodash/ProtodashExplainer.ipynb)
+- [MMD-critic](interpreter_demo/prototypes_and_criticisms/MMD_demo.ipynb)
+- [ProtoDash algorithm](interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)
