@@ -19,4 +19,4 @@ Influential interpretation
 
 Prototypes and Criticisms
 - [MMD-critic](./prototypes_and_criticisms/mmd/MMD_demo.ipynb)
-- [ProtoDash algorithm](./prototypes_and_criticisms/Protodash/ProtodashExplainer_for__prototypes.ipynb)
+- [ProtoDash algorithm](prototypes_and_criticisms/Protodash/ProtodashExplainer.ipynb)
