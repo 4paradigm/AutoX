@@ -52,6 +52,22 @@ autox.get_top_features_ts  # 时间序列数据集
 kaggle-Allstate获取topk重要的特征:
 - [autox_get_top_features_Allstate](https://www.kaggle.com/poteman/autox-get-top-features-allstate?scriptVersionId=81484541)
 
+## 模型可解释Demo
+AutoX内置的模型可解释功能包括:
+### 全局代理模型
+- [树模型](autox/interpreter/interpreter_demo/global_interpretation/global_surrogate_tree_demo.ipynb)
+
+### 局部代理模型
+- [LIME](autox/interpreter/interpreter_demo/local_interpretation/lime_demo.ipynb)
+- [SHAP](autox/interpreter/interpreter_demo/local_interpretation/shap_demo.ipynb)
+
+### 影响力样本
+- [nn](autox/interpreter/interpreter_demo/influential_instances/influential_interpretation_nn.ipynb)
+- [nn_sgd](autox/interpreter/interpreter_demo/influential_instances/influential_interpretation_nn_sgd.ipynb)
+
+### 代表性样本和非代表性样本
+- [MMD-critic](autox/interpreter/interpreter_demo/prototypes_and_criticisms/MMD_demo.ipynb)
+- [ProtoDash algorithm](autox/interpreter/interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)
 
 
 
