@@ -18,5 +18,5 @@ AutoX内置的模型可解释功能包括:
 - nn_sgd
 
 代表性样本和非代表性样本
-- MMD-critic
+- [MMD-critic](./prototypes_and_criticisms/mmd/MMD_demo.ipynb)
 - ProtoDash algorithm(基于模型的方法)
