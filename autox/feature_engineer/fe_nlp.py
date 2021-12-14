@@ -51,7 +51,7 @@ class FeatureNlp:
                                     analyzer='word', token_pattern=r'\w{1,}', ngram_range=(1, 1), use_idf=1,
                                     smooth_idf=1,
                                     sublinear_tf=1)
-            X_tfidf = tfidfVectorizer.fit_transform(df[col])
+            X_tfidf = tfidfVectorizer.fit_transform(df[col].astype(str))
             shape_of_train = df[df[self.target].notnull()].shape[0]
             shape_of_test = df[df[self.target].isnull()].shape[0]
             train = X_tfidf[:shape_of_train]
