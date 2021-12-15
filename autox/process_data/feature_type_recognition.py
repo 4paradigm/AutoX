@@ -33,7 +33,7 @@ def get_data_type(df, col):
     if detect_TIMESTAMP(df, col):
         return FEATURE_TYPE['timestamp']
     if df[col].dtypes == object or df[col].dtypes == bool or str(df[col].dtypes) == 'category':
-        if df[col].fillna(df[col].mode()).apply(lambda x: len(str(x))).astype('float').mean() > 100:
+        if df[col].fillna(df[col].mode()).apply(lambda x: len(str(x))).astype('float').mean() > 25:
             return FEATURE_TYPE['txt']
         return FEATURE_TYPE['cat']
     if 'int' in str(df[col].dtype) or 'float' in str(df[col].dtype):
