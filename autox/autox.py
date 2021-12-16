@@ -21,7 +21,7 @@ from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 class AutoX():
     def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None,
                  metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression',
-                 Debug = False, image_info={}):
+                 Debug = False, image_info={}, target_map={}):
         self.Debug = Debug
         self.info_ = {}
         self.info_['id'] = id
@@ -36,7 +36,8 @@ class AutoX():
         self.info_['ts_unit'] = ts_unit
         self.info_['time_col'] = time_col
         self.info_['image_info'] = image_info
-        self.dfs_ = read_data_from_path(path)
+        self.info_['target_map'] = target_map
+        self.dfs_ = read_data_from_path(path, train_name=train_name, target=target, target_map=target_map)
         if image_info:
             assert('image_path' in image_info.keys())
             assert('image_col' in image_info.keys())
