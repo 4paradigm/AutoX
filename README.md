@@ -16,7 +16,7 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 autox.get_submit  # 回归或分类问题
 autox.get_submit_ts  # 时间序列数据集
 ```
-## Demo
+## Demo(按数据类型划分)
 #### 二分类问题
 Kaggle_Santander-AutoX解决方案:
 - [colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
@@ -41,12 +41,22 @@ kaggle petfinder-AutoX解决方案:
 - [automl for petfinder:预测宠物照片的流行度](https://www.kaggle.com/poteman/automl-for-petfinder-autox?scriptVersionId=81076747)
 
 
+## Demo(按使用场景划分)
+#### 营销场景
+[预测银行客户是否会认购定期存款](https://www.kaggle.com/poteman/automl-for-bank-autox)
+#### 风控场景
+[贷款违约预测](https://www.kaggle.com/poteman/automl-for-loan-autox/)
+#### 推荐场景
+[预测移动端的广告是否会被点击](https://www.kaggle.com/poteman/automl-for-avazu-autox)
+
+
+
 ## 使用以下函数一键获取topk重要特征:
 ```
 autox.get_top_features  # 回归或分类问题
 autox.get_top_features_ts  # 时间序列数据集
 ```
-## Demo
+## 获取topk重要特征Demo
 
 #### 
 kaggle-Allstate获取topk重要的特征:
