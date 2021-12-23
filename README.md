@@ -130,7 +130,6 @@ AutoX内置的模型可解释功能包括:
 |binary classification | single-table | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
 |binary classification | single-table |[stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87177 | 0.81025 | 0.79039 |
 |binary classification | single-table |[santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | 0.89196 | 0.64643 | 0.88775 |
-|binary classification | single-table |[Titanic](https://www.kaggle.com/c/titanic/)  | accuracy | 0.77751 | 0.78229 | 0.79186 |
 |binary classification | multi-table |[IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
 |regression | single-table |[ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | 0.755 | 8.434 | 4.221 |
 |regression | single-table |[Allstate Claims Severity](https://www.kaggle.com/c/allstate-claims-severity)| mae | 1137.07885 | 1173.35917 | 1163.12014 |
