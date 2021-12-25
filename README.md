@@ -10,6 +10,9 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 - 灵活性: 各组件解耦合，能单独使用，对于自动机器学习效果不满意的地方，可以结合专家知识，AutoX提供灵活的接口。
 - 比赛上分点总结：整理并公开历史比赛的上分点。
 
+# 加入社区
+<img src="./img/qr_code_1227.png" width = "200" height = "200" alt="AutoX社区" align=center />
+
 # 快速上手
 ## 使用以下函数一键获取预测结果:
 ```
@@ -80,14 +83,12 @@ AutoX内置的模型可解释功能包括:
 - [ProtoDash algorithm](autox/interpreter/interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)
 
 
-
 # 目录
 <!-- TOC -->
 
 - [AutoX是什么？](#AutoX是什么？)
 - [目录](#目录)
 - [安装](#安装)
-- [架构](#架构)
 - [快速上手](#快速上手)
 - [效果对比](#效果对比)
 - [加入社区](#加入社区)
@@ -96,31 +97,16 @@ AutoX内置的模型可解释功能包括:
 
 <!-- /TOC -->
 # 安装
+### pip安装
+```
+!pip install automl-x -i https://www.pypi.org/simple/
+```
+
+### github仓库安装
 ```
 1. git clone https://github.com/4paradigm/autox.git
 2. cd autox
 3. python setup.py install
-```
-
-# 架构
-```
-├── autox
-│   ├── ensemble
-│   ├── feature_engineer
-│   ├── feature_selection
-│   ├── file_io
-│   ├── join_tables
-│   ├── metrics
-│   ├── models
-│   ├── process_data
-│   └── util.py
-│   ├── CONST.py
-│   ├── autox.py
-├── run_oneclick.py
-└── demo
-└── test
-├── setup.py
-├── README.md
 ```
 
 
@@ -142,9 +128,6 @@ AutoX内置的模型可解释功能包括:
 |regression-ts | multi-table  |[Walmart Recruiting](https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/)| wmae | 4660.99174 | 5024.16179 | 5128.31622 |
 |regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.13850 | 0.20453 | 0.35757 |
 
-
-# 加入社区
-<img src="./img/qr_code_1227.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # TODO
 功能开发完成后，发布相应的使用demo
