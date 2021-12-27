@@ -11,7 +11,7 @@ AutoX一个高效的自动化机器学习工具，它主要针对于表格类型
 - 比赛上分点总结：整理并公开历史比赛的上分点。
 
 # 加入社区
-<img src="./img/qr_code_1227.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_0103.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # 快速上手
 ## 使用以下函数一键获取预测结果:
