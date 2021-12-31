@@ -132,7 +132,7 @@ class AutoXServer():
     def load_server(self, path):
 
         data_name = self.server_name
-        self.G_df_dict = load_obj(path + f'{data_name}_G_df_dict.pkl')
-        self.G_data_info = load_obj(path + f'{data_name}_G_data_info.pkl')
-        self.G_hist = load_obj(path + f'{data_name}_G_hist.pkl')
+        self.G_df_dict = load_obj(path + f'/{data_name}_G_df_dict.pkl')
+        self.G_data_info = load_obj(path + f'/{data_name}_G_data_info.pkl')
+        self.G_hist = load_obj(path + f'/{data_name}_G_hist.pkl')
 
