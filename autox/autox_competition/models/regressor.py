@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import KFold
-from autox_competition.util import log
+from autox.autox_competition.util import log
 from sklearn.model_selection import train_test_split
 import optuna
 from optuna.samplers import TPESampler

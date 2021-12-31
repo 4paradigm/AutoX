@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
-from autox_competition.util import log
+from autox.autox_competition.util import log
 from sklearn.preprocessing import OrdinalEncoder
 
 def auto_encoder(df, df_feature_type, id):

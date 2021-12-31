@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import warnings
 warnings.filterwarnings('ignore')
-from autox_competition.util import log, reduce_mem_usage
+from autox.autox_competition.util import log, reduce_mem_usage
 
 def read_data_from_path(path, train_name, target, target_map, file_type='csv'):
     G_df_dict = {}

@@ -1,22 +1,22 @@
-from autox_competition.feature_engineer import FeatureCount
-from autox_competition.feature_engineer.fe_stat import FeatureStat
-from autox_competition.feature_engineer import FeatureRank
-from autox_competition.feature_engineer import FeatureNlp
-from autox_competition.feature_engineer.fe_time import FeatureTime
-from autox_competition.feature_engineer import FeatureCumsum
-from autox_competition.feature_engineer import FeatureShift
-from autox_competition.feature_engineer import FeatureDiff
-from autox_competition.feature_engineer.fe_one2M import FeatureOne2M
-from autox_competition.feature_engineer import fe_ima2vec
-from autox_competition.file_io import read_data_from_path
-from autox_competition.models import CrossLgbRegression, CrossXgbRegression
-from autox_competition.models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
-from autox_competition.process_data import feature_combination, train_test_divide, clip_label
-from autox_competition.process_data import feature_filter, auto_encoder
-from autox_competition.process_data.feature_type_recognition import Feature_type_recognition
-from autox_competition.util import log
-from autox_competition.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
-from autox_competition.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
+from autox.autox_competition.feature_engineer import FeatureCount
+from autox.autox_competition.feature_engineer.fe_stat import FeatureStat
+from autox.autox_competition.feature_engineer import FeatureRank
+from autox.autox_competition.feature_engineer import FeatureNlp
+from autox.autox_competition.feature_engineer.fe_time import FeatureTime
+from autox.autox_competition.feature_engineer import FeatureCumsum
+from autox.autox_competition.feature_engineer import FeatureShift
+from autox.autox_competition.feature_engineer import FeatureDiff
+from autox.autox_competition.feature_engineer.fe_one2M import FeatureOne2M
+from autox.autox_competition.feature_engineer import fe_ima2vec
+from autox.autox_competition.file_io import read_data_from_path
+from autox.autox_competition.models import CrossLgbRegression, CrossXgbRegression
+from autox.autox_competition.models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
+from autox.autox_competition.process_data import feature_combination, train_test_divide, clip_label
+from autox.autox_competition.process_data import feature_filter, auto_encoder
+from autox.autox_competition.process_data.feature_type_recognition import Feature_type_recognition
+from autox.autox_competition.util import log
+from autox.autox_competition.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
+from autox.autox_competition.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 
 class AutoX():
     def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None,

@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
-from autox_competition.CONST import FEATURE_TYPE
+from autox.autox_competition.CONST import FEATURE_TYPE
 from datetime import timedelta
 
 def lag_features(df, lags, val, keys):

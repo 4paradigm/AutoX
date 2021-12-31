@@ -1,6 +1,6 @@
 from tqdm import tqdm
-from autox_competition.process_data import Feature_type_recognition
-from autox_competition.CONST import FEATURE_TYPE
+from autox.autox_competition.process_data import Feature_type_recognition
+from autox.autox_competition.CONST import FEATURE_TYPE
 
 class FeatureCount:
     def __init__(self):
