@@ -1,9 +1,11 @@
 import pandas as pd
-from ..CONST import FEATURE_TYPE
-from autox.process_data import Feature_type_recognition
+from autox_competition.CONST import FEATURE_TYPE
+from autox_competition.process_data import Feature_type_recognition
 from tqdm import tqdm
+import numpy as np
+from autox_competition.util import log
 
-class FeatureShift:
+class FeatureCumsum:
     def __init__(self):
         self.target = None
         self.df_feature_type = None
@@ -63,13 +65,17 @@ class FeatureShift:
         for group_col in tqdm(self.ops.keys()):
             agg_cols = self.ops[group_col]
             for agg_col in agg_cols:
-                for i in [-30, -24, -7, -3, -2, -1, 1, 2, 3, 7, 24, 30]:
-                    shift_value = df.groupby(group_col)[agg_col].shift(i).values
-                    if type(group_col) == tuple:
-                        name = f'{"__".join(group_col)}__{agg_col}__shift__{i}'
-                    else:
-                        name = f'{group_col}__{agg_col}__shift__{i}'
-                    result[name] = shift_value
+                cumsum_value = df.groupby(group_col)[agg_col].cumsum().values
+                if type(group_col) == tuple:
+                    name = f'{"__".join(group_col)}__{agg_col}__cumsum'
+                else:
+                    name = f'{group_col}__{agg_col}__cumsum'
+                result[name] = cumsum_value
+
+        del_cols = list((result == np.inf).sum().index)
+        result.drop(del_cols, axis=1, inplace=True)
+        log(f"this cols with inf data, del them: {del_cols}")
+
         return result
 
     def fit_transform(self, df, target=None, df_feature_type=None, silence_group_cols=[], silence_agg_cols=None,
@@ -77,5 +83,3 @@ class FeatureShift:
         self.fit(df, target=target, df_feature_type=df_feature_type, silence_group_cols=silence_group_cols,
                  silence_agg_cols=silence_agg_cols, select_all=select_all, max_num=max_num)
         return self.transform(df)
-
-

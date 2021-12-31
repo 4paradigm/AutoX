@@ -1,18 +1,31 @@
 import pandas as pd
 from tqdm import tqdm
-from ..CONST import FEATURE_TYPE
+from autox_competition.CONST import FEATURE_TYPE
 from datetime import timedelta
 
-def lag_features(df, lags, val, keys):
-    df_temp = df[keys + [val]]
+def roll_mean_features(df, windows, val, keys, op):
     names = []
-    for lag in lags:
-        name = f"{'__'.join(keys)}__{val}__lag_" + str(lag)
+    for window in windows:
+        name = f"{'__'.join(keys)}__{val}_roll_{op}_" + str(window)
         names.append(name)
-        df_temp[name] = df_temp.groupby(keys)[val].transform(lambda x: x.shift(lag))
-    return df_temp[names]
+        if op == 'mean':
+            df[name] = df.groupby(keys)[val].transform(
+                lambda x: x.rolling(window=window, min_periods=3, win_type="triang").mean())
+        if op == 'std':
+            df[name] = df.groupby(keys)[val].transform(
+                lambda x: x.rolling(window=window, min_periods=3).std())
+        if op == 'median':
+            df[name] = df.groupby(keys)[val].transform(
+                lambda x: x.rolling(window=window, min_periods=3).median())
+        if op == 'max':
+            df[name] = df.groupby(keys)[val].transform(
+                lambda x: x.rolling(window=window, min_periods=3).max())
+        if op == 'min':
+            df[name] = df.groupby(keys)[val].transform(
+                lambda x: x.rolling(window=window, min_periods=3).min())
+    return df[names]
 
-class FeatureShiftTS:
+class FeatureRollingStatTS:
     def __init__(self):
         self.id_ = None
         self.target = None
@@ -42,15 +55,14 @@ class FeatureShiftTS:
             one_unit = timedelta(days=1)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
-            self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3, intervals + 7,
-                             intervals + 7 * 2, intervals + 7 * 3, intervals + 30, intervals * 2, intervals * 3]
-
+            self.windows = [intervals+7, intervals+7*2, intervals*2]
+            self.windows = list(dict.fromkeys(self.windows))
         if self.ts_unit == 'W':
             one_unit = timedelta(days=7)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
-            self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
-
+            self.windows = [intervals+3, intervals+4, intervals+5]
+            self.windows = list(dict.fromkeys(self.windows))
 
     def get_ops(self):
         return self.ops
@@ -58,23 +70,25 @@ class FeatureShiftTS:
     def set_ops(self, ops):
         self.ops = ops
 
-    def get_lags(self):
-        return self.lags
+    def get_windows(self):
+        return self.windows
 
-    def set_lags(self, lags):
-        self.lags = lags
+    def set_windows(self, windows):
+        self.windows = windows
 
     def transform(self, df):
         df_copy = df.copy()
         df_copy.sort_values(by=self.time_col, axis=0, inplace=True)
-
-        for i, col in tqdm(enumerate(self.ops)):
-            df_temp = lag_features(df_copy, self.lags, col, self.id_)
-            df_temp = df_temp.loc[df.index]
-            if i == 0:
-                result = df_temp
-            else:
-                result = pd.concat([result, df_temp], axis=1)
+        flag = True
+        for col in tqdm(self.ops):
+            for op in ['mean', 'std', 'median', 'max', 'min']:
+                df_temp = roll_mean_features(df_copy, self.windows, col, self.id_, op)
+                df_temp = df_temp.loc[df.index]
+                if flag:
+                    result = df_temp
+                    flag = False
+                else:
+                    result = pd.concat([result, df_temp], axis=1)
         return result
 
     def fit_transform(self, df, id_, target, df_feature_type, time_col, ts_unit, silence_cols=[]):

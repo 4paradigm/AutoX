@@ -1,7 +1,7 @@
 import pandas as pd
 import datetime
 
-from autox.CONST import FEATURE_TYPE
+from autox_competition.CONST import FEATURE_TYPE
 
 # datetime的表现形式为：2015-08-28 16:43:37.283
 # timestamp的表现形式为：1440751417.283

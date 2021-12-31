@@ -1,6 +1,6 @@
 import pandas as pd
-from ..CONST import FEATURE_TYPE
-from autox.process_data import Feature_type_recognition
+from autox_competition.CONST import FEATURE_TYPE
+from autox_competition.process_data import Feature_type_recognition
 from tqdm import tqdm
 
 class FeatureDiff:

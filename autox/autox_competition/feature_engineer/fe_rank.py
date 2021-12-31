@@ -1,11 +1,10 @@
 import pandas as pd
-from ..CONST import FEATURE_TYPE
-from autox.process_data import Feature_type_recognition
+from autox_competition.CONST import FEATURE_TYPE
+from autox_competition.process_data import Feature_type_recognition
 from tqdm import tqdm
-import numpy as np
-from ..util import log
 
-class FeatureCumsum:
+
+class FeatureRank:
     def __init__(self):
         self.target = None
         self.df_feature_type = None
@@ -31,15 +30,12 @@ class FeatureCumsum:
 
         for group_col in self.df_feature_type.keys():
             if self.df_feature_type[group_col] == FEATURE_TYPE['cat'] and group_col not in self.silence_group_cols:
-                if df[group_col].nunique() == df.shape[0]:
-                    continue
-                self.ops[(group_col)] = []
+                self.ops[(group_col)] = {}
                 for agg_col in self.df_feature_type.keys():
                     if group_col == agg_col:
                         continue
-                    if agg_col not in self.silence_agg_cols:
-                        if self.df_feature_type[agg_col] == FEATURE_TYPE['num']:
-                            self.ops[(group_col)].append(agg_col)
+                    if self.df_feature_type[agg_col] == FEATURE_TYPE['num'] and agg_col not in self.silence_agg_cols:
+                        self.ops[(group_col)][agg_col] = ['rank']
 
         if not self.select_all:
             if self.target is not None:
@@ -63,19 +59,14 @@ class FeatureCumsum:
     def transform(self, df):
         result = pd.DataFrame()
         for group_col in tqdm(self.ops.keys()):
-            agg_cols = self.ops[group_col]
+            agg_cols = self.ops[group_col].keys()
             for agg_col in agg_cols:
-                cumsum_value = df.groupby(group_col)[agg_col].cumsum().values
+                cur_result = df.groupby(group_col)[agg_col].rank()
                 if type(group_col) == tuple:
-                    name = f'{"__".join(group_col)}__{agg_col}__cumsum'
+                    name = f'{"__".join(group_col)}__{agg_col}__rank'
                 else:
-                    name = f'{group_col}__{agg_col}__cumsum'
-                result[name] = cumsum_value
-
-        del_cols = list((result == np.inf).sum().index)
-        result.drop(del_cols, axis=1, inplace=True)
-        log(f"this cols with inf data, del them: {del_cols}")
-
+                    name = f'{group_col}__{agg_col}__rank'
+                result[name] = cur_result
         return result
 
     def fit_transform(self, df, target=None, df_feature_type=None, silence_group_cols=[], silence_agg_cols=None,

@@ -1,6 +1,6 @@
 import pandas as pd
-from ..CONST import FEATURE_TYPE
-from autox.process_data import Feature_type_recognition
+from autox_competition.CONST import FEATURE_TYPE
+from autox_competition.process_data import Feature_type_recognition
 import numpy as np
 
 def FE_target_encoding(train, test, keys, col_label, k = 5):

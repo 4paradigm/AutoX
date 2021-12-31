@@ -5,13 +5,13 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import KFold
-from ..util import log
+from autox_competition.util import log
 from sklearn.model_selection import train_test_split
 import optuna
 from optuna.samplers import TPESampler
 import xgboost as xgb
 from sklearn.preprocessing import StandardScaler
-from pytorch_tabnet.tab_model import TabNetClassifier
+
 
 class CrossTabnetBiClassifier(object):
     pass

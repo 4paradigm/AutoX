@@ -1,22 +1,22 @@
-from .feature_engineer.fe_count import FeatureCount
-from .feature_engineer.fe_stat import FeatureStat
-from .feature_engineer.fe_rank import FeatureRank
-from .feature_engineer.fe_nlp import FeatureNlp
-from .feature_engineer.fe_time import FeatureTime
-from .feature_engineer.fe_cumsum import FeatureCumsum
-from .feature_engineer.fe_shift import FeatureShift
-from .feature_engineer.fe_diff import FeatureDiff
-from .feature_engineer.fe_one2M import FeatureOne2M
-from .feature_engineer import fe_ima2vec
-from .file_io.read_data import read_data_from_path
-from .models.regressor import CrossLgbRegression, CrossXgbRegression, CrossTabnetRegression
-from .models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier, CrossTabnetBiClassifier
-from .process_data import feature_combination, train_test_divide, clip_label
-from .process_data import feature_filter, auto_encoder
-from .process_data.feature_type_recognition import Feature_type_recognition
-from .util import log, reduce_mem_usage
-from autox.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
-from autox.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
+from autox_competition.feature_engineer import FeatureCount
+from autox_competition.feature_engineer.fe_stat import FeatureStat
+from autox_competition.feature_engineer import FeatureRank
+from autox_competition.feature_engineer import FeatureNlp
+from autox_competition.feature_engineer.fe_time import FeatureTime
+from autox_competition.feature_engineer import FeatureCumsum
+from autox_competition.feature_engineer import FeatureShift
+from autox_competition.feature_engineer import FeatureDiff
+from autox_competition.feature_engineer.fe_one2M import FeatureOne2M
+from autox_competition.feature_engineer import fe_ima2vec
+from autox_competition.file_io import read_data_from_path
+from autox_competition.models import CrossLgbRegression, CrossXgbRegression
+from autox_competition.models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
+from autox_competition.process_data import feature_combination, train_test_divide, clip_label
+from autox_competition.process_data import feature_filter, auto_encoder
+from autox_competition.process_data.feature_type_recognition import Feature_type_recognition
+from autox_competition.util import log
+from autox_competition.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
+from autox_competition.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 
 class AutoX():
     def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None,

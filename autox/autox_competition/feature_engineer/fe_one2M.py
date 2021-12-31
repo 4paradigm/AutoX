@@ -1,5 +1,5 @@
 import pandas as pd
-from ..CONST import FEATURE_TYPE
+from autox_competition.CONST import FEATURE_TYPE
 
 class FeatureOne2M:
     def __init__(self):

@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from ..util import log
+from autox_competition.util import log
 
 def feature_filter(train, test, id_, target):
     not_used = id_ + [target]

@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
-from ..util import log, weighted_mae_lgb, weighted_mae_xgb
+from autox_competition.util import log, weighted_mae_lgb, weighted_mae_xgb
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 from datetime import timedelta
 import gc

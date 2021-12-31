@@ -1,18 +1,18 @@
 import pandas as pd
 from tqdm import tqdm
-from ..CONST import FEATURE_TYPE
+from autox_competition.CONST import FEATURE_TYPE
 from datetime import timedelta
 
-def ewm_features(df, lags, val, keys, alpha=0.95):
+def lag_features(df, lags, val, keys):
     df_temp = df[keys + [val]]
     names = []
     for lag in lags:
-        name = f"{'__'.join(keys)}__{val}__ewm_" + str(lag)
+        name = f"{'__'.join(keys)}__{val}__lag_" + str(lag)
         names.append(name)
-        df_temp[name] = df_temp.groupby(keys)[val].transform(lambda x: x.shift(lag).ewm(alpha=alpha).mean())
+        df_temp[name] = df_temp.groupby(keys)[val].transform(lambda x: x.shift(lag))
     return df_temp[names]
 
-class FeatureExpWeightedMean:
+class FeatureShiftTS:
     def __init__(self):
         self.id_ = None
         self.target = None
@@ -44,14 +44,13 @@ class FeatureExpWeightedMean:
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3, intervals + 7,
                              intervals + 7 * 2, intervals + 7 * 3, intervals + 30, intervals * 2, intervals * 3]
-            self.lags = list(dict.fromkeys(self.lags))
 
         if self.ts_unit == 'W':
             one_unit = timedelta(days=7)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
-            self.lags = list(dict.fromkeys(self.lags))
+
 
     def get_ops(self):
         return self.ops
@@ -70,7 +69,7 @@ class FeatureExpWeightedMean:
         df_copy.sort_values(by=self.time_col, axis=0, inplace=True)
 
         for i, col in tqdm(enumerate(self.ops)):
-            df_temp = ewm_features(df_copy, self.lags, col, self.id_)
+            df_temp = lag_features(df_copy, self.lags, col, self.id_)
             df_temp = df_temp.loc[df.index]
             if i == 0:
                 result = df_temp
