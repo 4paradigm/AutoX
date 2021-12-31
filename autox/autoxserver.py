@@ -125,9 +125,9 @@ class AutoXServer():
 
     def save_server(self, path):
         data_name = self.server_name
-        save_obj(self.G_df_dict, path + f'{data_name}_G_df_dict.pkl')
-        save_obj(self.G_data_info, f'{data_name}_G_data_info.pkl')
-        save_obj(self.G_hist, f'{data_name}_G_hist.pkl')
+        save_obj(self.G_df_dict, path + f'/{data_name}_G_df_dict.pkl')
+        save_obj(self.G_data_info, path + f'/{data_name}_G_data_info.pkl')
+        save_obj(self.G_hist, path + f'/{data_name}_G_hist.pkl')
 
     def load_server(self, path):
 

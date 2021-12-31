@@ -14,6 +14,19 @@ def load_json(path):
 # 预测的时候需要传入remain_time
 def read_data(train_set_path=None, test_set_path=None, data_info_path=None, data_info=None, df_dict=None, is_train=True, debug=True, remain_time=None):
     start = time.time()
+    if is_train:
+        assert(train_set_path is not None)
+        assert(data_info_path is not None)
+        assert(test_set_path is None)
+        assert(data_info is None)
+        assert(df_dict is None)
+    else:
+        assert (train_set_path is None)
+        assert (data_info_path is None)
+        assert (test_set_path is not None)
+        assert (data_info is not None)
+        assert (df_dict is not None)
+
     path_input = train_set_path if (test_set_path is None) else test_set_path
 
     if is_train:
