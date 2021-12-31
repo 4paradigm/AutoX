@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import time
-from autox_server.util import log
+from ..util import log
 
 # test拼上train重新groupby
 

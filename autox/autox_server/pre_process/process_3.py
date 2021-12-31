@@ -3,8 +3,8 @@ from sklearn.preprocessing import LabelEncoder
 import time
 import warnings
 warnings.filterwarnings('ignore')
-from autox_server.util import del_invalid_features, rename_columns
-from autox_server.util import log
+from ..util import del_invalid_features, rename_columns
+from ..util import log
 from tqdm import tqdm
 
 

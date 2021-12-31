@@ -2,8 +2,8 @@ import time
 import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
-from autox_server.model import model_util
-from autox_server.util import log
+from ..model import model_util
+from ..util import log
 
 def lgb_para_opt(G_df_dict, G_data_info, G_hist, is_train, remain_time, params, lgb_para_dict):
     start = time.time()

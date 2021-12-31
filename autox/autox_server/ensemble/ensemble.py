@@ -1,8 +1,8 @@
 import time
 import warnings
-from autox_server.model import simple_lgb
+from ..model import simple_lgb
 warnings.filterwarnings('ignore')
-from autox_server.util import log
+from ..util import log
 
 def ensemble(G_df_dict, G_data_info, G_hist, is_train, remain_time, top_k=3):
     start = time.time()

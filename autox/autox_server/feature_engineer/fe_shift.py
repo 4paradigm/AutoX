@@ -2,7 +2,7 @@ import warnings
 import pandas as pd
 warnings.filterwarnings('ignore')
 import time
-from autox_server.util import log
+from ..util import log
 
 
 def fe_shift(G_df_dict, G_data_info, G_hist, is_train, remain_time):

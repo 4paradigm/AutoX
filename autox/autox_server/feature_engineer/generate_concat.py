@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import time
-from autox_server.util import log, cols_concat
+from ..util import log, cols_concat
 from itertools import combinations
 
 def generate_concat(G_df_dict, G_data_info, G_hist, is_train, remain_time):

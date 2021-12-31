@@ -2,7 +2,7 @@ import warnings
 warnings.filterwarnings('ignore')
 import time
 import pandas as pd
-from autox_server.util import log
+from ..util import log
 
 onehot_N = 64
 def fe_onehot(G_df_dict, G_data_info, G_hist, is_train, remain_time):
