@@ -1,10 +1,9 @@
 from itertools import combinations
-from ..util import cols_concat
+from autox.autox_server.util import cols_concat, log
 import warnings
 import pandas as pd
 warnings.filterwarnings('ignore')
 import time
-from ..util import log
 
 def fe_concat_count(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     # 对G_df_dict['BIG']表做扩展特征

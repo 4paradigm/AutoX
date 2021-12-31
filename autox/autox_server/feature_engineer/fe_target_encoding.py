@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import time
-from ..util import log
+from autox.autox_server.util import log
 
 def fe_target_encoding(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     # 对G_df_dict['BIG']表做扩展特征

@@ -2,7 +2,7 @@ import json
 import time
 import warnings
 import pandas as pd
-from ..util import log
+from autox.autox_server.util import log
 warnings.filterwarnings('ignore')
 
 def load_json(path):

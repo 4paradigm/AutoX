@@ -3,7 +3,7 @@ warnings.filterwarnings('ignore')
 import time
 import pandas as pd
 import numpy as np
-from ..util import log
+from autox.autox_server.util import log
 from tqdm import tqdm
 
 def fe_time_diff(G_df_dict, G_data_info, G_hist, is_train, remain_time):

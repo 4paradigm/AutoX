@@ -13,19 +13,19 @@ Its features include:
 ## interpretable-ml
 AutoX covers following interpretable machine learning methods:
 ### Golbel interpretation
-- [tree-based model](autox/interpreter/interpreter_demo/global_interpretation/global_surrogate_tree_demo.ipynb)
+- [tree-based model](autox/autox_interpreter/interpreter_demo/global_interpretation/global_surrogate_tree_demo.ipynb)
 
 ### Local interpretation
-- [LIME](autox/interpreter/interpreter_demo/local_interpretation/lime_demo.ipynb)
-- [SHAP](autox/interpreter/interpreter_demo/local_interpretation/shap_demo.ipynb)
+- [LIME](autox/autox_interpreter/interpreter_demo/local_interpretation/lime_demo.ipynb)
+- [SHAP](autox/autox_interpreter/interpreter_demo/local_interpretation/shap_demo.ipynb)
 
 ### Influential interpretation
-- [nn](autox/interpreter/interpreter_demo/influential_instances/influential_interpretation_nn.ipynb)
-- [nn_sgd](autox/interpreter/interpreter_demo/influential_instances/influential_interpretation_nn_sgd.ipynb)
+- [nn](autox/autox_interpreter/interpreter_demo/influential_instances/influential_interpretation_nn.ipynb)
+- [nn_sgd](autox/autox_interpreter/interpreter_demo/influential_instances/influential_interpretation_nn_sgd.ipynb)
 
 ### Prototypes and Criticisms
-- [MMD-critic](autox/interpreter/interpreter_demo/prototypes_and_criticisms/MMD_demo.ipynb)
-- [ProtoDash algorithm](autox/interpreter/interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)
+- [MMD-critic](autox/autox_interpreter/interpreter_demo/prototypes_and_criticisms/MMD_demo.ipynb)
+- [ProtoDash algorithm](autox/autox_interpreter/interpreter_demo/prototypes_and_criticisms/ProtodashExplainer.ipynb)
 
 
 # Table-of-Contents

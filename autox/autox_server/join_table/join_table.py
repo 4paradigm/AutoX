@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import time
-from ..util import rename_columns, log
+from autox.autox_server.util import rename_columns, log
 
 def join_simple_tables(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     """

@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn import metrics
-from ..util import log
+from autox.autox_server.util import log
 
 def lb(G_data_info, G_hist, path_input):
 

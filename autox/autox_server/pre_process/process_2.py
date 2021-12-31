@@ -1,8 +1,8 @@
 import warnings
 warnings.filterwarnings('ignore')
 import time
-from ..util import del_invalid_features
-from ..util import log
+from autox.autox_server.util import del_invalid_features
+from autox.autox_server.util import log
 
 def preprocess_2(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     # 对G_df_dict['BIG']进行操作

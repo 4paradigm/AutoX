@@ -6,7 +6,7 @@ from sklearn.model_selection import KFold
 warnings.filterwarnings('ignore')
 import time
 import gc
-from ..util import log
+from autox.autox_server.util import log
 
 # KEEP_TIME = 100 # 上线用
 KEEP_TIME = -100000 # 测试效果用

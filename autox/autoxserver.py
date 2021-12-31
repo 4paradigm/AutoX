@@ -1,13 +1,13 @@
-from .autox_server.ensemble import ensemble
-from .autox_server.feature_engineer import fe_count, fe_onehot, fe_shift, fe_time_diff, generate_concat
-from .autox_server.join_table import join_table
-from .autox_server.model import base_lgb, lgb_with_fe
-from .autox_server.model import model_util
-from .autox_server.para_opt import lgb_para_opt
-from .autox_server.pre_process import process_1, process_2, process_3
-from .autox_server.read_data import read_data
-from .autox_server.util import log, load_obj
-from .autox_server.util import merge_table, save_obj
+from autox.autox_server.ensemble import ensemble
+from autox.autox_server.feature_engineer import fe_count, fe_onehot, fe_shift, fe_time_diff, generate_concat
+from autox.autox_server.join_table import join_table
+from autox.autox_server.model import base_lgb, lgb_with_fe
+from autox.autox_server.model import model_util
+from autox.autox_server.para_opt import lgb_para_opt
+from autox.autox_server.pre_process import process_1, process_2, process_3
+from autox.autox_server.read_data import read_data
+from autox.autox_server.util import log, load_obj
+from autox.autox_server.util import merge_table, save_obj
 
 class AutoXServer():
     def __init__(self, is_train, server_name, data_info_path=None, train_set_path=None):

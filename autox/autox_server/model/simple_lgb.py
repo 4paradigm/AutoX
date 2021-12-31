@@ -5,9 +5,9 @@ from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import KFold
 warnings.filterwarnings('ignore')
 import time
-from ..util import log
+from autox.autox_server.util import log
 
-from ..model import model_util
+from autox.autox_server.model import model_util
 SAMPLE_LIMIT = model_util.SAMPLE_LIMIT
 
 def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time):

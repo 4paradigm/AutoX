@@ -2,7 +2,7 @@ import warnings
 import time
 import pandas as pd
 warnings.filterwarnings('ignore')
-from ..util import log
+from autox.autox_server.util import log
 
 
 def get_time_feature(df, col, keep=False):
