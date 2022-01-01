@@ -26,3 +26,5 @@ setup(name="automl-x",
         include_package_data=True,
         zip_safe=False
         )
+# python setup.py sdist build
+# twine upload dist/*

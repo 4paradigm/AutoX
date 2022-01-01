@@ -104,6 +104,11 @@ AutoX内置的模型可解释功能包括:
 
 ### github仓库安装
 ```
+git clone https://github.com/4paradigm/autox.git
+pip install ./autox
+```
+或
+```
 1. git clone https://github.com/4paradigm/autox.git
 2. cd autox
 3. python setup.py install
