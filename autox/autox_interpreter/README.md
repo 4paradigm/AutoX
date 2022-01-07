@@ -2,6 +2,11 @@
 
 # 模型可解释
 AutoX内置的模型可解释功能包括:
+### 基于模型的可解释
+- [NN模型可解释](interpreter_demo/nn_interpret.ipynb)
+- [Lightgbm模型可解释](interpreter_demo/lgb_interpret.ipynb)
+- [LR模型可解释](interpreter_demo/lr_interpret.ipynb)
+
 ### 全局代理模型
 - [树模型](interpreter_demo/global_interpretation/global_surrogate_tree_demo.ipynb)
 
