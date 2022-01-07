@@ -76,7 +76,7 @@ test_data/
     "dataset_id": "Athena",  # 数据表名称 
     "recom_metrics": ["auc"], # 推荐的评价指标
     "target_entity": "overdue", #主表(label列所在表为主表)
-    "target_id": [],  # id列
+    "target_id": ["new_user_id"],  # id列
     "target_label": "label",  # 目标值列
     "time_budget": 1200,  # 时间预算
     "entities": {  # 数据集中各表的信息
