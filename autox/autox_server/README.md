@@ -17,7 +17,7 @@ AutoX支持上线部署的服务
 - 支持回归及时序预测的功能正在开发中
 
 # 快速上手
-autox_server在结构上分训练和预测两部分。
+autox_server在结构上分训练和预测两部分。<br>
 Step 1. 训练：通过对训练集进行数据探索，获得AutoX的解决方案(包含数据预处理、拼表、特征工程、模型选择、
 模型调参、模型融合等)，将解决方案以pickle各保存到指定路径中。
 ```
@@ -47,6 +47,7 @@ pred = autoxserver.predict(test_set_path = ./bank/test_data)
 ### 案例1：银行场景-客户贷款风险预测
 案例描述：通过用户基本信息，消费行为，还款情况等，建立准确的逾期预测模型，以预测用户是否会逾期还款。<br>
 数据下载地址：[百度网盘](), [google cloud]()<br>
+详细数据说明：[link](https://challenge.datacastle.cn/v3/cmptDetail.html?id=176) <br>
 autox_server训练代码：[bank_train.ipynb](demo/bank/bank_train.ipynb)<br>
 autox_server预测代码：[bank_test.ipynb](demo/bank/bank_train.ipynb)<br>
 

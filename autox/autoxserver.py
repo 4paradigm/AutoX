@@ -123,6 +123,7 @@ class AutoXServer():
                                                 lgb_para_dict)
         _ = ensemble.ensemble(self.G_df_dict, self.G_data_info, self.G_hist, is_train, remain_time, top_k=2)
         sub = self.G_hist['predict']['ensemble']
+        sub.index = range(len(sub))
         return sub
 
     def save_server(self, path):

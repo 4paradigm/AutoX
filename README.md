@@ -41,7 +41,7 @@ AutoX一个高效的自动化机器学习工具。
 ### github仓库安装
 ```
 git clone https://github.com/4paradigm/autox.git
-pip install ./autox
+pip install ./AutoX
 ```
 或
 ```
@@ -73,10 +73,6 @@ pip install ./autox
 功能开发完成后，发布相应的使用demo
 - [ ] 多个label预测
 - [ ] 多分类任务
-- [ ] 环境制作: docker, pip等
-- [ ] 保存模型，支持inference上线
-- [ ] 提供特征重要性接口，返回构造好的特征，以及构造该特征的方法
-- [ ] 支持导出特征工程的结果，用户使用自定义模型进一步训练
 
 若有其他希望AutoX支持的功能，欢迎提issue!
 欢迎填写[用户调研问卷](https://www.wjx.cn/vj/YOwSFHN.aspx)，让AutoX变得更好!
