@@ -3,7 +3,7 @@
 # AutoX是什么？
 AutoX一个高效的自动化机器学习工具。
 它的特点包括:
-- 效果出色: AutoX在多个kaggle数据集上，效果显著优于其他解决方案(见[效果对比](#autox_competition效果对比))。
+- 效果出色: AutoX在多个kaggle数据集上，效果显著优于其他解决方案(见[效果对比](#效果对比))。
 - 简单易用: AutoX的接口和sklearn类似，方便上手使用。
 - 通用: 适用于分类和回归问题。
 - 自动化: 无需人工干预，全自动的数据清洗、特征工程、模型调参等步骤。
@@ -27,7 +27,7 @@ AutoX一个高效的自动化机器学习工具。
 - [目录](#目录)
 - [安装](#安装)
 - [快速上手](#快速上手)
-- [autox_competition效果对比](#autox_competition效果对比)
+- [效果对比](#效果对比)
 - [TODO](#TODO)
 - [错误排查](#错误排查)
 
@@ -50,7 +50,15 @@ pip install ./AutoX
 3. python setup.py install
 ```
 
-# autox_competition效果对比
+# 效果对比
+## 不同任务下的效果提升百分比
+|data_type | 对比AutoGluon | 对比H2o |
+|----- | ------------- | ----------- |
+|binary classification | 20.44% | 2.98% |
+|regression | 37.54% | 39.66% |
+|time-series | 28.40% | 32.46% |
+
+## 详细数据集对比
 |data_type | single-or-multi | data_name | metric | AutoX | AutoGluon | H2o |
 |----- | ------------- | ----------- |---------------- |---------------- | ----------------|----------------|
 |binary classification | single-table | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
