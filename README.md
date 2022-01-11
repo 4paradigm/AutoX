@@ -50,6 +50,12 @@ pip install ./AutoX
 3. python setup.py install
 ```
 
+# 快速上手
+- [autox打比赛](autox/autox_competition/README.md)
+- [autox上线部署](autox/autox_server/README.md)
+- [autox可解释](autox/autox_interpreter/README.md)
+
+
 # 效果对比
 ## 不同任务下的效果提升百分比
 |data_type | 对比AutoGluon | 对比H2o |
