@@ -59,10 +59,10 @@ class XgbRegressionTs(object):
         train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
 
-        log('train time, max and min:')
-        log(train.iloc[train_idx, time_col].max(), train.iloc[train_idx, time_col].min())
-        log('valid time, max and min:')
-        log(train.iloc[valid_idx, time_col].max(), train.iloc[valid_idx, time_col].min())
+        log('train time, min and max:')
+        log(f"{train.loc[train_idx, time_col].min()}, {train.loc[train_idx, time_col].max()}")
+        log('valid time, min and max:')
+        log(f"{train.loc[valid_idx, time_col].min()}, {train.loc[valid_idx, time_col].max()}")
 
         MSEs = []
         start_time = time()
@@ -170,10 +170,10 @@ class LgbRegressionTs(object):
         train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
 
-        log('train time, max and min:')
-        log(train.iloc[train_idx, time_col].max(), train.iloc[train_idx, time_col].min())
-        log('valid time, max and min:')
-        log(train.iloc[valid_idx, time_col].max(), train.iloc[valid_idx, time_col].min())
+        log('train time, min and max:')
+        log(f"{train.loc[train_idx, time_col].min()}, {train.loc[train_idx, time_col].max()}")
+        log('valid time, min and max:')
+        log(f"{train.loc[valid_idx, time_col].min()}, {train.loc[valid_idx, time_col].max()}")
 
         if Early_Stopping_Rounds is not None:
             self.Early_Stopping_Rounds = Early_Stopping_Rounds
