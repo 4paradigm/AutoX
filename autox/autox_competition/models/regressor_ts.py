@@ -48,14 +48,21 @@ class XgbRegressionTs(object):
             log("log1p!")
             train[target] = np.log1p(train[target])
 
-        if ts_unit == 'D':
+        if ts_unit in ['D', 'day', 'Day']:
             one_unit = timedelta(days=1)
-        elif ts_unit == 'W':
+        elif ts_unit in ['W', 'week', 'Week']:
             one_unit = timedelta(days=7)
+        elif ts_unit in ['month', 'Month']:
+            one_unit = timedelta(days=30)
         intervals = int((pd.to_datetime(test[time_col].max()) - pd.to_datetime(test[time_col].min())) / one_unit + 1)
         split_time = pd.to_datetime(train[time_col].max()) - intervals * one_unit
         train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
+
+        log('train time, max and min:')
+        log(train.iloc[train_idx, time_col].max(), train.iloc[train_idx, time_col].min())
+        log('valid time, max and min:')
+        log(train.iloc[valid_idx, time_col].max(), train.iloc[valid_idx, time_col].min())
 
         MSEs = []
         start_time = time()
@@ -152,14 +159,21 @@ class LgbRegressionTs(object):
             log("log1p!")
             train[target] = np.log1p(train[target])
 
-        if ts_unit == 'D':
+        if ts_unit in ['D', 'day', 'Day']:
             one_unit = timedelta(days=1)
-        elif ts_unit == 'W':
+        elif ts_unit in ['W', 'week', 'Week']:
             one_unit = timedelta(days=7)
+        elif ts_unit in ['Month', 'month']:
+            one_unit = timedelta(days=30)
         intervals = int((pd.to_datetime(test[time_col].max()) - pd.to_datetime(test[time_col].min())) / one_unit + 1)
         split_time = pd.to_datetime(train[time_col].max()) - intervals * one_unit
         train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
+
+        log('train time, max and min:')
+        log(train.iloc[train_idx, time_col].max(), train.iloc[train_idx, time_col].min())
+        log('valid time, max and min:')
+        log(train.iloc[valid_idx, time_col].max(), train.iloc[valid_idx, time_col].min())
 
         if Early_Stopping_Rounds is not None:
             self.Early_Stopping_Rounds = Early_Stopping_Rounds

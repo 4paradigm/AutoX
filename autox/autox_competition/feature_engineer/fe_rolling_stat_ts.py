@@ -51,18 +51,21 @@ class FeatureRollingStatTS:
             if self.df_feature_type[col] == FEATURE_TYPE['num']:
                 self.ops.append(col)
 
-        if self.ts_unit == 'D':
+        if self.ts_unit in ['D', 'day', 'Day']:
             one_unit = timedelta(days=1)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.windows = [intervals+7, intervals+7*2, intervals*2]
             self.windows = list(dict.fromkeys(self.windows))
-        if self.ts_unit == 'W':
+        elif self.ts_unit in ['W', 'week', 'Week']:
             one_unit = timedelta(days=7)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.windows = [intervals+3, intervals+4, intervals+5]
             self.windows = list(dict.fromkeys(self.windows))
+        else:
+            self.windows = [3, 4, 5]
+
 
     def get_ops(self):
         return self.ops

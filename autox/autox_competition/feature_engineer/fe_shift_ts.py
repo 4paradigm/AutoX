@@ -38,19 +38,21 @@ class FeatureShiftTS:
             if self.df_feature_type[col] == FEATURE_TYPE['num']:
                 self.ops.append(col)
 
-        if self.ts_unit == 'D':
+        if self.ts_unit in ['D', 'day', 'Day']:
             one_unit = timedelta(days=1)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3, intervals + 7,
                              intervals + 7 * 2, intervals + 7 * 3, intervals + 30, intervals * 2, intervals * 3]
 
-        if self.ts_unit == 'W':
+        elif self.ts_unit in ['W', 'week', 'Week']:
             one_unit = timedelta(days=7)
             intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
 
+        else:
+            self.lags = [1, 2, 3]
 
     def get_ops(self):
         return self.ops
