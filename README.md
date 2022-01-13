@@ -55,6 +55,11 @@ pip install ./AutoX
 - [autox上线部署](autox/autox_server/README.md)
 - [autox可解释](autox/autox_interpreter/README.md)
 
+# 社区案例
+[汽车销量预测](./demo/汽车销量预测/README.md)
+
+# 比赛案例
+见demo文件夹
 
 # 效果对比
 ## 不同任务下的效果提升百分比
