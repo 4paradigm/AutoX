@@ -34,7 +34,7 @@ def fe_count(G_df_dict, G_data_info, G_hist, is_train, remain_time):
             temp.index = temp[f]
             temp = temp.drop(f, axis=1)
             faeture_map = temp.to_dict()[f + '_cnt']
-            faeture_map = {k: v for k, v in faeture_map.items() if not math.isnan(k)}
+            faeture_map = {k: v for k, v in faeture_map.items() if (type(k) == str or not math.isnan(k))}
             G_hist['FE_count']['feature_map'][f] = faeture_map
 
     G_df_dict['FE_count'] = G_df_dict['BIG'][Id]
