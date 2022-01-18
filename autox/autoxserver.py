@@ -41,7 +41,7 @@ class AutoXServer():
         log("*** phase: {}".format(phase))
         is_train = True if phase == 'train' else False
         self.G_df_dict, self.G_data_info, remain_time = read_data.read_data(data_info_path=self.data_info_path,
-                                                                            train_set_path=self.path_input, is_train=is_train, debug=False)
+                                                                            train_set_path=self.train_set_path, is_train=is_train, debug=False)
 
 
         remain_time = process_1.preprocess(self.G_df_dict, self.G_data_info, self.G_hist, is_train, remain_time)
