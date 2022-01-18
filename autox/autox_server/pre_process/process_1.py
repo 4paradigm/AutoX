@@ -42,7 +42,9 @@ def drop_nan_target(df, target):
 def delete_row(G_df_dict, G_data_info, G_hist, is_train, target, main_table_name):
     # 删除主表Label异常的数据: 只对train的主表进行操作
     if is_train:
-        G_df_dict[main_table_name], drop_rows_idx = drop_nan_target(G_df_dict[main_table_name], target)
+        drop_rows_idx = []
+        if target in G_df_dict[main_table_name].columns:
+            G_df_dict[main_table_name], drop_rows_idx = drop_nan_target(G_df_dict[main_table_name], target)
         log("drop_rows_idx:{}".format(list(drop_rows_idx)))
         G_hist['drop_rows_idx'] = drop_rows_idx
     else:
@@ -76,6 +78,7 @@ def preprocess(G_df_dict, G_data_info, G_hist, is_train, remain_time):
 
     1.去除异常行: 只对train的主表进行操作
     2.分解时间: 对所有表进行操作
+    3.若数据较大，对主表进行采样
     """
     start = time.time()
 
@@ -87,6 +90,41 @@ def preprocess(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     target = G_data_info['target_label']
     main_table_name = G_data_info['target_entity']
 
+    if is_train:
+        G_hist['big_data'] = False
+        G_hist['super_big_data'] = False
+
+        super_big_limit = 1.5e8
+        if G_df_dict[main_table_name].shape[0] > super_big_limit:
+            G_hist['super_big_data'] = True
+
+        # 行数较多的数据集采样
+        SAMPLE_LIMIT_FOR_BIG = 1e7
+        SAMPLE_SIZE = 1e6
+        if G_df_dict[main_table_name].shape[0] > SAMPLE_LIMIT_FOR_BIG:
+            log('[+] sample for big data')
+            G_hist['big_data'] = True
+            G_df_dict[main_table_name] = G_df_dict[main_table_name].sample(int(SAMPLE_SIZE))
+            if 'action' in G_df_dict:
+                relation = [x for x in G_data_info['relations'] if x['right_entity'] == 'action'][0]
+                main_table_id = G_df_dict[main_table_name][relation['left_on'][0]]
+                G_df_dict['action'] = G_df_dict['action'].loc[
+                    G_df_dict['action'][relation['right_on'][0]].isin(main_table_id)]
+
+        # 列数较多的数据集采样
+        SAMPLE_LIMIT_FOR_BIG_COL = 4e6
+        COL_LIMIT = 600
+        SAMPLE_SIZE_FOR_BIG_COL = 1e6
+        if G_df_dict[main_table_name].shape[0] > SAMPLE_LIMIT_FOR_BIG_COL and G_df_dict[main_table_name].shape[1] > COL_LIMIT:
+            log('[+] sample for big data')
+            G_hist['big_data'] = True
+            G_df_dict[main_table_name] = G_df_dict[main_table_name].sample(int(SAMPLE_SIZE_FOR_BIG_COL))
+            if 'action' in G_df_dict:
+                relation = [x for x in G_data_info['relations'] if x['right_entity'] == 'action'][0]
+                main_table_id = G_df_dict[main_table_name][relation['left_on'][0]]
+                G_df_dict['action'] = G_df_dict['action'].loc[
+                    G_df_dict['action'][relation['right_on'][0]].isin(main_table_id)]
+
     log('[+] preprocess, delete_row')
     # 只对主表进行操作
     delete_row(G_df_dict, G_data_info, G_hist, is_train, target, main_table_name)
@@ -94,8 +132,10 @@ def preprocess(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     log('[+] preprocess, parsing_time')
     parsing_time(G_df_dict, G_data_info, G_hist, is_train)
 
+
     end = time.time()
     remain_time -= (end - start)
+    log("time consumption: {}".format(str(end - start)))
     log("remain_time: {} s".format(remain_time))
     return remain_time
 

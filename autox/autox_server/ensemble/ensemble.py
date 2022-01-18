@@ -1,8 +1,8 @@
 import time
 import warnings
 from autox.autox_server.model import simple_lgb
-warnings.filterwarnings('ignore')
 from autox.autox_server.util import log
+warnings.filterwarnings('ignore')
 
 def ensemble(G_df_dict, G_data_info, G_hist, is_train, remain_time, top_k=3):
     start = time.time()
@@ -12,6 +12,7 @@ def ensemble(G_df_dict, G_data_info, G_hist, is_train, remain_time, top_k=3):
 
         used_model_names = sorted(G_hist['val_auc'], key=G_hist['val_auc'].get, reverse=True)[:top_k]
         G_hist['used_model_names'] = used_model_names
+        log('used_model_names: {}'.format(used_model_names))
         end = time.time()
         remain_time -= (end - start)
 
@@ -36,7 +37,7 @@ def ensemble(G_df_dict, G_data_info, G_hist, is_train, remain_time, top_k=3):
 
         end = time.time()
         remain_time -= (end - start)
-
+    log("time consumption: {}".format(str(end - start)))
     log("remain_time: {} s".format(remain_time))
 
     return remain_time

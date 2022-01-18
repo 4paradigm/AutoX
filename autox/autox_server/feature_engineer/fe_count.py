@@ -1,47 +1,17 @@
 import warnings
-import pandas as pd
 warnings.filterwarnings('ignore')
-import time
-from autox.autox_server.util import log
-from tqdm import tqdm
-import math
+from autox.autox_server.feature_engineer.fe_count_ratio import fe_count_ratio
+from autox.autox_server.feature_engineer.fe_count_map import fe_count_map
 
-def fe_count(G_df_dict, G_data_info, G_hist, is_train, remain_time):
-    # 对G_df_dict['BIG']表做扩展特征
+def fe_count(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
 
-    start = time.time()
-    log('[+] feature engineer, count')
+    remain_time = fe_count_map(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE)
 
-    Id = G_data_info['target_id']
-    target = G_data_info['target_label']
+    # if G_data_info['time_series_data'] == 'true':
+    #     # 对于时序数据的count特征，test部分通过train保留的字典进行映射
+    #     remain_time = fe_count_map(G_df_dict, G_data_info, G_hist, is_train, remain_time)
+    # else:
+    #     # 对于非时序数据的count特征，计算count数和总体数据量的比例，test部分计算时拼上train再操作
+    #     remain_time = fe_count_ratio(G_df_dict, G_data_info, G_hist, is_train, remain_time)
 
-    if is_train:
-        G_hist['FE_count'] = {}
-        G_hist['FE_count']['feature_map'] = {}
-
-        size_of_big = G_df_dict['BIG'].shape[0]
-
-        cnt_features = []
-        for col in tqdm(G_hist['big_cols_cat']):
-            if G_df_dict['BIG'][col].nunique() < size_of_big * 0.8:
-                cnt_features.append(col)
-        G_hist['FE_count']['cnt_features'] = cnt_features
-        log("count features: {}".format(cnt_features))
-
-        for f in tqdm(cnt_features):
-            temp = pd.DataFrame(G_df_dict['BIG'][f])
-            temp[f + '_cnt'] = temp.groupby([f])[f].transform('count')
-            temp.index = temp[f]
-            temp = temp.drop(f, axis=1)
-            faeture_map = temp.to_dict()[f + '_cnt']
-            faeture_map = {k: v for k, v in faeture_map.items() if (type(k) == str or not math.isnan(k))}
-            G_hist['FE_count']['feature_map'][f] = faeture_map
-
-    G_df_dict['FE_count'] = G_df_dict['BIG'][Id]
-    for f in G_hist['FE_count']['cnt_features']:
-        G_df_dict['FE_count'][f + "_cnt"] = G_df_dict['BIG'][f].map(G_hist['FE_count']['feature_map'][f])
-
-    end = time.time()
-    remain_time -= (end - start)
-    log("remain_time: {} s".format(remain_time))
     return remain_time

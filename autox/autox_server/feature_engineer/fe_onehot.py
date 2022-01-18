@@ -35,8 +35,10 @@ def fe_onehot(G_df_dict, G_data_info, G_hist, is_train, remain_time):
     for f in G_hist['FE_onehot']:
         df_temp = pd.get_dummies(G_df_dict['BIG'][f], prefix=f)
         G_df_dict['FE_onehot'] = pd.concat([G_df_dict['FE_onehot'], df_temp], axis=1)
+        G_df_dict['FE_onehot'].columns = ["onehot_" + str(x) for x in list(G_df_dict['FE_onehot'].columns)]
 
     end = time.time()
     remain_time -= (end - start)
+    log("time consumption: {}".format(str(end - start)))
     log("remain_time: {} s".format(remain_time))
     return remain_time

@@ -10,7 +10,7 @@ from autox.autox_server.util import log
 from autox.autox_server.model import model_util
 SAMPLE_LIMIT = model_util.SAMPLE_LIMIT
 
-def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time):
+def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time, loop_num = None):
     """
     """
 
@@ -29,9 +29,18 @@ def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time):
         # 获得used_size, 训练数据不断增加
         data_size = G_df_dict['BIG'].shape[0]
         half_size = data_size // 2
+
+        # todo: 优化训练数据集大小
         used_size = [2 ** i * 1000 for i in range(12)]
         used_size = [x for x in used_size if x < half_size]
         used_size.extend([half_size, data_size])
+        if loop_num in range(0, 3):
+            try:
+                used_size = [used_size[loop_num]]
+            except:
+                used_size = [half_size]
+        elif loop_num == 3:
+            used_size = [half_size]
 
         end = time.time()
         remain_time -= (end - start)
@@ -54,7 +63,7 @@ def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time):
 
             log("used size: {}".format(train.shape[0]))
 
-            not_used = [Id, target, 'istrain']
+            not_used = Id + [target, 'istrain']
             used_features = [x for x in list(train.describe().columns) if x not in not_used]
 
             G_hist['simple_lgb']['used_features'].append(used_features)
@@ -129,6 +138,7 @@ def simple_lgb(G_df_dict, G_data_info, G_hist, is_train, remain_time):
 
             end = time.time()
             remain_time -= (end - start)
+            log("time consumption: {}".format(str(end - start)))
             log("remain_time: {} s".format(remain_time))
             log("#" * 50)
 

@@ -22,5 +22,6 @@ def preprocess_2(G_df_dict, G_data_info, G_hist, is_train, remain_time):
 
     end = time.time()
     remain_time -= (end - start)
+    log("time consumption: {}".format(str(end - start)))
     log("remain_time: {} s".format(remain_time))
     return remain_time
