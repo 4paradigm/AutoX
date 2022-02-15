@@ -7,7 +7,7 @@ setup(name="automl-x",
         description="automl tools",
         author="caihengxing",
         author_email="caihengxing@4paradigm.com",
-        url='https://github.com/fanghy06/autox',
+        url='https://github.com/fanghy06/autox1',
         install_requires=[
             'lightgbm',
             'xgboost',
