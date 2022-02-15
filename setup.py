@@ -3,11 +3,11 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(name="automl-x",
-        version="0.1.0",
+        version="0.1.1",
         description="automl tools",
         author="caihengxing",
         author_email="caihengxing@4paradigm.com",
-        url='https://github.com/4paradigm/autox',
+        url='https://github.com/fanghy06/autox',
         install_requires=[
             'lightgbm',
             'xgboost',
