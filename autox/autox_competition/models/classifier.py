@@ -29,7 +29,7 @@ class CrossXgbBiClassifier(object):
             'eta': 0.01,
             'max_depth': 5,
             'subsample': 0.6,
-            'n_estimators': 2500,
+            'n_estimators': 500,
             'reg_alpha': 40,
             'reg_lambda': 18,
             'min_child_weight': 16,
