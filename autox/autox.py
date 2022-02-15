@@ -116,7 +116,7 @@ class AutoX():
 
     def get_submit(self):
         self.topk_feas = self.get_top_features(return_df = False)
-
+        print('******************如果打印出这一行，说明成功了******************')
 #         # 模型训练
 #         log("start training xgboost model")
 #         if self.info_['task_type'] == 'regression':
