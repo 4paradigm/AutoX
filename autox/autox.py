@@ -117,21 +117,22 @@ class AutoX():
     def get_submit(self):
         self.topk_feas = self.get_top_features(return_df = False)
 
-        # 模型训练
-        log("start training xgboost model")
-        if self.info_['task_type'] == 'regression':
-            self.model_xgb = CrossXgbRegression(metric=self.info_['metric'])
-            self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
+#         # 模型训练
+#         log("start training xgboost model")
+#         if self.info_['task_type'] == 'regression':
+#             self.model_xgb = CrossXgbRegression(metric=self.info_['metric'])
+#             self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
 
-        elif self.info_['task_type'] == 'binary':
-            self.model_xgb = CrossXgbBiClassifier()
-            self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
+#         elif self.info_['task_type'] == 'binary':
+#             self.model_xgb = CrossXgbBiClassifier()
+#             self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
 
         # 模型预测
         predict_lgb = self.model_lgb.predict(self.test[self.used_features])
-        predict_xgb = self.model_xgb.predict(self.test[self.used_features])
+#         predict_xgb = self.model_xgb.predict(self.test[self.used_features])
         # predict_tabnet = model_tabnet.predict(test[used_features])
-        predict = (predict_xgb + predict_lgb) / 2
+#         predict = (predict_xgb + predict_lgb) / 2
+        predict = predict_lgb
 
         # 预测结果后处理
         min_ = self.info_['min_target']
