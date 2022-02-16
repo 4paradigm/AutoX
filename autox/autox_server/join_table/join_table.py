@@ -44,8 +44,8 @@ def join_simple_tables(G_df_dict, G_data_info, G_hist, is_train, remain_time):
         merge_table = G_df_dict[merge_table_name].copy()
         merge_table.columns = [x if x in skip_name else merge_table_name + "_" + x for x in merge_table.columns]
 
-        G_df_dict['BIG'] = G_df_dict['BIG'].merge(merge_table, left_on=left_on, right_on=right_on)
-
+        G_df_dict['BIG'] = G_df_dict['BIG'].merge(merge_table, left_on=left_on, right_on=right_on, how='left')
+        log(f"G_df_dict['BIG'].shape: {G_df_dict['BIG'].shape}")
     end = time.time()
     remain_time -= (end - start)
     log("remain_time: {} s".format(remain_time))
