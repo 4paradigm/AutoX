@@ -128,12 +128,12 @@ def lgb_model(df, G_data_info, G_hist, is_train, remain_time, exp_name, params, 
             log("{}| used_features: {}".format(exp_name, used_features))
         G_hist[exp_name]['used_features'] = used_features
 
-        # develop_tune直接return
-        end = time.time()
-        remain_time -= (end - start)
-        log("time consumption: {}".format(str(end - start)))
-        log("remain_time: {} s".format(remain_time))
-        return remain_time
+        # # develop_tune直接return
+        # end = time.time()
+        # remain_time -= (end - start)
+        # log("time consumption: {}".format(str(end - start)))
+        # log("remain_time: {} s".format(remain_time))
+        # return remain_time
 
 
         # 保存feature imp
