@@ -55,6 +55,7 @@ pip install ./AutoX
 - [autox打比赛](autox/autox_competition/README.md)
 - [autox上线部署](autox/autox_server/README.md)
 - [autox可解释](autox/autox_interpreter/README.md)
+- [特征构造](autox/autox_competition/feature_engineer/README.md)
 
 # 社区案例
 [汽车销量预测](./demo/汽车销量预测/README.md)
