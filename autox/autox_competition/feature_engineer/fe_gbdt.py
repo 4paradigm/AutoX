@@ -35,7 +35,7 @@ class FeatureGbdt:
                   }
         self.N_round = int(num_of_features)
         trn_data = lgb.Dataset(X[self.used_cols], label=y, categorical_feature=category_cols)
-        self.clf = lgb.train(params, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data], verbose_eval=10)
+        self.clf = lgb.train(params, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data], verbose_eval=False)
 
     def transform(self, X):
         lgb_feature = pd.DataFrame(self.clf.predict(X[self.used_cols], pred_leaf=True))
