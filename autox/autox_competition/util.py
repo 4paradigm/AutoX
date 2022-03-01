@@ -4,7 +4,7 @@ import numpy as np
 
 # log
 import logging
-LOGGER = logging.getLogger('run-time-adaptive_automl')
+LOGGER = logging.getLogger()
 LOG_LEVEL = 'INFO'
 # LOG_LEVEL = 'DEBUG'
 LOGGER.setLevel(getattr(logging, LOG_LEVEL))
