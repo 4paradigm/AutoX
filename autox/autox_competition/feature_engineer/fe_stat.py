@@ -13,7 +13,7 @@ class FeatureStat:
         self.max_num = None
         self.ops = {}
         self.op_list_cat = ['nunique']
-        self.op_list_num = ['mean', 'min', 'max', 'mean', 'std']
+        self.op_list_num = ['mean', 'min', 'max', 'median', 'std']
 
     def fit(self, df, target=None, df_feature_type=None, silence_group_cols=[], silence_agg_cols=[],
             select_all=True, max_num=None):
