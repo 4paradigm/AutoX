@@ -89,6 +89,12 @@ pip install ./AutoX
 |regression-ts | multi-table  |[Walmart Recruiting](https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/)| wmae | 4660.99174 | 5024.16179 | 5128.31622 |
 |regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.13850 | 0.20453 | 0.35757 |
 
+# AutoX成就
+### 企业支持
+
+### 比赛获奖
+- [2021阿里云基础设施供应链大赛-冠军方案](https://tianchi.aliyun.com/forum/postDetail?postId=344505)
+
 
 # TODO
 功能开发完成后，发布相应的使用demo
