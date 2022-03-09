@@ -5,13 +5,19 @@ from PIL import Image
 from tqdm import tqdm
 
 
-def fe_ima2vec(df, img_path, img_col, filename_extension):
+def fe_ima2vec(df, img_path, img_col, filename_extension, sub_path = None):
     img2vec = Img2Vec(cuda=(torch.cuda.is_available()))
 
     fe_img = []
     for idx in tqdm(range(len(df))):
-        img = Image.open(f'{img_path}/{df.loc[idx, img_col]}.{filename_extension}')
-        vec = img2vec.get_vec(img)
+        path = f'{img_path}/{df.loc[idx, img_col]}.{filename_extension}'
+        if sub_path:
+            path = f'{img_path}/{df.loc[idx, sub_path]}/{df.loc[idx, img_col]}.{filename_extension}'
+        try:
+            img = Image.open(path)
+            vec = img2vec.get_vec(img)
+        except:
+            vec = [None] * 512
         fe_img.append(vec)
 
     fe_img = pd.DataFrame(fe_img)
