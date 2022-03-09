@@ -52,6 +52,9 @@ lgb_feature_test = featureGbdt.transform(X_test)
 # Image2vec特征
 ### 说明
 将图片输入转化为向量特征。
+### 使用案例
+- [kaggle_H&M_image_feature_AutoX](https://www.kaggle.com/poteman/h-m-image-feature-autox/notebook)
+
 
 # Nlp特征
 ### 说明
