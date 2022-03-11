@@ -11,7 +11,7 @@ setup(name="automl-x",
         install_requires=[
             'lightgbm',
             'xgboost',
-            'pytorch-tabnet',
+            # 'pytorch-tabnet',
             'torch',
             'numpy',
             'pandas',
