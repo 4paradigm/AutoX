@@ -20,4 +20,5 @@ def get_pseudo_label(train, test, id_, target, used_cols):
     pseudo_test.loc[ pseudo_test[target]<0.5, target ] = 0
     pseudo_test.index = range(len(pseudo_test))
     pseudo_test = pseudo_test.merge(test, on = id_, how = 'left')
+    pseudo_test = pseudo_test[train.columns]
     return  pseudo_test
