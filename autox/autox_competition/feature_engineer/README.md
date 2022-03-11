@@ -88,3 +88,8 @@ lgb_feature_test = featureGbdt.transform(X_test)
 # Time特征
 将时间列特征进行分解。
 获得信息包括：年、月、日、时、一年的第几周、星期、是否工作日、季度、是否月初、是否月末。
+
+# 伪标签数据增强
+将测试集中置信度大的样本取出来，用预测结果进行标记，作为增强数据集。
+### 使用案例
+- [PseudoLabeling_AutoX](https://www.kaggle.com/poteman/pseudolabeling-autox)
