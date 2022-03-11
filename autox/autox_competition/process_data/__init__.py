@@ -4,3 +4,4 @@ from .feature_combination import feature_combination
 from .feature_filter import feature_filter
 from .train_test_divide import train_test_divide
 from .clip_label import clip_label
+from .get_pseudo_label import get_pseudo_label
