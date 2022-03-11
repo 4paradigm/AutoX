@@ -16,7 +16,7 @@ def fe_window2(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
 
     if is_train:
         G_hist['FE_window2'] = {}
-        G_hist['FE_window2']['window_num_features'] = []
+        G_hist['FE_window2']['num_agg_features'] = []
         G_hist['FE_window2']['cat_agg_features'] = []
         G_hist['FE_window2']['window_cat_features'] = []
 
@@ -38,11 +38,11 @@ def fe_window2(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
                 G_hist['FE_window2']['window_cat_features'] = window_cat_features
                 log("window2 cat features: {}".format(window_cat_features))
 
-                window_num_features = []
+                num_agg_features = []
                 for col in G_hist['big_cols_num']:
-                    window_num_features.append(col)
-                G_hist['FE_window2']['window_num_features'] = window_num_features
-                log("window2 num features: {}".format(window_num_features))
+                    num_agg_features.append(col)
+                G_hist['FE_window2']['num_agg_features'] = num_agg_features
+                log("FE_window2 num_agg_features: {}".format(num_agg_features))
 
                 cat_agg_features = []
                 for col in G_hist['big_cols_cat']:
@@ -55,7 +55,7 @@ def fe_window2(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
         G_df_dict['FE_window2'] = pd.DataFrame()
         for w in tqdm([10, '432001s']):
             for cat_col in G_hist['FE_window2']['window_cat_features']:
-                for num_col in G_hist['FE_window2']['window_num_features']:
+                for num_col in G_hist['FE_window2']['num_agg_features']:
                     if type(w) == int:
                         # f_std = lambda x: x.rolling(window=w, min_periods=1).std()
                         f_mean = lambda x: x.rolling(window=w, min_periods=1).mean()

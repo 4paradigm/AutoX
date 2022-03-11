@@ -27,13 +27,13 @@ def fe_time_diff(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
         G_hist['FE_time_diff']['window'] = window
         G_hist['FE_time_diff']['cat_col'] = G_hist['big_cols_cat']
         G_hist['FE_time_diff']['time_col_unix'] = G_hist['big_cols_Unix_timestamp']
-        G_hist['FE_time_diff']['time_col_data_time'] = G_hist['big_cols_datetime']
+        G_hist['FE_time_diff']['time_col_datetime'] = G_hist['big_cols_datetime']
 
         if G_hist['big_data']:
             G_hist['FE_time_diff']['window'] = []
             G_hist['FE_time_diff']['cat_col'] = []
             G_hist['FE_time_diff']['time_col_unix'] = []
-            G_hist['FE_time_diff']['time_col_data_time'] = []
+            G_hist['FE_time_diff']['time_col_datetime'] = []
 
     log("big_cols_Unix_timestamp: {}".format(G_hist['big_cols_Unix_timestamp']))
     log("big_cols_datetime: {}".format(G_hist['big_cols_datetime']))
@@ -58,7 +58,7 @@ def fe_time_diff(G_df_dict, G_data_info, G_hist, is_train, remain_time, AMPERE):
 
                     G_df_dict['FE_time_diff'][f'{cat_col}__with__{time_col_unix}_unix_diff_{i}'] = time_diff.reindex(G_df_dict['BIG'].index)
 
-                for time_col_data_time in G_hist['FE_time_diff']['time_col_data_time']:
+                for time_col_data_time in G_hist['FE_time_diff']['time_col_datetime']:
                     if G_data_info['time_series_data'] == 'true':
                         if time_col != time_col_data_time:
                             temp_df = G_df_dict['BIG'][[cat_col, time_col_data_time, time_col]].sort_values([cat_col, time_col])
