@@ -90,6 +90,8 @@ lgb_feature_test = featureGbdt.transform(X_test)
 获得信息包括：年、月、日、时、一年的第几周、星期、是否工作日、季度、是否月初、是否月末。
 
 # 伪标签数据增强
-将测试集中置信度大的样本取出来，用预测结果进行标记，作为增强数据集。
+使用有标签的数据训练模型, 对无标签的数据进行预测, 将预测置信度大的样本取出来，用预测结果进行标记，作为伪标签增强数据集。
 ### 使用案例
 - [PseudoLabeling_AutoX](https://www.kaggle.com/poteman/pseudolabeling-autox)
+### 详细说明
+- [小数据集怎么上分? 几行代码生成伪标签数据集](https://mp.weixin.qq.com/s/woJCZ-nfK3Bw5cEQfeGJ5A)
