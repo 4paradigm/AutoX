@@ -63,6 +63,8 @@ kaggle-Allstate获取topk重要的特征:
 - [目录](#目录)
 - [效果对比](#效果对比)
 - [比赛上分点总结](#比赛上分点总结)
+- [特征工程](./feature_engineer/README.md)
+- [特征选择](./feature_selection/README.md)
 
 <!-- /TOC -->
 
