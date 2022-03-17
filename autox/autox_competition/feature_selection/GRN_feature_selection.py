@@ -328,7 +328,7 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
 
     return weights
 
-class Feature_selection():
+class GRN_feature_selection():
     def __init__(self):
         self.new_columns = []
         #         self.new_df = None
