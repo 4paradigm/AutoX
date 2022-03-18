@@ -10,10 +10,24 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class AdversarialValidation:
+    """**Remove features with inconsistent distribution between train and test.**
+
+    Example::
+        `elo_AdversarialValidation_AutoX <https://www.kaggle.com/code/poteman/elo-adversarialvalidation-autox>`_
+
+    """
     def __init__(self):
         self.removed_features = []
 
     def fit(self, train, test, id_, target, categorical_features=[], p=0.6):
+        """
+        :param train: dataframe, the training input samples.
+        :param test: dataframe, the testing input samples.
+        :param id_: list, columns as id.
+        :param target: str, target column.
+        :param categorical_features: list, columns with categorical type.
+        :param p: float, threshold. If the auc is greater than this threshold, the algorithm will continuously remove the most important feature.
+        """
         assert (p > 0.5)
         self.categorical_features = categorical_features
 
@@ -101,5 +115,9 @@ class AdversarialValidation:
                 break
 
     def transform(self, df):
+        """
+        :param df: dataframe, dataframe needs to be transformed.
+        :return: dataframe, transformed dataframe.
+        """
         used = [x for x in df.columns if x not in self.removed_features]
         return df[used]
