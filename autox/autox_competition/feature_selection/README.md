@@ -13,7 +13,7 @@
 第6步，所有第5步中被删除的特征，就是最终获得的训练集和测试集分布不一致的特征，不推荐在后续过程中使用。
 ```
 ### 使用案例
-- [elo_AdversarialValidation_AutoX](https://www.kaggle.com/code/poteman/elo-adversarialvalidation-autox)
+- [Titanic_AdversarialValidation_AutoX](https://www.kaggle.com/code/poteman/titanic-adversarialvalidation-autox)
 
 # GRN Feature Selection
 ### 说明
