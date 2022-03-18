@@ -1,3 +1,6 @@
+feature engineer
+===================
+
 count features
 ===================
 .. automodule:: autox.autox_competition.feature_engineer.fe_count

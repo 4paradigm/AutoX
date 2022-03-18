@@ -1,3 +1,6 @@
+feature selection
+===================
+
 adversarial validation
 ===================
 .. automodule:: autox.autox_competition.feature_selection.adversarial_validation
