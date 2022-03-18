@@ -8,9 +8,6 @@ Welcome to AutoX's documentation!
 
 Installation
 ------------
-
-To use AutoX, first install it using pip:
-
 .. code-block:: console
 
    $ git clone https://github.com/4paradigm/autox.git
@@ -23,7 +20,6 @@ AutoX Competition
 AutoX Server
 =================
    :doc:`server`
-
 
 AutoX Interpreter
 =================

@@ -1,13 +1,16 @@
 Competition
 =====
 
-AutoX 主函数
+Pipeline
 =================
-.. automodule:: autox.autox
-   :members:
+   :doc:`pipeline`
 
 
-AutoX 特征工程
-===================
-.. automodule:: autox.autox_competition.feature_engineer.fe_count
-   :members:
+Feature engineer
+=================
+   :doc:`feature_engineer`
+
+
+Feature selection
+=================
+   :doc:`feature_selection`
