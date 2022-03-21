@@ -15,3 +15,4 @@ from .fe_rolling_stat_ts import FeatureRollingStatTS
 from .fe_exp_weighted_mean import FeatureExpWeightedMean
 from .fe_image2vec import fe_ima2vec
 from .fe_gbdt import FeatureGbdt
+from .fe_one2many import FeatureOne2Many
