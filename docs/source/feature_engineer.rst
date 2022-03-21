@@ -1,6 +1,11 @@
 feature engineer
 ===================
 
+one2many features
+===================
+.. automodule:: autox.autox_competition.feature_engineer.fe_one2many
+   :members:
+
 count features
 ===================
 .. automodule:: autox.autox_competition.feature_engineer.fe_count
