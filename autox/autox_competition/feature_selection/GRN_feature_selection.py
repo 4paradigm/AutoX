@@ -2,7 +2,6 @@ import warnings
 warnings.simplefilter('default')
 import numpy as np
 import pandas as pd
-from tqdm.notebook import tqdm
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GroupKFold,KFold
 import torch
@@ -253,12 +252,11 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
     best_loss = np.inf
     weights = None
     for e in range(epochs):
-        tk0 = tqdm(dataloaders['train'], total=len(dataloaders['train']))
         # train
         model.train()
         train_loss = 0
         num = 0
-        for i, (maps, targets) in enumerate(tk0):
+        for i, (maps, targets) in enumerate(dataloaders['train']):
             for k, v in maps.items():
                 maps[k] = v.to(device)
             targets = targets.to(device, dtype=torch.float)
@@ -271,8 +269,6 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
             optimizer.step()
             train_loss += loss.item()
             num += len(targets)
-            running_loss = train_loss / num
-            tk0.set_postfix(loss=running_loss)
         train_epoch_loss = train_loss / num_train_examples
 
         # valid
@@ -293,16 +289,11 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
 
         # change lr
         scheduler.step(valid_epoch_loss)
-        # print score
-        print(f"Epoch {e}, LR: {optimizer.param_groups[0]['lr']}")
-        print(f"train loss: {train_epoch_loss:.8f}, valid loss {valid_epoch_loss:.8f}")
         losses.append((train_epoch_loss, valid_epoch_loss))
 
         # save model
         if best_loss > valid_epoch_loss:
-            print(f'-- loss from {best_loss:.8f} to {valid_epoch_loss:.8f}')
             weights = model.sparse_weight.detach().cpu().numpy()
-            print(f'The features weights has been recorded.')
             best_loss = valid_epoch_loss
         print()
 
@@ -310,8 +301,8 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
 
 class GRN_feature_selection():
     def __init__(self):
+        self.feature2weight = None
         self.new_columns = []
-        #         self.new_df = None
         self._real_scaler = None
         self._cat_scalers = None
         self.weights = None
@@ -349,9 +340,9 @@ class GRN_feature_selection():
                     train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num']))))/5
         print('Training has ended and the weights for each feature are as follows, please use "transform(data,k=K)" to '
               'get Top K Important Features\n')
-        self.name2weight = pd.DataFrame(self.new_columns[:len(self.weights)], columns=['column'])
-        self.name2weight['weight'] = self.weights
-        print(self.name2weight)
+        self.feature2weight = pd.DataFrame(self.new_columns[:len(self.weights)], columns=['feature'])
+        self.feature2weight['weight'] = self.weights
+        print(self.feature2weight)
 
     def transform(self, df, k=10):
         ind = list(np.argpartition(self.weights, -k)[-k:])
