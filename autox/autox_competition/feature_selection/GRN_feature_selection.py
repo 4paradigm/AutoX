@@ -319,7 +319,7 @@ class GRN_feature_selection():
         self._column_definition = None
         self._num_classes_per_cat_input = None
 
-    def fit(self, df, column_definition,y):
+    def fit(self, df, y,column_definition):
         self._column_definition = column_definition
         # 检查特征列定义和dataframe是否对应，并且转换对应数据类型,将定义的特征列取出来作为新的df,之后所有的操作都是在新的df上进行
         df = self.check_column_definition(df,y)
