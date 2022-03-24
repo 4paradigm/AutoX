@@ -353,7 +353,7 @@ class GRN_feature_selection():
 
     def transform(self, df, k=10):
         ind = list(np.argpartition(self.weights, -k)[-k:])
-        names = list(np.array(self.new_columns)[ind]) + self._column_definition['target']
+        names = list(np.array(self.new_columns)[ind])
         self.selected_df = df.loc[:, names]
         return self.selected_df
 
