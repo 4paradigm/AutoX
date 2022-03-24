@@ -295,7 +295,6 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
         if best_loss > valid_epoch_loss:
             weights = model.sparse_weight.detach().cpu().numpy()
             best_loss = valid_epoch_loss
-        print()
 
     return weights
 
@@ -373,8 +372,6 @@ class GRN_feature_selection():
         df['target'] = y
         # #返回子数据集
         return df
-
-    #         self.new_df = df.loc[:,self.new_columns]
 
     def set_scalers(self, new_df):
         # 暂时使用MinMaxScaler，后期看需求增加其他scaler
