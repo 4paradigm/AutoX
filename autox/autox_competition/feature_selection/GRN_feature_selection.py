@@ -1,18 +1,10 @@
 import warnings
 warnings.simplefilter('default')
-
-import gc
-
 import numpy as np
 import pandas as pd
 from tqdm.notebook import tqdm
-
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import GroupKFold,KFold
-
-import joblib
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -161,12 +153,6 @@ class VariableSelectionNetwork(nn.Module):
                                                   input_size=self.input_size,
                                                   output_size=self.output_size,
                                                   dropout_rate=self.dropout_rate, )
-
-    #         self.per_feature_grn = nn.ModuleList([GatedResidualNetwork(self.hidden_layer_size,
-    #                                                                    input_size = 1,
-    #                                                                    output_size=1,
-    #                                                                    dropout_rate=self.dropout_rate)
-    #                                                       for i in range(self.output_size)])
     def forward(self, x):
         embedding = x
 
@@ -219,10 +205,6 @@ class SimpleMLP(nn.Module):
         return x
 
 
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-# device
-
-
 class GRN_DATASET(Dataset):
     def __init__(self, df_data, _column_definition, mode='train'):
         self.mode = mode
@@ -250,7 +232,7 @@ class GRN_DATASET(Dataset):
             targets_out = self.targets[index]
             return data_map, targets_out
         else:
-            return data_map, vals_out
+            return data_map
 
 
 def train_fn(dataloaders, device, cat_num_classes, real_num):
@@ -259,11 +241,11 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
     optimizer = optim.Adam(model.parameters(),
                            lr=1e-3)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer,
-                                                     factor=0.1,
-                                                     patience=1,
+                                                     factor=0.5,
+                                                     patience=0,
                                                      mode='min')
 
-    epochs = 8
+    epochs = 10
     num_train_examples = len(dataloaders['train'])
     num_valid_examples = len(dataloaders['valid'])
 
@@ -362,11 +344,15 @@ class GRN_feature_selection():
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
             self.weights = np.array(
                 train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num'])))
-            print('Traning finished, please use "transform(K)" to get Top K Important Features\n')
+            print('Training has ended and the weights for each feature are as follows, please use "transform(data,'
+                  'k=K)" to get Top K Important Features\n')
             break
+        self.name2weight = pd.DataFrame(self.new_columns[:len(self.weights)], columns=['column'])
+        self.name2weight['weight'] = self.weights
+        print(self.name2weight)
 
-    def transform(self, df, p=10):
-        ind = list(np.argpartition(self.weights, -p)[-p:])
+    def transform(self, df, k=10):
+        ind = list(np.argpartition(self.weights, -k)[-k:])
         names = list(np.array(self.new_columns)[ind]) + self._column_definition['target']
         self.selected_df = df.loc[:, names]
         return self.selected_df
