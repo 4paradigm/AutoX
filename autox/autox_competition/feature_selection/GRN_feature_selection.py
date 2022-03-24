@@ -214,7 +214,7 @@ class GRN_DATASET(Dataset):
         if self._column_definition['num']:
             self.vals = np.array(df_data.loc[:, _column_definition['num']].values.tolist(), dtype=np.float32)
         if self.mode != 'test':
-            self.targets = np.array(df_data.loc[:, _column_definition['target']].values, dtype=np.float64)
+            self.targets = np.array(df_data.loc[:, ['target']].values, dtype=np.float64)
         self.len = df_data.shape[0]
 
     def __len__(self):
@@ -261,7 +261,6 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
         for i, (maps, targets) in enumerate(tk0):
             for k, v in maps.items():
                 maps[k] = v.to(device)
-            # vals = vals.to(device=device, dtype=torch.float)
             targets = targets.to(device, dtype=torch.float)
 
             yhat = model(maps)
@@ -274,7 +273,6 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
             num += len(targets)
             running_loss = train_loss / num
             tk0.set_postfix(loss=running_loss)
-        #             wandb.log({"Running Loss":running_loss})
         train_epoch_loss = train_loss / num_train_examples
 
         # valid
@@ -321,17 +319,18 @@ class GRN_feature_selection():
         self._column_definition = None
         self._num_classes_per_cat_input = None
 
-    def fit(self, df, column_definition):
+    def fit(self, df, column_definition,y):
         self._column_definition = column_definition
         # 检查特征列定义和dataframe是否对应，并且转换对应数据类型,将定义的特征列取出来作为新的df,之后所有的操作都是在新的df上进行
-        df = self.check_column_definition(df)
+        df = self.check_column_definition(df,y)
         # Scaler 和 transforme input 必须组合使用，目前来看占用时间比较多，后期可增加开关选择性使用
         self.set_scalers(df)
         df = self.transform_inputs(df)
         # 当前只在一个fold上跑，取验证得分最佳时的特征权重，后期可增加多个fold取得的权重平均
         print('Training weights\n')
-        kf = KFold(n_splits=10)
+        kf = KFold(n_splits=5)
         for fold_id, (trn_idx, val_idx) in enumerate(kf.split(df)):
+            print(f'training fold{fold_id}\n')
             df_train = df.iloc[trn_idx]
             df_valid = df.iloc[val_idx]
 
@@ -342,11 +341,14 @@ class GRN_feature_selection():
                 'valid': DataLoader(valid_set, batch_size=1024, num_workers=4, pin_memory=True, shuffle=False)
             }
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-            self.weights = np.array(
-                train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num'])))
-            print('Training has ended and the weights for each feature are as follows, please use "transform(data,'
-                  'k=K)" to get Top K Important Features\n')
-            break
+            if fold_id!=0:
+                self.weights += (np.array(
+                    train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num']))))/5
+            else:
+                self.weights = (np.array(
+                    train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num']))))/5
+        print('Training has ended and the weights for each feature are as follows, please use "transform(data,k=K)" to '
+              'get Top K Important Features\n')
         self.name2weight = pd.DataFrame(self.new_columns[:len(self.weights)], columns=['column'])
         self.name2weight['weight'] = self.weights
         print(self.name2weight)
@@ -357,32 +359,29 @@ class GRN_feature_selection():
         self.selected_df = df.loc[:, names]
         return self.selected_df
 
-    def check_column_definition(self, df):
+    def check_column_definition(self, df, y):
         print("""Checking columns' definition\n""")
         # 检查列定义是否存在
-        assert 'target' and ('cat' or 'num') in self._column_definition, \
-            'Lack of established columns of " target " or " num " or "cat" '
+        assert ('cat' or 'num') in self._column_definition, \
+            'Lack of established columns of " num " or "cat" '
         # 检查列名是否为空
-        assert self._column_definition['target'] and (self._column_definition['cat'] or self._column_definition['num']), \
+        assert (self._column_definition['cat'] or self._column_definition['num']), \
             'A list with the column names cannot be empty'
-        # 当前只支持一列target
-        if len(self._column_definition['target']) != 1:
-            self._column_definition['target'] = self._column_definition['target'][:1]
-            warnings.warn("Only one column of target values is currently supported", SyntaxWarning)
         # 检查对应列名是否存在,若存在则加入到子列名列表
-        for data_type in ['cat', 'num', 'target']:
+        for data_type in ['cat', 'num']:
             if self._column_definition[data_type]:
                 for col in self._column_definition[data_type]:
                     assert col in df, f'The {data_type} column "{col}" not in dataframe'
                     self.new_columns.append(col)
         # 尝试将每一列数据类型转为对应的类型,目前默认target是连续型,考虑加上try except?
-        df[self._column_definition['target'][0]] = df[self._column_definition['target'][0]].astype(float)
+        y = y.astype(float)
         if self._column_definition['num']:
             df.loc[:, self._column_definition['num']] = df.loc[:, self._column_definition['num']].apply(
                 lambda row: row.astype(float))
-
+        df = df.loc[:, self.new_columns]
+        df['target'] = y
         # #返回子数据集
-        return df.loc[:, self.new_columns]
+        return df
 
     #         self.new_df = df.loc[:,self.new_columns]
 
