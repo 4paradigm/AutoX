@@ -1,28 +1,30 @@
 import pandas as pd
 from tqdm import tqdm
 from autox.autox_competition.CONST import FEATURE_TYPE
+from autox.autox_competition.util import check_ts_unit
 from datetime import timedelta
+import re
 
-def roll_mean_features(df, windows, val, keys, op):
+def roll_mean_features(df, intervals, windows, val, keys, op):
     names = []
     for window in windows:
         name = f"{'__'.join(keys)}__{val}_roll_{op}_" + str(window)
         names.append(name)
         if op == 'mean':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.rolling(window=window, min_periods=3, win_type="triang").mean())
+                lambda x: x.shift(intervals).rolling(window=window, min_periods=3, win_type="triang").mean())
         if op == 'std':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.rolling(window=window, min_periods=3).std())
+                lambda x: x.shift(intervals).rolling(window=window, min_periods=3).std())
         if op == 'median':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.rolling(window=window, min_periods=3).median())
+                lambda x: x.shift(intervals).rolling(window=window, min_periods=3).median())
         if op == 'max':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.rolling(window=window, min_periods=3).max())
+                lambda x: x.shift(intervals).rolling(window=window, min_periods=3).max())
         if op == 'min':
             df[name] = df.groupby(keys)[val].transform(
-                lambda x: x.rolling(window=window, min_periods=3).min())
+                lambda x: x.shift(intervals).rolling(window=window, min_periods=3).min())
     return df[names]
 
 class FeatureRollingStatTS:
@@ -53,17 +55,30 @@ class FeatureRollingStatTS:
 
         if self.ts_unit in ['D', 'day', 'Day']:
             one_unit = timedelta(days=1)
-            intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+            self.intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
-            self.windows = [intervals+7, intervals+7*2, intervals*2]
-            self.windows = list(dict.fromkeys(self.windows))
+            self.windows = [3, 4, 5]
         elif self.ts_unit in ['W', 'week', 'Week']:
             one_unit = timedelta(days=7)
-            intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+            self.intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
-            self.windows = [intervals+3, intervals+4, intervals+5]
-            self.windows = list(dict.fromkeys(self.windows))
+            self.windows = [7, 7*2, 7*3]
+        elif check_ts_unit(self.ts_unit):
+            pattern = re.compile('-?[1-9]\d*')
+            number = pattern.search(ts_unit)[0]
+            unit = ts_unit[len(number):]
+            number = int(number)
+            if unit == 'min':
+                one_unit = timedelta(minutes=number)
+            elif unit == 'day':
+                one_unit = timedelta(days=number)
+            elif unit == 'week':
+                one_unit = timedelta(weeks=number)
+            self.intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+                df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
+            self.windows = [3, 4, 5]
         else:
+            self.intervals = 0
             self.windows = [3, 4, 5]
 
 
@@ -85,7 +100,7 @@ class FeatureRollingStatTS:
         flag = True
         for col in tqdm(self.ops):
             for op in ['mean', 'std', 'median', 'max', 'min']:
-                df_temp = roll_mean_features(df_copy, self.windows, col, self.id_, op)
+                df_temp = roll_mean_features(df_copy, self.intervals, self.windows, col, self.id_, op)
                 df_temp = df_temp.loc[df.index]
                 if flag:
                     result = df_temp

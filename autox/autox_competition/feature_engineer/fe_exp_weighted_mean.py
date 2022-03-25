@@ -2,6 +2,8 @@ import pandas as pd
 from tqdm import tqdm
 from autox.autox_competition.CONST import FEATURE_TYPE
 from datetime import timedelta
+from autox.autox_competition.util import check_ts_unit
+import re
 
 def ewm_features(df, lags, val, keys, alpha=0.95):
     df_temp = df[keys + [val]]
@@ -52,6 +54,23 @@ class FeatureExpWeightedMean:
             df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
             self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
             self.lags = list(dict.fromkeys(self.lags))
+
+        elif check_ts_unit(self.ts_unit):
+            pattern = re.compile('-?[1-9]\d*')
+            number = pattern.search(ts_unit)[0]
+            unit = ts_unit[len(number):]
+            number = int(number)
+            if unit == 'min':
+                one_unit = timedelta(minutes=number)
+            elif unit == 'day':
+                one_unit = timedelta(days=number)
+            elif unit == 'week':
+                one_unit = timedelta(weeks=number)
+            intervals = int((pd.to_datetime(df.loc[df[self.target].isnull(), self.time_col].max()) - pd.to_datetime(
+                df.loc[df[self.target].isnull(), self.time_col].min())) / one_unit + 1)
+            self.lags = [intervals, intervals + 1, intervals + 2, intervals + 3]
+            self.lags = list(dict.fromkeys(self.lags))
+
         else:
             self.lags = [1, 2, 3]
 
