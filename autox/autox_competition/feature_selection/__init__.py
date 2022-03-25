@@ -1,2 +1,2 @@
-from .GRN_feature_selection import GRN_feature_selection
+from .grn_feature_selection import GRN_feature_selection
 from .adversarial_validation import AdversarialValidation

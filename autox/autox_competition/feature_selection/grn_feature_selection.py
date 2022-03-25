@@ -3,13 +3,14 @@ warnings.simplefilter('default')
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import GroupKFold,KFold
+from sklearn.model_selection import KFold
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import sklearn.preprocessing
+from tqdm import tqdm
 
 
 class GatedLinearUnit(nn.Module):
@@ -319,8 +320,7 @@ class GRN_feature_selection():
         # 当前只在一个fold上跑，取验证得分最佳时的特征权重，后期可增加多个fold取得的权重平均
         print('Training weights\n')
         kf = KFold(n_splits=5)
-        for fold_id, (trn_idx, val_idx) in enumerate(kf.split(df)):
-            print(f'training fold{fold_id}\n')
+        for fold_id, (trn_idx, val_idx) in tqdm(enumerate(kf.split(df)), total = 5):
             df_train = df.iloc[trn_idx]
             df_valid = df.iloc[val_idx]
 
