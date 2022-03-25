@@ -1,8 +1,10 @@
 from tqdm import tqdm
 from autox.autox_competition.util import log
 
-def feature_filter(train, test, id_, target):
+def feature_filter(train, test, id_, target, time_series=False):
     not_used = id_ + [target]
+    if time_series:
+        not_used = [target]
 
     used_features = test.describe().columns
     # 过滤掉test中全为nan的特征

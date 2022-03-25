@@ -19,6 +19,8 @@ from autox.autox_competition.feature_engineer import FeatureShiftTS, FeatureRoll
 from autox.autox_competition.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
 
 class AutoX():
+    """AutoX主函数描述"""
+
     def __init__(self, target, train_name, test_name, path, time_series=False, ts_unit=None, time_col=None,
                  metric='rmse', feature_type = {}, relations = [], id = [], task_type = 'regression',
                  Debug = False, image_info={}, target_map={}):
@@ -424,7 +426,7 @@ class AutoX():
 
         # 特征过滤
         log("feature filter")
-        self.used_features = feature_filter(self.train, self.test, id_, target)
+        self.used_features = feature_filter(self.train, self.test, id_, target, time_series=True)
         log(f"used_features: {self.used_features}")
 
         # 模型训练
