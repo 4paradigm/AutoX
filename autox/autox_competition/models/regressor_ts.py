@@ -4,6 +4,8 @@ import lightgbm as lgb
 import numpy as np
 import pandas as pd
 import torch
+from autox.autox_competition.util import check_ts_unit
+import re
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
 from autox.autox_competition.util import log, weighted_mae_lgb, weighted_mae_xgb
@@ -54,10 +56,24 @@ class XgbRegressionTs(object):
             one_unit = timedelta(days=7)
         elif ts_unit in ['month', 'Month']:
             one_unit = timedelta(days=30)
+        elif check_ts_unit(ts_unit):
+            pattern = re.compile('-?[1-9]\d*')
+            number = pattern.search(ts_unit)[0]
+            unit = ts_unit[len(number):]
+            number = int(number)
+            if unit == 'min':
+                one_unit = timedelta(minutes=number)
+            elif unit == 'day':
+                one_unit = timedelta(days=number)
+            elif unit == 'week':
+                one_unit = timedelta(weeks=number)
+
         intervals = int((pd.to_datetime(test[time_col].max()) - pd.to_datetime(test[time_col].min())) / one_unit + 1)
         split_time = pd.to_datetime(train[time_col].max()) - intervals * one_unit
-        train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
+
+        remove_data_split_time = pd.to_datetime(train[time_col].min()) + intervals * one_unit
+        train_idx = train.loc[(~(train[time_col] > str(split_time))) & (train[time_col] > str(remove_data_split_time))].index
 
         log('train time, min and max:')
         log(f"{train.loc[train_idx, time_col].min()}, {train.loc[train_idx, time_col].max()}")
@@ -80,9 +96,9 @@ class XgbRegressionTs(object):
 
         val = model.predict(train.iloc[valid_idx][used_features])
         if log1p:
-            mse_ = mean_squared_error(np.expm1(train.iloc[valid_idx][target]), np.expm1(val), squared=True)
+            mse_ = mean_squared_error(np.expm1(train.iloc[valid_idx][target]), np.expm1(val))
         else:
-            mse_ = mean_squared_error(train.iloc[valid_idx][target], val, squared=True)
+            mse_ = mean_squared_error(train.iloc[valid_idx][target], val)
         print('MSE: {}'.format(mse_))
         MSEs.append(mse_)
         print('Finished in {}'.format(str(datetime.timedelta(seconds=time() - start_time))))
@@ -165,10 +181,24 @@ class LgbRegressionTs(object):
             one_unit = timedelta(days=7)
         elif ts_unit in ['Month', 'month']:
             one_unit = timedelta(days=30)
+        elif check_ts_unit(ts_unit):
+            pattern = re.compile('-?[1-9]\d*')
+            number = pattern.search(ts_unit)[0]
+            unit = ts_unit[len(number):]
+            number = int(number)
+            if unit == 'min':
+                one_unit = timedelta(minutes=number)
+            elif unit == 'day':
+                one_unit = timedelta(days=number)
+            elif unit == 'week':
+                one_unit = timedelta(weeks=number)
+
         intervals = int((pd.to_datetime(test[time_col].max()) - pd.to_datetime(test[time_col].min())) / one_unit + 1)
         split_time = pd.to_datetime(train[time_col].max()) - intervals * one_unit
-        train_idx = train.loc[~(train[time_col] > str(split_time))].index
         valid_idx = train.loc[train[time_col] > str(split_time)].index
+
+        remove_data_split_time = pd.to_datetime(train[time_col].min()) + intervals * one_unit
+        train_idx = train.loc[(~(train[time_col] > str(split_time))) & (train[time_col] > str(remove_data_split_time))].index
 
         log('train time, min and max:')
         log(f"{train.loc[train_idx, time_col].min()}, {train.loc[train_idx, time_col].max()}")

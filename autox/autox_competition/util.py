@@ -25,6 +25,13 @@ def log(entry, level='info'):
 
     getattr(LOGGER, level)(f"{space} {entry}")
 
+def check_ts_unit(ts_unit):
+    ends = ['min', 'day', 'week']
+    for item in ends:
+        if ts_unit.endswith(item):
+            return True
+    return False
+
 
 def weighted_mae_lgb(preds, train_data, weight=10.0):
     labels = train_data.get_label()
