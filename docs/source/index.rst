@@ -1,29 +1,41 @@
-.. AutoX documentation master file, created by
-   sphinx-quickstart on Thu Mar 17 21:17:18 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+=======
+AutoX
+=======
 
-Welcome to AutoX's documentation!
-=================================
+This is the documentation of **AutoX**.
+
+AutoX is a python package.
+It's an open source AutoML solution for tabular data.
+
+You can jump right into the package by looking into our :ref:`quick-start-label`.
 
 Installation
-------------
+========
 .. code-block:: console
 
    $ git clone https://github.com/4paradigm/autox.git
    $ pip install ./autox
 
-AutoX Competition
-=================
-   :doc:`competition`
+Contents
+========
 
-AutoX Server
-=================
-   :doc:`server`
+The following chapters will explain the AutoX package in detail:
 
-AutoX Interpreter
-=================
-   :doc:`interpreter`
+.. toctree::
+   :maxdepth: 1
+
+   Introduction <text/introduction>
+   Quick Start <text/quick_start>
+   AutoX Competition <text/competition>
+   AutoX Server <text/server>
+   AutoX Interpreter <text/interpreter>
+   AutoX Community <text/community>
+   AutoX Achievement <text/achievement>
+   FAQ <text/faq>
+   Authors <authors>
+   License <license>
+   Changelog <changes>
+   How to contribute <text/how_to_contribute>
 
 
 Indices and tables
@@ -32,3 +44,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Acknowledgements
+================
+
+The research and development of TSFRESH was funded in part by 4paradigm.

@@ -1,9 +1,0 @@
-Interpreter
-=====
-
-.. _installation:
-
-Installation
-------------
-
-...
