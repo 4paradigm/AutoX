@@ -14,11 +14,22 @@ from tqdm import tqdm
 
 
 class GatedLinearUnit(nn.Module):
+    """**The unit of gating operation that maps the input to the range of 0-1 and multiple original input through the
+    sigmoid function.**
+
+    """
+
     def __init__(self, input_size,
                  hidden_layer_size,
                  dropout_rate,
                  activation=None):
+        """
 
+        :param input_size: Number of features
+        :param hidden_layer_size: The size of nn.Linear layer, global default is 160
+        :param dropout_rate: The rate of linear layer parameters randomly discarded during training
+        :param activation: activation function used to activate raw input, default is None
+        """
         super(GatedLinearUnit, self).__init__()
 
         self.input_size = input_size
@@ -60,10 +71,19 @@ class GatedLinearUnit(nn.Module):
 
 
 class GateAddNormNetwork(nn.Module):
+    """**Units that adding gating output to skip connection improves generalization.**"""
+
     def __init__(self, input_size,
                  hidden_layer_size,
                  dropout_rate,
                  activation=None):
+        """
+
+        :param input_size: Number of features
+        :param hidden_layer_size: The size of nn.Linear layer, global default is 160
+        :param dropout_rate: The rate of linear layer parameters randomly discarded during training
+        :param activation: activation function used to activate raw input, default is None
+        """
         super(GateAddNormNetwork, self).__init__()
 
         self.input_size = input_size
@@ -85,20 +105,26 @@ class GateAddNormNetwork(nn.Module):
 
 
 class GatedResidualNetwork(nn.Module):
+    """**GRN main module, which divides all inputs into two ways, calculates the gating one way for linear mapping twice and
+    passes the original input to GateAddNormNetwork together. ** """
     def __init__(self,
                  hidden_layer_size,
                  input_size=None,
                  output_size=None,
-                 dropout_rate=None,
-                 return_gate=False):
+                 dropout_rate=None):
+        """
 
+        :param hidden_layer_size: The size of nn.Linear layer, global default is 160
+        :param input_size: Number of features
+        :param output_size: Number of features
+        :param dropout_rate: The rate of linear layer parameters randomly discarded during training
+        """
         super(GatedResidualNetwork, self).__init__()
 
         self.hidden_layer_size = hidden_layer_size
         self.input_size = input_size if input_size else self.hidden_layer_size
         self.output_size = output_size
         self.dropout_rate = dropout_rate
-        self.return_gate = return_gate
 
         self.W1 = torch.nn.Linear(self.hidden_layer_size, self.hidden_layer_size)
         self.W2 = torch.nn.Linear(self.input_size, self.hidden_layer_size)
@@ -138,10 +164,19 @@ class GatedResidualNetwork(nn.Module):
 
 
 class VariableSelectionNetwork(nn.Module):
+    """**Feature selection module, which inputs a vector stitched into all features, takes the weights of each
+    feature and multiply with the original input as output. ** """
     def __init__(self, hidden_layer_size,
                  dropout_rate,
                  output_size,
-                 input_size=None, ):
+                 input_size):
+        """
+
+        :param hidden_layer_size: The size of nn.Linear layer, global default is 160
+        :param dropout_rate: The rate of linear layer parameters randomly discarded during training
+        :param output_size: Number of features
+        :param input_size: Number of features
+        """
         super(VariableSelectionNetwork, self).__init__()
 
         self.hidden_layer_size = hidden_layer_size
@@ -153,6 +188,7 @@ class VariableSelectionNetwork(nn.Module):
                                                   input_size=self.input_size,
                                                   output_size=self.output_size,
                                                   dropout_rate=self.dropout_rate, )
+
     def forward(self, x):
         embedding = x
 
@@ -170,8 +206,18 @@ def swish(x):
 
 
 class SimpleMLP(nn.Module):
+    """**The module where the main model is defined. The model consists of GRN and a single layer neural network. The
+    input discrete features are embedding and real valued features to the GRN module, and then obtains the feature
+    weight and multiply the output to the single output through the single layer neural network, and then the loss is
+    calculated with target. ** """
     def __init__(self, cat_num_classes, real_num):
+        """
+
+        :param cat_num_classes: Number of category features
+        :param real_num: Number of real valued features
+        """
         super().__init__()
+        self.categorical_var_embeddings = None
         self.cat_num_classes = cat_num_classes
         self.cat_size = len(cat_num_classes)
         self.input_size = self.cat_size + real_num
@@ -206,7 +252,15 @@ class SimpleMLP(nn.Module):
 
 
 class GRN_DATASET(Dataset):
+    """**According to the definition of the feature column data type, the corresponding columns are extracted from
+    the dataset and processed into the format of the model input. ** """
     def __init__(self, df_data, _column_definition, mode='train'):
+        """
+
+        :param df_data: Input data stored in a DataFrame
+        :param _column_definition: Data type definitions for different feature columns
+        :param mode: Mode of processing data, data processed by train mode was used for training, and data processed by test mode for testing
+        """
         self.mode = mode
         self._column_definition = _column_definition
         if _column_definition['cat']:
@@ -236,6 +290,7 @@ class GRN_DATASET(Dataset):
 
 
 def train_fn(dataloaders, device, cat_num_classes, real_num):
+    """**Training function**"""
     model = SimpleMLP(cat_num_classes, real_num).to(device)
     loss_fn = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(),
@@ -299,7 +354,14 @@ def train_fn(dataloaders, device, cat_num_classes, real_num):
 
     return weights
 
+
 class GRN_feature_selection():
+    """**Each feature weight is output according to the feature column definition.**
+
+    Example::
+        `GRN_FeatureSelection_AutoX <https://www.kaggle.com/code/hengwdai/grn-featureselection-autox>`_
+
+    """
     def __init__(self):
         self.feature2weight = None
         self.new_columns = []
@@ -310,17 +372,23 @@ class GRN_feature_selection():
         self._column_definition = None
         self._num_classes_per_cat_input = None
 
-    def fit(self, df, y,column_definition):
+    def fit(self, df, y, column_definition):
+        """
+        
+        :param df: Input data stored in a DataFrame 
+        :param y: Input single column target stored in a DataFrame 
+        :param column_definition: Data type definitions for different feature columns 
+        """
         self._column_definition = column_definition
         # 检查特征列定义和dataframe是否对应，并且转换对应数据类型,将定义的特征列取出来作为新的df,之后所有的操作都是在新的df上进行
-        df = self.check_column_definition(df,y)
+        df = self.check_column_definition(df, y)
         # Scaler 和 transforme input 必须组合使用，目前来看占用时间比较多，后期可增加开关选择性使用
         self.set_scalers(df)
         df = self.transform_inputs(df)
         # 当前只在一个fold上跑，取验证得分最佳时的特征权重，后期可增加多个fold取得的权重平均
         print('Training weights\n')
         kf = KFold(n_splits=5)
-        for fold_id, (trn_idx, val_idx) in tqdm(enumerate(kf.split(df)), total = 5):
+        for fold_id, (trn_idx, val_idx) in tqdm(enumerate(kf.split(df)), total=5):
             df_train = df.iloc[trn_idx]
             df_valid = df.iloc[val_idx]
 
@@ -331,12 +399,14 @@ class GRN_feature_selection():
                 'valid': DataLoader(valid_set, batch_size=1024, num_workers=4, pin_memory=True, shuffle=False)
             }
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-            if fold_id!=0:
+            if fold_id != 0:
                 self.weights += (np.array(
-                    train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num']))))/5
+                    train_fn(dataloaders, device, self._num_classes_per_cat_input,
+                             len(self._column_definition['num'])))) / 5
             else:
                 self.weights = (np.array(
-                    train_fn(dataloaders, device, self._num_classes_per_cat_input, len(self._column_definition['num']))))/5
+                    train_fn(dataloaders, device, self._num_classes_per_cat_input,
+                             len(self._column_definition['num'])))) / 5
         print('Training has ended and the weights for each feature are as follows, please use "transform(data,k=K)" to '
               'get Top K Important Features\n')
         self.feature2weight = pd.DataFrame(self.new_columns[:len(self.weights)], columns=['feature'])
@@ -344,6 +414,12 @@ class GRN_feature_selection():
         print(self.feature2weight)
 
     def transform(self, df, top_k=10):
+        """
+
+        :param df: Input data stored in a DataFrame
+        :param top_k: Number of features used as output which have higher weights
+        :return: New dataframe contains top_k features which have higher weights
+        """
         ind = list(np.argpartition(self.weights, -top_k)[-top_k:])
         names = list(np.array(self.new_columns)[ind])
         self.selected_df = df.loc[:, names]
