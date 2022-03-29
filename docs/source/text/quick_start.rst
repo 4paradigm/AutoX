@@ -20,139 +20,135 @@ or
    $ git clone https://github.com/4paradigm/autox.git
    $ pip install ./autox
 
+Before boring yourself by reading the docs in detail, you can dive right into AutoX with the following examples:
 
-Dive in
+Binary classification example(Transaction Prediction)
 -------
 
-Before boring yourself by reading the docs in detail, you can dive right into autox with the following example:
-
-We are given a data set containing robot failures as discussed in [1]_.
-Each robot records time series from six different sensors.
-For each sample denoted by a different id we are going to classify if the robot reports a failure or not.
-From a machine learning point of view, our goal is to classify each group of time series.
-
-To start, we load the data into python
+We are provided with an anonymized dataset containing numeric feature variables, the binary `target` column, and a string `ID_code` column.
+The task is to predict the value of `target` column in the test set.
 
 .. code:: python
 
-    from autox.examples.robot_execution_failures import download_robot_execution_failures, \
-        load_robot_execution_failures
-    download_robot_execution_failures()
-    timeseries, y = load_robot_execution_failures()
+   print(train.head())
 
-and end up with a pandas.DataFrame `timeseries` having the following shape
+.. image:: ../images/train_head.png
+   :scale: 40 %
+   :alt: The rolling mechanism
+   :align: center
+
+
+.. code:: python
+
+   print(test.head())
+
+.. image:: ../images/test_head.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
+
+.. code:: python
+
+   print(train.shape(), test.shape())
+
+.. image:: ../images/train_test_shape.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
+
+We build the automl pipeline with AutoX as following:
+
+.. code:: python
+
+    from autox import AutoX
+    path = f'../input/santander-customer-transaction-prediction'
+    autox = AutoX(target = 'target', train_name = 'train.csv', test_name = 'test.csv', id = ['ID_code'], path = path)
+    sub = autox.get_submit()
+    sub.to_csv("./autox_Santander.csv", index = False)
+
+We get a pandas.DataFrame `sub` which has the same number of rows as test.
 
 .. code:: python
    
-   print(timeseries.head())
-   
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-|     | id  | time| F_x | F_y | F_z | T_x | T_y | T_z |
-+=====+=====+=====+=====+=====+=====+=====+=====+=====+
-| 0   | 1   | 0   | -1  | -1  | 63  | -3  | -1  | 0   |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-| 1   | 1   | 1   | 0   | 0   | 62  | -3  | -1  | 0   |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-| 2   | 1   | 2   | -1  | -1  | 61  | -3  | 0   | 0   |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-| 3   | 1   | 3   | -1  | -1  | 63  | -2  | -1  | 0   |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-| 4   | 1   | 4   | -1  | -1  | 63  | -3  | -1  | 0   |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-| ... | ... | ... | ... | ... | ... | ... | ... | ... |
-+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+   print(sub.shape(), test.shape())
 
-The first column is the DataFrame index and has no meaning here.
-There are six different time series (a-f) for the different sensors. The different robots are denoted by the ids column.
-
-On the other hand, ``y`` contains the information which robot `id` reported a failure and which not:
-
-+---+---+
-| 1 | 0 |
-+---+---+
-| 2 | 0 |
-+---+---+
-| 3 | 0 |
-+---+---+
-| 4 | 0 |
-+---+---+
-| 5 | 0 |
-+---+---+
-|...|...|
-+---+---+
-
-Here, for the samples with ids 1 to 5 no failure was reported.
-
-In the following we illustrate the time series of the sample id 3 reporting no failure:
-
-.. code:: python
-
-    import matplotlib.pyplot as plt
-    timeseries[timeseries['id'] == 3].plot(subplots=True, sharex=True, figsize=(10,10))
-    plt.show()
-
-.. image:: ../images/ts_example_robot_failures_nofail.png
-   :scale: 100 %
-   :alt: the time series for id 3 (no failure)
+.. image:: ../images/test_sub_shape.png
+   :scale: 30 %
+   :alt: The rolling mechanism
    :align: center
 
-And for id 20 reporting a failure:
-
-
 .. code:: python
 
-    timeseries[timeseries['id'] == 21].plot(subplots=True, sharex=True, figsize=(10,10))
-    plt.show()
+   print(sub.head())
 
-.. image:: ../images/ts_example_robot_failures_fail.png
-   :scale: 100 %
-   :alt: the time series for id 20 (failure)
+.. image:: ../images/sub_head.png
+   :scale: 30 %
+   :alt: The rolling mechanism
    :align: center
 
-You can already see some differences by eye - but for successful machine learning we have to put these differences into
-numbers.
+You can execute this example with this link: `santander-autox  <https://www.kaggle.com/code/poteman/automl-for-santander-autox>`_.
 
-For this, autox comes into place.
-It allows us to automatically extract over 1200 features from those six different time series for each robot.
+Regression example(House Prices)
+-------
 
-For extracting all features, we do:
+With 79 explanatory variables describing (almost) every aspect of residential homes in Ames, Iowa, we need predict the `SalePrice` of each home.
 
 .. code:: python
 
-    from autox import extract_features
-    extracted_features = extract_features(timeseries, column_id="id", column_sort="time")
+   print(train.head())
 
-You end up with a DataFrame `extracted_features` with all more than 1200 different extracted features.
-We will now remove all ``NaN`` values (that were created by feature calculators, than can not be used on the given
-data, e.g. because it has too low statistics) and select only the relevant features next:
-
-.. code-block:: python
-
-    from autox import select_features
-    from autox.utilities.dataframe_functions import impute
-
-    impute(extracted_features)
-    features_filtered = select_features(extracted_features, y)
+.. image:: ../images/train_head_house.png
+   :scale: 40 %
+   :alt: The rolling mechanism
+   :align: center
 
 
-Only around 300 features were classified as relevant enough.
+.. code:: python
 
-Further, you can even perform the extraction, imputing and filtering at the same time with the
-:func:`autox.extract_relevant_features` function:
+   print(test.head())
 
-.. code-block:: python
+.. image:: ../images/test_head_house.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
 
-    from autox import extract_relevant_features
+.. code:: python
 
-    features_filtered_direct = extract_relevant_features(timeseries, y,
-                                                         column_id='id', column_sort='time')
+   print(train.shape(), test.shape())
 
+.. image:: ../images/train_test_shape_house.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
 
-You can now use the features contained in the DataFrame `features_filtered` (which is equal to
-`features_filtered_direct`) in conjunction with `y` to train your classification model.
-Please see the `robot_failure_example.ipynb` Jupyter Notebook in the folder named notebook for this.
-In this notebook a RandomForestClassifier is trained on the extracted features.
+We build the automl pipeline with AutoX as following:
 
-References
+.. code:: python
 
-.. [1] http://archive.ics.uci.edu/ml/datasets/Robot+Execution+Failures
+    from autox import AutoX
+    path = '../input/house-prices-advanced-regression-techniques'
+    autox = AutoX(target = 'SalePrice', train_name = 'train.csv', test_name = 'test.csv', id = ['Id'], path = path)
+    sub = autox.get_submit()
+    sub.to_csv("submission.csv", index = False)
+
+We get a pandas.DataFrame `sub` which has the same number of rows as test.
+
+.. code:: python
+
+   print(sub.shape(), test.shape())
+
+.. image:: ../images/test_sub_shape_house.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
+
+.. code:: python
+
+   print(sub.head())
+
+.. image:: ../images/sub_head_house.png
+   :scale: 30 %
+   :alt: The rolling mechanism
+   :align: center
+
+You can execute this example with this link: `house_price-autox <https://www.kaggle.com/code/poteman/kaggle-house-price-automl-autox>`_.
