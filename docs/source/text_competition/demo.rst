@@ -7,9 +7,6 @@ Demo
    :align: center
 
 AutoX
----------
+-----
 .. automodule:: autox.autox
    :members:
-
-
-

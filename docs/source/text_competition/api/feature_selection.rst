@@ -1,12 +1,22 @@
 feature selection
 =================
 
+.. automodule:: autox.autox_competition.feature_selection
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 adversarial validation
----------
+----------------------
+
 .. automodule:: autox.autox_competition.feature_selection.adversarial_validation
-   :members:
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 GRN feature selection
----------
-.. automodule:: autox.autox_competition.feature_selection.GRN_feature_selection.GRN_feature_selection
+--------------
+.. automodule:: autox.autox_competition.feature_engineer.grrn_feature_selection
    :members:
+   :undoc-members:
+   :show-inheritance:

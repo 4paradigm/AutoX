@@ -20,7 +20,6 @@ import shlex
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../..'))
 import recommonmark
 from recommonmark.transform import AutoStructify
 
@@ -40,6 +39,15 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
     'recommonmark',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.coverage',
+    'sphinx.ext.doctest',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.imgmath',
+    'sphinx.ext.napoleon'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
