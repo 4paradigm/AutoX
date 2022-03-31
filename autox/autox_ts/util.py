@@ -27,7 +27,7 @@ def construct_data(df, id_col, time_col, target_col,
         return t1 + delta
 
     SAMPLE_DATA = False
-    SAMPLE_DATA_threshold = 100 * 10000
+    SAMPLE_DATA_threshold = 500 * 10000
     if (df.shape[0] * forecast_period) > SAMPLE_DATA_threshold:
         SAMPLE_DATA = True
         Frac = SAMPLE_DATA_threshold / (df.shape[0] * forecast_period)
