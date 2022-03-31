@@ -37,7 +37,7 @@ class AutoTS():
         self.mode = mode
         self.metric = metric
 
-    def get_result_(self):
+    def get_result(self):
         if self.mode == 'auto':
             sub = self.kdata_lgb()
         # elif self.mode == 'prophet':
