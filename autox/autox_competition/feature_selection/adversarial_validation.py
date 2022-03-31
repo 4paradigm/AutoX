@@ -39,8 +39,8 @@ class AdversarialValidation:
         folds = KFold(n_splits=n_fold, shuffle=True, random_state=889)
 
         lr = 0.1
-        Early_Stopping_Rounds = 150
-        N_round = 100
+        Early_Stopping_Rounds = 20
+        N_round = 50
         Verbose = False
         params = {'num_leaves': 41,
                   'min_child_weight': 0.03454472573214212,
@@ -106,6 +106,7 @@ class AdversarialValidation:
 
             if mean_auc > p:
                 cur_removed_feature = feature_importances.loc[0, 'feature']
+                log(f"remove feature {cur_removed_feature}")
                 self.removed_features.append(cur_removed_feature)
                 not_used = not_used + [cur_removed_feature]
                 used_features = [x for x in test.columns if x not in not_used]

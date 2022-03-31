@@ -5,8 +5,3 @@ Pipeline
    :scale: 40 %
    :alt: The rolling mechanism
    :align: center
-
-AutoX
----------
-.. automodule:: autox.autox
-   :members:
