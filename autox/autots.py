@@ -43,8 +43,8 @@ class AutoTS():
         # elif self.mode == 'prophet':
         #     sub = self.baseline_prophet()
 
-        log('[+] post process')
-        sub[self.target_col] = clip_label(sub[self.target_col], self.df[self.target_col].min(), self.df[self.target_col].max())
+        # log('[+] post process')
+        # sub[self.target_col] = clip_label(sub[self.target_col], self.df[self.target_col].min(), self.df[self.target_col].max())
 
         return sub
 
