@@ -2,6 +2,11 @@
 API
 =====
 
+count features
+--------------
+.. automodule:: autox.autox_competition.feature_engineer.fe_count
+   :members:
+
 .. toctree::
    :maxdepth: 1
 
@@ -49,3 +54,7 @@ Overview of feature selection API
 +--------------------------------------------+--------------------------------------------+
 |                   GRN                      |                                            |
 +--------------------------------------------+--------------------------------------------+
+
+
+
+参考浩哥的引用写法.
