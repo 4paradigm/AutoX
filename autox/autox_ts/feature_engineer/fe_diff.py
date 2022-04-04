@@ -2,7 +2,7 @@ from autox.autox_competition.util import log
 
 def fe_diff(df, id_col, time_col, time_varying_cols, lag):
     log('[+] fe_diff')
-    result = df[[id_col, time_col]]
+    result = df[[id_col, time_col]].copy()
     df = df.sort_values(by = time_col)
     add_feas = []
     key = id_col
