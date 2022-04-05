@@ -3,6 +3,12 @@ from autox.autox_competition.process_data import Feature_type_recognition
 from autox.autox_competition.CONST import FEATURE_TYPE
 
 class FeatureCount:
+    """**Convert categorical features into the number of occurrences.**
+
+    Example::
+        `kaggle_notbook <https://www.kaggle.com/code/hengwdai/grn-featureselection-autox>`_
+
+    """
     def __init__(self):
         self.target = None
         self.df_feature_type = None
@@ -13,6 +19,16 @@ class FeatureCount:
 
     def fit(self, df, degree=1, target = None, df_feature_type = None, silence_cols = [], select_all = True,
             max_num = None):
+        """
+        :param df: dataframe
+        :param degree:
+        :param target:
+        :param df_feature_type:
+        :param silence_cols:
+        :param select_all:
+        :param max_num:
+        :return: None
+        """
 
         assert(degree == 1 or degree == 2)
 
@@ -62,6 +78,10 @@ class FeatureCount:
         self.ops = ops
 
     def transform(self, df):
+        """
+        :param df: dataframe,
+        :return: dataframe, count features.
+        """
         name_list = []
         for op in tqdm(self.ops):
             if len(op) == 1:
@@ -81,6 +101,7 @@ class FeatureCount:
 
     def fit_transform(self, df, target = None, df_feature_type = None, silence_cols = [], select_all = True,
             max_num = None):
+
         self.fit(df, target=target, df_feature_type=df_feature_type, silence_cols=silence_cols,
                         select_all=select_all, max_num=max_num)
         return self.transform(df)

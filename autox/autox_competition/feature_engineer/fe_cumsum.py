@@ -6,6 +6,8 @@ import numpy as np
 from autox.autox_competition.util import log
 
 class FeatureCumsum:
+    """cumsum特征描述"""
+
     def __init__(self):
         self.target = None
         self.df_feature_type = None

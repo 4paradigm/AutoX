@@ -6,6 +6,8 @@ from keras.models import Model
 from keras.regularizers import l2
 
 class FeatureDenoisingAutoencoder:
+    """DenoisingAutoencoder特征描述"""
+
     def __init__(self):
         self.id_column = None
         self.target = None

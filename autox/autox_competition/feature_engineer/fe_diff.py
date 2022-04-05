@@ -4,6 +4,8 @@ from autox.autox_competition.process_data import Feature_type_recognition
 from tqdm import tqdm
 
 class FeatureDiff:
+    """diff特征描述"""
+
     def __init__(self):
         self.target = None
         self.df_feature_type = None
