@@ -6,6 +6,7 @@ API
    :maxdepth: 1
 
    Feature engineer <./api/feature_engineer>
+   Feature engineer2 <./feature_engineer2>
    Feature selection <./api/feature_selection>
 
 Overview of feature engineer API
