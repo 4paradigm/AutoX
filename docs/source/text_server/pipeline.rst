@@ -11,5 +11,12 @@ AutoX
 .. automodule:: autox.autox
    :members:
 
+util
+----
+.. automodule:: autox.autox_competition.util
+   :members:
 
-
+adversarial_validation
+----------------------
+.. automodule:: autox.autox_competition.feature_selection.adversarial_validation
+   :members:
