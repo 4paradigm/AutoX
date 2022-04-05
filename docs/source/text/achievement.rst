@@ -1,11 +1,11 @@
-=====
+===========
 Achievement
-=====
+===========
 
 .. _results-comparison:
 
 performance improvement under different tasks
----------
+---------------------------------------------
 
 +-----------------------+-------------------------+------------------+
 | data_type             | compare with AutoGluon  | compare with H2O |
@@ -19,7 +19,7 @@ performance improvement under different tasks
 
 
 results comparison
----------
+------------------
 
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------+----------+-----------------+-----------------+-----------------+
 |    data_type         | single-or-multi |                                                                                              data_name   | metric   | AutoX           | AutoGluon       |        H2o      |
@@ -54,12 +54,12 @@ results comparison
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------+----------+-----------------+-----------------+-----------------+
 
 competition
----------
+-----------
 
 1. `First place solution for Alibaba Cloud Infrastructure Supply Chain Competition <https://www.continuum.io/downloads#windows>`_
 
 Enterprise support
----------
+------------------
 
     1. 值得买
     2. 慕尚

@@ -1,6 +1,6 @@
-=====
+==================
 AutoML Competition
-=====
+==================
 
 autox_competition is AutoML Solutions for Competition.
 

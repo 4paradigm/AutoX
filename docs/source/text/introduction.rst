@@ -2,7 +2,7 @@ Introduction
 ============
 
 What is AutoX?
-----------------------------
+--------------
 
 AutoX is an efficient automl tool, mainly aimed at data mining competitions with tabular data. Its features include:
 
@@ -14,7 +14,7 @@ AutoX is an efficient automl tool, mainly aimed at data mining competitions with
     * Summary of magics: Organize and publish magics of competitions.
 
 What's Included in AutoX?
-------------------------------
+-------------------------
 
 .. toctree::
    :maxdepth: 1

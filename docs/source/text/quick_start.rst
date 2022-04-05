@@ -5,7 +5,7 @@ Quick Start
 
 
 Install AutoX
----------------
+-------------
 
 As the compiled autox package is hosted on the Python Package Index (PyPI) you can easily install it with pip
 
