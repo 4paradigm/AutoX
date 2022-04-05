@@ -9,3 +9,4 @@ optuna
 img2vec_pytorch
 pypinyin
 keras
+tensorflow
