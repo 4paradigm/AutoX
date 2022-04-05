@@ -5,24 +5,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '1.6.4'
-
-
-import os
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if on_rtd:
-    import inspect
-    from sphinx import apidoc
-
-    __location__ = os.path.join(os.getcwd(), os.path.dirname(
-        inspect.getfile(inspect.currentframe())))
-
-    output_dir = os.path.join(__location__, "./")
-    module_dir = os.path.join(__location__, "../../autox")
-    cmd_line_template = "sphinx-apidoc -f -o {outputdir} {moduledir}"
-    cmd_line = cmd_line_template.format(outputdir=output_dir, moduledir=module_dir)
-    apidoc.main(cmd_line.split(" "))
-
+needs_sphinx = '4.4.0'
 
 # -- Path setup --------------------------------------------------------------
 
@@ -36,7 +19,13 @@ sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../../..'))
 sys.path.insert(0, os.path.abspath('../../../..'))
 
+import inspect
+__location__ = os.path.join(os.getcwd(), os.path.dirname(
+        inspect.getfile(inspect.currentframe())))
 
+sys.path.insert(0, os.path.join(__location__, "../.."))
+sys.path.insert(0, os.path.join(__location__, "../../.."))
+sys.path.insert(0, os.path.join(__location__, "../../../.."))
 
 # -- Project information -----------------------------------------------------
 

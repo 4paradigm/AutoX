@@ -10,4 +10,3 @@ img2vec_pytorch
 pypinyin
 keras
 tensorflow
-sphinx==1.6.4
