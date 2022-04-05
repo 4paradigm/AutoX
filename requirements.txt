@@ -8,4 +8,4 @@ tqdm
 optuna
 img2vec_pytorch
 pypinyin
-keres
+keras
