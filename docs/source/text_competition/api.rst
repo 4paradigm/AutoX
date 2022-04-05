@@ -2,11 +2,6 @@
 API
 =====
 
-count features
---------------
-.. automodule:: autox.autox_competition.feature_engineer.fe_count
-   :members:
-
 .. toctree::
    :maxdepth: 1
 

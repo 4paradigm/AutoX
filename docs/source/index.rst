@@ -10,7 +10,7 @@ It's an open source AutoML solution for tabular data.
 You can jump right into the package by looking into our :ref:`quick-start-label`.
 
 Installation
-========
+============
 .. code-block:: console
 
    $ git clone https://github.com/4paradigm/autox.git
@@ -33,9 +33,6 @@ The following chapters will explain the AutoX package in detail:
    AutoX Achievement <text/achievement>
    FAQ <text/faq>
    Authors <authors>
-   License <license>
-   Changelog <changes>
-   How to contribute <text/how_to_contribute>
 
 
 Indices and tables
@@ -48,4 +45,4 @@ Indices and tables
 Acknowledgements
 ================
 
-The research and development of TSFRESH was funded in part by 4paradigm.
+The research and development of AutoX was funded in part by 4paradigm.

@@ -16,7 +16,7 @@ adversarial validation
 
 GRN feature selection
 --------------
-.. automodule:: autox.autox_competition.feature_engineer.grrn_feature_selection
+.. automodule:: autox.autox_competition.feature_selection.grn_feature_selection
    :members:
    :undoc-members:
    :show-inheritance:
