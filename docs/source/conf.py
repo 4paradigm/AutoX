@@ -4,6 +4,9 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+# If your documentation needs a minimal Sphinx version, state it here.
+needs_sphinx = '1.6.4'
+
 
 import os
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
@@ -43,9 +46,6 @@ author = 'caihengxing'
 
 
 # -- General configuration ---------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '4.4.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
