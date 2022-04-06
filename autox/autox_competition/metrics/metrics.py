@@ -20,10 +20,11 @@ def MAPE(y_true, y_pred):
 
 def _get_score_metric(y_true, y_pred, metric='mape'):
     '''
+    **Calculate metric.**
     :param y_true: array-like of shape (n_samples,) or (n_samples, n_outputs). Ground truth (correct) target values.
     :param y_pred: array-like of shape (n_samples,) or (n_samples, n_outputs). Estimated target values.
     :param metric: str, one of ['mae', 'mape', 'mse', 'rmse', 'msle', 'rmsle', 'smape'], default = 'mape'.
-    :return:
+    :return: metric.
     '''
     y_true = np.array(y_true) if type(y_true) == list else y_true
     y_pred = np.array(y_pred) if type(y_true) == list else y_pred
