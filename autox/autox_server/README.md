@@ -49,7 +49,7 @@ pred = autoxserver.predict(test_set_path = ./bank/test_data)
 数据下载地址：[百度网盘](https://pan.baidu.com/s/1OzxjH8a7qEhY0WYb5OjC2g)-提取码:phgb, [google cloud](https://drive.google.com/file/d/1izyg93sN7F_Kb7K03rQFVRYt_952MoDq/view?usp=sharing)<br>
 详细数据说明：[link](https://challenge.datacastle.cn/v3/cmptDetail.html?id=176) <br>
 autox_server训练代码：[bank_train.ipynb](demo/bank/bank_train.ipynb)<br>
-autox_server预测代码：[bank_test.ipynb](demo/bank/bank_train.ipynb)<br>
+autox_server预测代码：[bank_test.ipynb](demo/bank/bank_test.ipynb)<br>
 
 
 # 输入格式说明

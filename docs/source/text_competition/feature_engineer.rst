@@ -6,6 +6,11 @@ count features
 .. automodule:: autox.autox_competition.feature_engineer.fe_count
    :members:
 
+cross features
+--------------
+.. automodule:: autox.autox_competition.feature_engineer.fe_cross
+   :members:
+
 cumsum features
 ---------------
 .. automodule:: autox.autox_competition.feature_engineer.fe_cumsum
