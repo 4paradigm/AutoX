@@ -1,7 +1,7 @@
 English | [简体中文](./README.md)
 
 # What-is-AutoX?
-AutoX is an efficient automl tool, mainly aimed at data mining competitions with tabular data.
+AutoX is an efficient AutoML tool, and it is designed for the tabular data modelling for real-world datasets.
 Its features include:
 - SOTA: AutoX outperforms other solutions in many competition datasets(see [Evaluation](#Evaluation)).
 - Easy to use: The design of interfaces is similar to sklearn.
