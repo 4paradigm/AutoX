@@ -6,10 +6,20 @@ warnings.filterwarnings('ignore')
 
 
 class FeatureCross:
+    """**synthetic feature formed by multiplying (crossing) two features.**
+        """
     def __init__(self):
         pass
 
     def fit(self, X, y, objective, category_cols, top_k=10, used_cols=[]):
+        '''
+        :param X: {array-like, sparse matrix} of shape (n_samples, n_features). Training vector, where n_samples is the number of samples and n_features is the number of features.
+        :param y: array-like of shape (n_samples,). Target vector relative to X.
+        :param objective: str, objective equal to 'binary' or 'regression'.
+        :param category_cols: list, column names of categorical features.
+        :param top_k: int, keep the top_k importance cross features, default top_k = 10.
+        :param used_cols: list, columns will be used for training model, default top_k = 10.
+        '''
 
         self.category_cols = category_cols
         if len(used_cols) > 0:
@@ -55,6 +65,10 @@ class FeatureCross:
                     self.cross_features.append([f1, f2])
 
     def transform(self, X):
+        '''
+        :param X: {array-like, sparse matrix} of shape (n_samples, n_features). Training vector, where n_samples is the number of samples and n_features is the number of features.
+        :return: dataframe, cross features.
+        '''
         result = pd.DataFrame()
         for [f1, f2] in self.cross_features:
             result[f'{f1}_cross_{f2}'] = X[f1].astype(str) + '__' + X[f2].astype(str)

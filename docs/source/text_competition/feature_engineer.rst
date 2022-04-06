@@ -1,11 +1,6 @@
 feature engineer
 =================
 
-adversarial_validation
-----------------------
-.. automodule:: autox.autox_competition.feature_selection.adversarial_validation
-   :members:
-
 count features
 --------------
 .. automodule:: autox.autox_competition.feature_engineer.fe_count
