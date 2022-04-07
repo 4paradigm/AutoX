@@ -27,14 +27,17 @@ warnings.filterwarnings('ignore')
 def tokens2sentence(x):
     return ' '.join(x)
 
+
 def dummy_fun(doc):
     return doc
 
-def get_words_w2v_vec(model,sent):#使用word2vec获取整句话的vec
-    return np.array(list(map(lambda x:model.wv[x],sent)),dtype=float).mean(axis=0)
 
-def get_words_glove_vec(model,sent):#使用glove获取整句话的vec
-    return np.array(list(map(lambda x:model.word_vectors[model.dictionary[x]],sent)),dtype=float).mean(axis=0)
+def get_words_w2v_vec(model, sent):  # 使用word2vec获取整句话的vec
+    return np.array(list(map(lambda x: model.wv[x], sent)), dtype=float).mean(axis=0)
+
+
+def get_words_glove_vec(model, sent):  # 使用glove获取整句话的vec
+    return np.array(list(map(lambda x: model.word_vectors[model.dictionary[x]], sent)), dtype=float).mean(axis=0)
 
 
 class NLP_feature():
