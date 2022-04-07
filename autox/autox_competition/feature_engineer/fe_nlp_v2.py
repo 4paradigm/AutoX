@@ -1,13 +1,11 @@
+import warnings
+
 import numpy as np
 import pandas as pd
 from datasets import Dataset
-# import nltk
-# import re
-# from joblib import Parallel, delayed
 from gensim.models import FastText, Word2Vec
 from glove import Glove, Corpus
 from scipy import sparse
-# from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import KFold
@@ -18,7 +16,12 @@ from tokenizers import (
     trainers,
     Tokenizer,
 )
-from transformers import PreTrainedTokenizerFast
+from transformers import (AutoModel, AutoModelForMaskedLM,
+                          AutoTokenizer, LineByLineTextDataset,
+                          DataCollatorForLanguageModeling,
+                          Trainer, TrainingArguments, PreTrainedTokenizerFast)
+
+warnings.filterwarnings('ignore')
 
 
 def tokens2sentence(x):
@@ -38,6 +41,7 @@ class NLP_feature():
     def __init__(self):
         self.tokenizers = {}
         self.embedded_texts = {}
+        self.model_name = 'prajjwal1/bert-tiny'
         self.embeddings = {}
         self.encoders = {}
         self.emb_size = 32
@@ -57,8 +61,9 @@ class NLP_feature():
         ## 训练分词器，如果不使用，则默认使用空格分词
         if self.use_tokenizer:
             self.fit_tokenizers(df)
-        for column in self.text_columns_def:
-            df[f'{column}_tokenized_ids'] = self.tokenize(df, column)
+        if self.embedding_mode != 'Bert':
+            for column in self.text_columns_def:
+                df[f'{column}_tokenized_ids'] = self.tokenize(df, column)
         #         return df
         ## 训练embedding,初步确定五种： TFIDF、FastText、Word2Vec、Glove、 BertEmbedding,训练的embedding model数量与文本特征列数量相同,使用字典存储，索引为特征列名
         self.fit_embeddings(df)
@@ -102,7 +107,11 @@ class NLP_feature():
 
         for column in self.text_columns_def:
             print(f'Fitting column: {column} tokenizer')
-            self.tokenizers.update({column: micro_tokenizer(df[[column]], column)})
+            if self.embedding_mode != 'Bert':
+                self.tokenizers.update({column: micro_tokenizer(df[[column]], column)})
+            else:
+                tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+                self.tokenizers.update({column: tokenizer})
 
     def tokenize(self, df, column):
         if self.use_tokenizer:
@@ -168,6 +177,41 @@ class NLP_feature():
             for column in self.text_columns_def:
                 print(f'Fitting column: {column} glove embedding')
                 micro_glove(df[f'{column}_tokenized_ids'], column)
+        elif self.embedding_mode == 'Bert':
+            def micro_bert(text_df, name):
+                text_df = text_df.apply(lambda x: x.replace('\n', ''))
+                text = '\n'.join(text_df.tolist())
+                with open('text.txt', 'w') as f:
+                    f.write(text)
+                model = AutoModelForMaskedLM.from_pretrained(self.model_name)
+                model_path = f'./{name}_transformer'
+                train_dataset = LineByLineTextDataset(
+                    tokenizer=self.tokenizers[name],
+                    file_path="text.txt",
+                    block_size=128)
+                data_collator = DataCollatorForLanguageModeling(
+                    tokenizer=self.tokenizers[name], mlm=True, mlm_probability=0.15)
+                training_args = TrainingArguments(
+                    output_dir=model_path,
+                    num_train_epochs=2,
+                    per_device_train_batch_size=8,
+                    per_device_eval_batch_size=8,
+                    evaluation_strategy='no',
+                    save_strategy='no',
+                    report_to="none")
+                trainer = Trainer(
+                    model=model,
+                    args=training_args,
+                    data_collator=data_collator,
+                    train_dataset=train_dataset,
+                    eval_dataset=None)
+                trainer.train()
+                trainer.save_model(model_path)
+                self.embeddings.update({name: model_path})
+
+            for column in self.text_columns_def:
+                print(f'Fitting column: {column} bert embedding')
+                micro_bert(df[column], column)
         else:
             raise NotImplementedError
 
@@ -189,6 +233,14 @@ class NLP_feature():
             embedded_text = sparse.csr_matrix(np.array(
                 list(map(lambda x: get_words_glove_vec(embedding, x), self.tokenize(raw_df, name)))
             ))
+        elif self.embedding_mode == 'Bert':
+            model = AutoModel.from_pretrained(self.embeddings[name], output_hidden_states=True)
+            encoded_input = self.tokenizers[name](raw_df[name].to_list(),
+                                                  max_length=128,
+                                                  return_tensors='pt',
+                                                  padding='max_length',
+                                                  truncation=True)
+            embedded_text = sparse.csr_matrix(model(**encoded_input)['hidden_states'][0].detach().numpy().mean(1))
         else:
             raise NotImplementedError
         return embedded_text
@@ -211,8 +263,22 @@ class NLP_feature():
                 encoders = []
                 folds = KFold(n_splits=5, shuffle=True, random_state=42)
                 for fold_n, (train_index, valid_index) in enumerate(folds.split(df)):
-                    trn = df[f'{column}_tokenized_ids'][train_index]
-                    vld = df[f'{column}_tokenized_ids'][valid_index]
+                    if self.embedding_mode != 'Bert':
+                        trn = df[f'{column}_tokenized_ids'][train_index]
+                        vld = df[f'{column}_tokenized_ids'][valid_index]
+                    else:
+                        trn = self.tokenizers[column](
+                            df[column][train_index].to_list(),
+                            max_length=128,
+                            return_tensors='pt',
+                            padding='max_length',
+                            truncation=True)
+                        vld = self.tokenizers[column](
+                            df[column][valid_index].to_list(),
+                            max_length=128,
+                            return_tensors='pt',
+                            padding='max_length',
+                            truncation=True)
                     y_trn = y.iloc[train_index]
                     if self.embedding_mode == 'TFIDF':
                         trn = self.embeddings[column].transform(trn)
@@ -228,6 +294,10 @@ class NLP_feature():
                         trn = sparse.csr_matrix(
                             np.array(list(map(lambda x: get_words_glove_vec(self.embeddings[column], x), trn))))
                         vld = np.array(list(map(lambda x: get_words_glove_vec(self.embeddings[column], x), vld)))
+                    elif self.embedding_mode == 'Bert':
+                        model = AutoModel.from_pretrained(self.embeddings[column], output_hidden_states=True)
+                        trn = sparse.csr_matrix(model(**trn)['hidden_states'][0].detach().numpy().mean(1))
+                        vld = sparse.csr_matrix(model(**vld)['hidden_states'][0].detach().numpy().mean(1))
                     else:
                         raise NotImplementedError
                     encoders.append(micro_regressor(trn, y_trn))
@@ -235,7 +305,8 @@ class NLP_feature():
                     val = encoders[fold_n].predict(vld)
                     df.loc[valid_index, f"{column}_meta_feature"] = val
                 self.encoders.update({column: encoders})
-                df = df.drop(columns=[f'{column}_tokenized_ids'])
+                if self.embedding_mode != 'Bert':
+                    df = df.drop(columns=[f'{column}_tokenized_ids'])
             return df
 
     def transform(self, df):
@@ -244,10 +315,6 @@ class NLP_feature():
                 df[f'{column}_embedded'] = self.emb_text(df, column)
             return df
         if self.task == 'regression':
-            def micro_regressor(embedding_array, y):
-                regressor = Ridge(random_state=42, alpha=0.8)
-                regressor.fit(embedding_array, y)
-                return regressor
 
             for column in self.text_columns_def:
                 embedded_text = self.emb_text(df, column)
