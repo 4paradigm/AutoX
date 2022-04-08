@@ -33,10 +33,6 @@ AutoX一个高效的自动化机器学习工具。
 
 <!-- /TOC -->
 # 安装
-### pip安装
-```
-!pip install automl-x -i https://www.pypi.org/simple/
-```
 
 ### github仓库安装
 ```
@@ -49,6 +45,12 @@ pip install ./autox
 1. git clone https://github.com/4paradigm/autox.git
 2. cd autox
 3. python setup.py install
+```
+
+### pip安装
+```
+## pip安装包可能更新不及时，建议用github安装方式安装最新版本
+!pip install automl-x -i https://www.pypi.org/simple/
 ```
 
 # 快速上手
