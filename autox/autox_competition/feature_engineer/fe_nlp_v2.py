@@ -61,24 +61,14 @@ class NLP_feature():
         self.embedding_mode = embedding_mode
         self.y = y
         df = df.loc[:, text_columns_def]
-        ## 训练分词器，如果不使用，则默认使用空格分词
         if self.use_tokenizer:
             self.fit_tokenizers(df)
         if self.embedding_mode != 'Bert':
             for column in self.text_columns_def:
                 df[f'{column}_tokenized_ids'] = self.tokenize(df, column)
         #         return df
-        ## 训练embedding,初步确定五种： TFIDF、FastText、Word2Vec、Glove、 BertEmbedding,训练的embedding model数量与文本特征列数量相同,使用字典存储，索引为特征列名
         self.fit_embeddings(df)
-        ## 根据task训练特征提取器,训练的encoder model数量与文本特征列数量相同,使用字典存储，索引为特征列名, 与每一列的embedding model也是一一对应
-        ## 目前支持：有监督回归数值特征、无监督KNN距离特征、无监督关键词离散特征(语义，情感，。。。）
-        ## 特殊任务：根据两两对比数据 生成 每个数据的具体得分，比如通过成对评论的恶意(替换成任何一种语义程度都可以)比较，生成单个评论的恶意程度
-        ## 注意： 关键词离散特征和特殊任务目前只支持使用深度模型，无法自选tokenizer和embedding
         return self.fit_encoders(df, y)
-        ## 使用提取器处理文本数据生成新特征
-
-    def transform(self, df):
-        return self.encoder(df)
 
     def fit_tokenizers(self, df):
         raw_tokenizer = Tokenizer(models.WordPiece(unk_token="[UNK]"))
