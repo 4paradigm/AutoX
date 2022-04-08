@@ -3,6 +3,14 @@ from tqdm import tqdm
 from datetime import timedelta
 from autox.autox_competition.util import log
 
+from sklearn.preprocessing import MinMaxScaler
+
+def normalization(df, cols):
+    for col in cols:
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        df[col] = scaler.fit_transform(df[col].values.reshape((-1, 1)))
+    return df
+
 def feature_combination(df_list):
     log('[+] feature combination')
     result = df_list[0]
