@@ -77,7 +77,7 @@ pip install ./autox
 |data_type | single-or-multi | data_name | metric | AutoX | AutoGluon | H2o |
 |----- | ------------- | ----------- |---------------- |---------------- | ----------------|----------------|
 |binary classification | single-table | [Springleaf](https://www.kaggle.com/c/springleaf-marketing-response/)  | auc | 0.78865 | 0.61141 | 0.78186 |
-|binary classification | single-table |[stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87177 | 0.81025 | 0.79039 |
+|binary classification-nlp | single-table |[stumbleupon](https://www.kaggle.com/c/stumbleupon/)  | auc | 0.87177 | 0.81025 | 0.79039 |
 |binary classification | single-table |[santander](https://www.kaggle.com/c/santander-customer-transaction-prediction/)  | auc | 0.89196 | 0.64643 | 0.88775 |
 |binary classification | multi-table |[IEEE](https://www.kaggle.com/c/ieee-fraud-detection/)  | accuracy | 0.920809 | 0.724925 | 0.907818 |
 |regression | single-table |[ventilator](https://www.kaggle.com/c/ventilator-pressure-prediction/)  | mae | 0.755 | 8.434 | 4.221 |
@@ -90,6 +90,7 @@ pip install ./autox
 |regression-ts | single-table  |[Demand Forecasting](https://www.kaggle.com/c/demand-forecasting-kernels-only/)| smape | 13.79241 | 25.39182 | 18.89678 |
 |regression-ts | multi-table  |[Walmart Recruiting](https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/)| wmae | 4660.99174 | 5024.16179 | 5128.31622 |
 |regression-ts | multi-table  |[Rossmann Store Sales](https://www.kaggle.com/c/rossmann-store-sales/)| RMSPE | 0.13850 | 0.20453 | 0.35757 |
+|regression-cv | single-table |[PetFinder](https://www.kaggle.com/competitions/petfinder-pawpularity-score/overview/)  | rmse | 20.1327 | 23.1732 | 21.0586 |
 
 # AutoX成就
 ### 企业支持
