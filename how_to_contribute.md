@@ -64,6 +64,6 @@
 
 # 联系方式
 - 微信号: 
-<img src="./img/wechat.jpeg" alt="wechat" align=center/>
+<img src="./img/wechat.jpeg" width = "200" height = "200" alt="wechat" align=center/>
 
 - Email: caihengxing@4paradigm.com
