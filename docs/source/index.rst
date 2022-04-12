@@ -31,6 +31,7 @@ The following chapters will explain the AutoX package in detail:
    AutoX Interpreter <text/interpreter>
    AutoX Community <text/community>
    AutoX Achievement <text/achievement>
+   How to contribute <text/how_to_contribute>
    FAQ <text/faq>
    Authors <authors>
 
