@@ -103,7 +103,7 @@ sub.to_csv("submission.csv", index = False)
 1.3 Identify columns type in data
 1.4 Data preprocess
 ```
-- 2.Feature engineer
+- 2.Feature engineering
 ```
 Every feature engineer class inclues the following features:
 1. auto select columns which will be executed with current operation
@@ -111,13 +111,13 @@ Every feature engineer class inclues the following features:
 3. modify the columns
 4. execute the operation, and return features whose samples' number and order are consistent with orginal table.
 ```
-- 3.Features combination
+- 3. Features combination
 ```
 Combine the raw features and derived features, and return wide table.
 ```
-- 4.train_test_split
+- 4. Data split
 ```
-Split the wide table into train and test.
+Split the table into train and test.
 ```
 - 5.Features filter
 ```
@@ -195,14 +195,4 @@ AutoX supports two ensemble methods(Bagging will be used in default).
 1. Stacking；
 2. Bagging。
 ```
-
-# Summary-of-Magics
-|competition|magics|
-|------|------|
-|kaggle criteo||
-|zhidemai||
-
-## Debug
-|Log|Solution|
-|------|------|
 
