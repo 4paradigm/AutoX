@@ -27,7 +27,7 @@
 - 测试代码
 
 ## 功能开发
-### 功能性api
+### 功能性api贡献
 #### 功能性api贡献说明: 
 1. api的接口建议仿照sklearn的接口设计, 例如类需要实现一个fit和transform函数;
 2. 给出该api的简要说明;
@@ -64,6 +64,6 @@
 
 # 联系方式
 - 微信号: 
-<img src="./img/wechat.jpeg" width = "200" height = "200" alt="wechat" align=center/>
+<img src="./img/wechatIMG.jpeg" width = "200" height = "200" alt="wechat" align=center/>
 
 - Email: caihengxing@4paradigm.com
