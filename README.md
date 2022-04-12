@@ -18,6 +18,9 @@ AutoX一个高效的自动化机器学习工具。
 # 加入社区
 <img src="./img/qr_code_0415_2.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
+# 如何为AutoX贡献
+[如何为AutoX贡献](./how_to_contribute.md)
+
 # 目录
 <!-- TOC -->
 
@@ -26,6 +29,7 @@ AutoX一个高效的自动化机器学习工具。
 - [加入社区](#加入社区)
 - [目录](#目录)
 - [安装](#安装)
+- [如何为AutoX贡献](#如何为AutoX贡献)
 - [快速上手](#快速上手)
 - [效果对比](#效果对比)
 - [TODO](#TODO)
@@ -37,14 +41,8 @@ AutoX一个高效的自动化机器学习工具。
 ### github仓库安装
 ```
 git clone https://github.com/4paradigm/autox.git
-pip install ./autox
 ## github访问速度较慢时可以通过gitee地址 https://gitee.com/poteman/autox
-```
-或
-```
-1. git clone https://github.com/4paradigm/autox.git
-2. cd autox
-3. python setup.py install
+pip install ./autox
 ```
 
 ### pip安装
