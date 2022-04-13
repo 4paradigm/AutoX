@@ -61,7 +61,7 @@
 #### automl pipeline贡献参考示例:
 [参考](https://github.com/4paradigm/AutoX/blob/master/autox/autox.py)
 
-## 其他规划方向的开发
+## 规划方向的开发
 - 多分类任务
 - 时空预测任务
 - 多模态任务
