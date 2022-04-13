@@ -1,6 +1,17 @@
 # 说明
 我们希望AutoX成为国际领先的AutoML解决方案，为了打造性能优异、功能丰富、稳定性高、易用性高的自动机器学习产品，我们需要你的帮助!
+
 所有的贡献方式，包括bug报告、bug修复、文档优化等都欢迎你们的参与，甚至简单的错别字修复也非常欢迎并感谢。
+
+# 你将获得
+- 技术能力的提升
+- 积累自身的声望
+- 人际关系拓展
+- 提升个人综合素质, 包括沟通能力、解决问题的能力等
+
+# 优秀的贡献者有机会获得
+- 科研合作机会: 依托autox项目，和第四范式研究员以及高校顾问合作开展科研项目
+- 第四范式正式员工/实习面试直通车
 
 # AutoX主要提供的功能
 - AutoML: 全流程端到端的自动机器学习的pipeline.
@@ -8,12 +19,6 @@
 
 # 当前技术方案
 <img src="./img/framework.png" alt="技术方案" align=center/>
-
-# 规划方向
-- 多分类任务
-- 时空预测任务
-- 多模态任务
-- 分布式版本AutoX
 
 # 可贡献的内容
 
@@ -56,14 +61,25 @@
 #### automl pipeline贡献参考示例:
 [参考](https://github.com/4paradigm/AutoX/blob/master/autox/autox.py)
 
+## 其他规划方向的开发
+- 多分类任务
+- 时空预测任务
+- 多模态任务
+- 分布式版本AutoX
+
+## 社区运营
+- issues解答
+- 社区宣传
+- 数据竞赛baseline编写
 
 ## 其他对AutoX有意义的内容
+欢迎提议其他任意和AutoML相关的内容
 
 # 贡献方式
 建议通过pull request的方式提交修改，对git不熟悉的朋友可以参考这个[链接](https://gitbeijing.com/fork_flow.html)
 
 # 联系方式
+- Email: caihengxing@4paradigm.com
 - 微信号: 
 <img src="./img/wechatIMG.jpeg" width = "200" height = "200" alt="wechat" align=center/>
-
-- Email: caihengxing@4paradigm.com
+- AutoX贡献者意向成员群
