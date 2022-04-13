@@ -79,7 +79,6 @@
 建议通过pull request的方式提交修改，对git不熟悉的朋友可以参考这个[链接](https://gitbeijing.com/fork_flow.html)
 
 # 联系方式
-- Email: caihengxing@4paradigm.com
-- 微信号: 
-<img src="./img/wechatIMG.jpeg" width = "200" height = "200" alt="wechat" align=center/>
 - AutoX贡献者意向成员群
+<img src="./img/developers.jpeg" width = "200" height = "200" alt="wechat" align=center/>
+- Email: caihengxing@4paradigm.com
