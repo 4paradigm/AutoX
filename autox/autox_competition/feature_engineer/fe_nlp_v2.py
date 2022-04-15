@@ -1,7 +1,6 @@
-import warnings
-
 import numpy as np
 import pandas as pd
+import warnings
 from datasets import Dataset
 from gensim.models import FastText, Word2Vec
 from glove import Glove, Corpus
@@ -18,7 +17,7 @@ from tokenizers import (
 )
 from transformers import (AutoModel, AutoModelForMaskedLM,
                           AutoTokenizer, LineByLineTextDataset,
-                          DataCollatorForLanguageModeling,
+                          DataCollatorForLanguageModeling, pipeline,
                           Trainer, TrainingArguments, PreTrainedTokenizerFast)
 
 warnings.filterwarnings('ignore')
@@ -45,8 +44,13 @@ class NLP_feature():
         self.tokenizers = {}
         self.embedded_texts = {}
         self.model_name = 'prajjwal1/bert-tiny'
+        self.zero_shot_model = 'typeform/mobilebert-uncased-mnli'  # joeddav/xlm-roberta-large-xnli
         self.embeddings = {}
         self.encoders = {}
+        self.candidate_labels = {}
+        self.pipline = None
+        self.n_clusters = 2
+        self.do_mlm = False
         self.emb_size = 32
         self.use_tokenizer = False
         self.text_columns_def = None
@@ -54,21 +58,28 @@ class NLP_feature():
         self.task = None
         self.embedding_mode = None
 
-    def fit(self, df, text_columns_def, use_tokenizer, embedding_mode, task, y=None):
+    def fit(self, df, text_columns_def, use_tokenizer, embedding_mode, task, y=None, candidate_labels=None):
         self.task = task
         self.use_tokenizer = use_tokenizer
         self.text_columns_def = text_columns_def
         self.embedding_mode = embedding_mode
+        self.candidate_labels = candidate_labels
         self.y = y
         df = df.loc[:, text_columns_def]
+        if self.task == 'zero-shot-classification':
+            self.pipeline = pipeline(self.task, model=self.zero_shot_model)
+            return
+        ## 训练分词器，如果不使用，则默认使用空格分词
         if self.use_tokenizer:
             self.fit_tokenizers(df)
         if self.embedding_mode != 'Bert':
             for column in self.text_columns_def:
                 df[f'{column}_tokenized_ids'] = self.tokenize(df, column)
         #         return df
+        ## 训练embedding,初步确定五种： TFIDF、FastText、Word2Vec、Glove、 BertEmbedding,训练的embedding model数量与文本特征列数量相同,使用字典存储，索引为特征列名
         self.fit_embeddings(df)
         return self.fit_encoders(df, y)
+        ## 使用提取器处理文本数据生成新特征
 
     def fit_tokenizers(self, df):
         raw_tokenizer = Tokenizer(models.WordPiece(unk_token="[UNK]"))
@@ -198,7 +209,8 @@ class NLP_feature():
                     data_collator=data_collator,
                     train_dataset=train_dataset,
                     eval_dataset=None)
-                trainer.train()
+                if self.do_mlm:
+                    trainer.train()
                 trainer.save_model(model_path)
                 self.embeddings.update({name: model_path})
 
@@ -246,11 +258,16 @@ class NLP_feature():
             return res_dict
         #                 df[f"{column}_meta_feature"] = self.emb_text(df[column],column)
 
-        elif self.task == 'regression':
+        elif self.task == 'supervise' or self.task == 'unsupervise':
             def micro_regressor(embedding_array, y):
                 regressor = Ridge(random_state=42, alpha=0.8)
                 regressor.fit(embedding_array, y)
                 return regressor
+
+            def micro_cluster(embedding_array):
+                cluster = KMeans(n_clusters=self.n_clusters)
+                cluster.fit(embedding_array)
+                return cluster
 
             for column in self.text_columns_def:
                 encoders = []
@@ -272,7 +289,6 @@ class NLP_feature():
                             return_tensors='pt',
                             padding='max_length',
                             truncation=True)
-                    y_trn = y.iloc[train_index]
                     if self.embedding_mode == 'TFIDF':
                         trn = self.embeddings[column].transform(trn)
                         vld = self.embeddings[column].transform(vld)
@@ -293,7 +309,12 @@ class NLP_feature():
                         vld = sparse.csr_matrix(model(**vld)['hidden_states'][0].detach().numpy().mean(1))
                     else:
                         raise NotImplementedError
-                    encoders.append(micro_regressor(trn, y_trn))
+
+                    if self.task == 'supervise':
+                        y_trn = y.iloc[train_index]
+                        encoders.append(micro_regressor(trn, y_trn))
+                    else:
+                        encoders.append(micro_cluster(trn))
 
                     val = encoders[fold_n].predict(vld)
                     df.loc[valid_index, f"{column}_meta_feature"] = val
@@ -307,17 +328,41 @@ class NLP_feature():
             for column in self.text_columns_def:
                 df[f'{column}_embedded'] = self.emb_text(df, column)
             return df
-        if self.task == 'regression':
-
+        if self.task == 'supervise' or self.task == 'unsupervise':
             for column in self.text_columns_def:
                 embedded_text = self.emb_text(df, column)
                 meta_test = None
-                for idx in range(5):
-                    encoder = self.encoders[column][idx]
-                    pred = (encoder.predict(embedded_text)) / 5
-                    if idx == 0:
-                        meta_test = pred
-                    else:
-                        meta_test += pred
+                if self.task == 'supervise':
+                    for idx in range(5):
+                        encoder = self.encoders[column][idx]
+                        pred = (encoder.predict(embedded_text)) / 5
+                        if idx == 0:
+                            meta_test = pred
+                        else:
+                            meta_test += pred
+                #                     df[f'{column}_transformed'] = meta_test
+                else:
+                    for idx in range(5):
+                        encoder = self.encoders[column][idx]
+                        pred = np.eye(self.n_clusters)[encoder.predict(embedded_text)]
+                        if idx == 0:
+                            meta_test = pred
+                        else:
+                            meta_test += pred
+                    meta_test = np.argmax(meta_test, axis=1)
+                #                     meta_test = pd.DataFrame(np.eye(self.n_clusters)[np.argmax(meta_test,axis=1)])
+                #                     for idx in range(self.n_clusters):
+                #                         df[f'{column}_transformed_class{idx}'] =  meta_test[idx]
                 df[f'{column}_transformed'] = meta_test
             return df
+        elif self.task == 'zero-shot-classification':
+            for column in self.text_columns_def:
+                pred_labels = []
+                candidate_labels = self.candidate_labels[column]
+                for text in df[column]:
+                    results = classifier(text, candidate_labels)
+                    pred_labels.append(results['labels'][np.argmax(results['scores'])])
+                df[f'{column}_transformed'] = pred_labels
+            return df
+        else:
+            raise NotImplementedError
