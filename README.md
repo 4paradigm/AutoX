@@ -1,5 +1,5 @@
 [English](./README_EN.md) | 简体中文
-<img src="./img/logo.png" alt="logo" align=center />
+<img src="./img/logo.png" width = "1500" alt="logo" align=center />
 
 # AutoX是什么？
 AutoX一个高效的自动化机器学习工具。
