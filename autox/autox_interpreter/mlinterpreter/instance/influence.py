@@ -3,7 +3,6 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import Callback, EarlyStopping
 import numpy as np
 from ..model.nn import WideDeep, make_optimizer
-from tensorflow.keras.callbacks import Callback
 import math
 from tqdm import tqdm
 
@@ -42,7 +41,7 @@ def get_influential_instances_nn_sgd(df, df_display, schema, topk=10, split=0.2,
     df : pd.DataFrame
         training data has been preprocessed
     df_display: pd.DataFrame
-        the raw training data, which has a a one-to-one correspondence with df,
+        the raw training data, which has a one-to-one correspondence with df,
         the return DataFrame is from is from df_display
     schema : dict
         description of the Training data
@@ -175,7 +174,7 @@ def get_influential_instances_nn(df, df_display, schema, topk=10, split=0.2, par
     df : pd.DataFrame
         training data has been preprocessed
     df_display: pd.DataFrame
-        the raw training data, which has a a one-to-one correspondence with df,
+        the raw training data, which has a one-to-one correspondence with df,
         the return DataFrame is from is from df_display
     schema : dict
         description of the Training data
