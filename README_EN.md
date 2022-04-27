@@ -1,5 +1,5 @@
 English | [简体中文](./README.md)
-
+<img src="./img/logo.png" width = "1500" alt="logo" align=center />
 # What-is-AutoX?
 AutoX is an efficient AutoML tool, and it is designed for the tabular data modelling for real-world datasets.
 Its features include:
@@ -8,7 +8,13 @@ Its features include:
 - Generic & Universal: Supporting tabular data, including binary classification, multi-class classification and regression problems.
 - Auto: Fully automated pipeline without human-intervention.
 - Out of the box: Providing flexible modules which can be used alone.
-- Summary of magics: Organize and publish magics of competitions.
+- Summary of magics: Organize and publish magics of competitions. 
+
+# What does AutoX contain?
+autox_competition: mainly for table-type data mining competitions autox_server: automl service for online deployment autox_interpreter: machine learning interpretable function
+
+# Join the community
+<img src="./img/qr_code_0429.png" width = "200" height = "200" alt="AutoX Community" align=center />  
 
 ## interpretable-ml
 AutoX covers following interpretable machine learning methods:
@@ -36,8 +42,9 @@ AutoX covers following interpretable machine learning methods:
 - [Installation](#Installation)
 - [Architecture](#Architecture)
 - [Quick Start](#Quick-Start)
-- [Summary of Magics](#Summary-of-Magics)
 - [Evaluation](#Evaluation)
+- [Summary of Magics](#Summary-of-Magics)
+
 
 <!-- /TOC -->
 # Installation
@@ -193,6 +200,6 @@ AutoX supports fellowing models:
 ```
 AutoX supports two ensemble methods(Bagging will be used in default). 
 1. Stacking；
-2. Bagging。
+2. Bagging
 ```
 
