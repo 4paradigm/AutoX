@@ -100,7 +100,6 @@ pip install ./autox
 
 # TODO
 功能开发完成后，发布相应的使用demo
-- [ ] 多个label预测
 - [ ] 多分类任务
 
 若有其他希望AutoX支持的功能，欢迎提issue!
