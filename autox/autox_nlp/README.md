@@ -4,17 +4,6 @@
 
 # 快速上手
 
-## Demo(按数据类型划分)
-#### 二分类问题
-Kaggle_Santander-AutoX解决方案:
-- [colab](https://colab.research.google.com/drive/1HKOr3vK_Ty3Dftw2JF4SJWFtwxsBfcLz?usp=sharing)
-- [kaggle-kernel](https://www.kaggle.com/poteman/autox-tutorial-santander/)
-
-#### 回归问题
-DC租金预测-AutoX解决方案:
-- [colab](https://colab.research.google.com/drive/1SxK_-_6oAE8OzDitXCy2JM29F9UE0Ujj?usp=sharing)
-- [DClab](https://www.dclab.run/project_content.html?type=myproject&id=5393)
-
 # 目录
 <!-- TOC -->
 

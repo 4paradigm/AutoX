@@ -7,11 +7,8 @@ English | [简体中文](./README.md)
 <!-- TOC -->
 
 - [What is AutoX_nlp?](#What-is-AutoX_nlp?)
-- [Table of Contents](#Table-of-Contents)
-- [Installation](#Installation)
-- [Architecture](#Architecture)
 - [Quick Start](#Quick-Start)
-- [Summary of Magics](#Summary-of-Magics)
+- [Table of Contents](#Table-of-Contents)
 - [Evaluation](#Evaluation)
 
 <!-- /TOC -->
