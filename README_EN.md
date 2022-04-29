@@ -18,7 +18,7 @@ Its features include:
 # Join-the-community
 <img src="./img/qr_code_0429.png" width = "200" height = "200" alt="AutoX Community" align=center />  
 
-# How to contribute to AutoX?
+# How-to-contribute-to-AutoX?
 [how to contribute](./how_to_contribute.md)
 
 # Table-of-Contents
