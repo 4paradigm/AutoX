@@ -77,13 +77,19 @@ class FeatureStat:
                     result[name] = cur_result
 
                     # 分组-统计演变特征
-                    if stat_op =='mean':
+                    if stat_op == 'mean':
                         result[f'{agg_col}_minus_{name}'] = df[agg_col] - cur_result
-                        result[f'{agg_col}_div_{name}'] = df[agg_col] / (cur_result + 1e-5)
+                        if cur_result == 0:
+                          result[f'{agg_col}_div_{name}'] = 0
+                        else:
+                          result[f'{agg_col}_div_{name}'] = df[agg_col] / cur_result
                         result_mean = cur_result
 
-                    if stat_op =='std':
-                        result[f'{agg_col}_minus_{name}_group_normalization'] = (df[agg_col] - result_mean) / (cur_result + 1e-5)
+                    if stat_op == 'std':
+                        if cur_result == 0:
+                            result[f'{agg_col}_minus_{name}_group_normalization'] = 0
+                        else:
+                            result[f'{agg_col}_minus_{name}_group_normalization'] = (df[agg_col] - result_mean) / cur_result
         return result
 
     def fit_transform(self, df, target=None, df_feature_type=None, silence_group_cols=[], silence_agg_cols=None,
