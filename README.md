@@ -17,7 +17,7 @@ AutoX一个高效的自动化机器学习工具。
 - [autox_interpreter](autox/autox_interpreter/README.md): 机器学习可解释功能
 
 # 加入社区
-<img src="./img/qr_code_0429.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_0506.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # 如何为AutoX贡献
 [如何为AutoX贡献](./how_to_contribute.md)
