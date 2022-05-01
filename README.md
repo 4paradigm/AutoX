@@ -64,6 +64,7 @@ pip install ./autox
 # 比赛案例
 见demo文件夹
 
+数据集下载链接：https://pan.baidu.com/s/1p38OuP8_FJp2P_wJwhdFiw?pwd=8mxf
 # 效果对比
 ## 不同任务下的效果提升百分比
 |data_type | 对比AutoGluon | 对比H2o |
