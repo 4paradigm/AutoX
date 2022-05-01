@@ -1,3 +1,4 @@
+English | [简体中文](./README.md)
 # what is autox_server?
 AutoX supports online deployment services
 

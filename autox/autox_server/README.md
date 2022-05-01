@@ -1,3 +1,4 @@
+[English](./README_EN.md) | 简体中文
 # autox_server是什么？
 AutoX支持上线部署的服务
 
