@@ -102,9 +102,10 @@ class NLP_feature():
         
         ## 4、训练编码器，对embedding 进行特征降维，
         ## 初步确定两种编码器的选择：有监督的target encode 使用岭回归模型，2)	无监督的k-means：使用k-means算法
-        if self.task == 'supervise' or self.task == 'unsupervise': 
-            self.fit_encoders(df)
-        ## 使用提取器处理文本数据生成新特征
+        if self.task == 'embedding':
+          return df
+        elif self.task == 'supervise' or self.task == 'unsupervise': 
+          return  self.fit_encoders(df)
 
     def fit_tokenizers(self, df):
         raw_tokenizer = Tokenizer(models.WordPiece(unk_token="[UNK]"))
@@ -326,8 +327,13 @@ class NLP_feature():
                 elif self.task == 'unsupervise':
                     encoders.append(micro_cluster(trn))
 
+            val = encoders[fold_n].predict(vld)
+            df.loc[valid_index, f"{column}_meta_feature"] = val
             self.encoders.update({column: encoders})
-
+            if self.embedding_mode != 'Bert':
+                df = df.drop(columns=[f'{column}_tokenized_ids'])
+        return df
+        
     def transform(self, df):
         if self.task == 'embedding':
             for column in self.text_columns_def:
@@ -365,8 +371,4 @@ class NLP_feature():
             return df
         else:
             raise NotImplementedError
-    def fit_transform(self, df, task = 'embedding', embedding_model = 'TFIDF', use_tokenizer = False, silence_cols = [], 
-            df_feature_type = None, y = None, candidate_labels=None):
-        self.fit(self, df, task = task, embedding_model = embedding_model, use_tokenizer = use_tokenizer, silence_cols = silence_cols, 
-            df_feature_type = df_feature_type, y = y, candidate_labels=candidate_labels)
-        return self.transform(df)
+
