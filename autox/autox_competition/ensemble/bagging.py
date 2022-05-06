@@ -24,7 +24,8 @@ class BaggingRegressor():
                 for fold_n, (train_index, valid_index) in enumerate(self.folds.split(X, y)):
                     clf = cur_regressor.fit(X.loc[train_index], y.loc[train_index],
                                             eval_set=[(X.loc[valid_index], y.loc[valid_index])], 
-                                            verbose = 50)
+                                            early_stopping_rounds = 50, 
+                                            verbose = 0)
                     cur_fitted_regressors.append(clf)    
             self.fitted_regressors.append(cur_fitted_regressors)
         print('Training Done')
@@ -68,7 +69,8 @@ class BaggingClassifier():
                     clf = cur_classifier.fit(X.loc[train_index], y.loc[train_index],
                                             eval_set=[(X.loc[valid_index], y.loc[valid_index])], 
                                             eval_metric = cur_metric,
-                                            verbose = 50)
+                                            early_stopping_rounds = 50, 
+                                            verbose = 0)
                     cur_fitted_classifiers.append(clf)    
             self.fitted_classifiers.append(cur_fitted_classifiers)
         print('Training Done')
@@ -103,6 +105,6 @@ class BaggingClassifier():
             predict_proba_test['model_%d_predict_proba' % (idx)] = pred * classifier_weights[idx]
         self.result = predict_proba_test.sum(axis = 1)
         print('Prediction Done')
-        return self.result.argmax(axis = 1)
+        return self.result.apply(lambda x: 1 if x > 0.5 else 0)
     
  
