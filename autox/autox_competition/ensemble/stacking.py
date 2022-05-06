@@ -60,7 +60,7 @@ class StackingClassifier():
         folds = StratifiedKFold(n_splits=self.n_fold, shuffle=True, random_state=2022)
         self.folds = folds
 
-    def fit(self, X, y, custom_metric_list):
+    def fit(self, X, y, custom_metric_list = []):
         self.train_meta = pd.DataFrame(np.zeros([X.shape[0], len(self.classifiers)]))
         self.train_meta.columns = [f"meta_feature_{i}" for i in range(1, len(self.classifiers)+1)]
         for idx, cur_classifier in enumerate(self.classifiers):
