@@ -14,8 +14,8 @@ from transformers import (AutoModel,AutoModelForMaskedLM,
                           AutoTokenizer, LineByLineTextDataset,
                           DataCollatorForLanguageModeling,
                           Trainer, TrainingArguments,PreTrainedTokenizerFast,pipeline)
-from torch.utils.data import DataLoader
-from datasets import Dataset
+from torch.utils.data import DataLoader,Dataset
+from datasets import Dataset as dataset
 from sklearn.linear_model import Ridge
 from tokenizers import (
     decoders,
@@ -135,7 +135,7 @@ class NLP_feature():
 
         def micro_tokenizer(text_df,name):
             text = pd.concat([text_df])
-            dataset = Dataset.from_pandas(text)
+            dataset = dataset.from_pandas(text)
             def get_training_corpus():
                 for i in range(0, len(dataset), 1000):
                     yield dataset[i : i + 1000][name]
