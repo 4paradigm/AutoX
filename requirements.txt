@@ -10,3 +10,7 @@ img2vec_pytorch
 pypinyin
 keras
 tensorflow
+gensim
+glove-python-binary
+transformers
+datasets
