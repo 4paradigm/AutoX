@@ -11,39 +11,194 @@ feature_engineer 是autox_nlp的特征工程模块。
 - [按分词方式划分](#按分词方式划分)
 - [按特征提取方式划分](#按特征提取方式划分)
 - [按特征输出形式划分](#按特征输出形式划分)
+- [参数介绍](#参数介绍)
+- [属性介绍](#属性介绍)
 
 <!-- /TOC -->
 # 调用方式
 
 ```
-git clone https://github.com/4paradigm/autox.git
-## github访问速度较慢时可以通过gitee地址 https://gitee.com/poteman/autox
-pip install ./autox
+from autox.autox_nlp import NLP_feature
+import pandas as pd
+
+nlp = NLP_feature()
+
+train = pd.read_csv('train.csv')
+test  = pd.read_csv('test.csv')
+
+# Use fit to get meta_feature
+meta_feature = nlp.fit(train, ['text_column_name'], use_Toknizer, embedding_mode, task, y, candidate_labels)
+
+# Concat meta feature with raw data
+for column in meta_feature.columns:
+    train[column] = meta_feature[column]
+    
+test = nlp.transform(test)
+
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 
 # 快速上手
-- [文本特征提取](feature_engineer/README.md)
+[使用demo：CommmonLit Readability prize](https://www.kaggle.com/hengwdai/quickstart-auto3ml-nlp)
+## 按分词方式划分
+### 空格分词
+```
 
+use_Toknizer=False
 
-# 效果对比
-点击表格中的超链接可跳转至kaggle平台的线上demo，无需配置环境直接运行
+df = nlp.fit(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
 
-| Task type      | Dataset name                                                                             | Evaluation Metric | AutoX                                                                       | AutoGluon                                                                     | H2o                                                                           |
-|----------------|------------------------------------------------------------------------------------------|-------------------|-----------------------------------------------------------------------------|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| Regression     | [CommonlitReadability](https://www.kaggle.com/hengwdai/commonlit-readability-data-split) | RMSE              | [0.597](https://www.kaggle.com/code/hengwdai/commonlit-readability-auto3ml) | [1.022](https://www.kaggle.com/code/hengwdai/commonlit-readability-autogluon) | [1.023](https://www.kaggle.com/code/hengwdai/commonlit-readability-h2o)       |
-| Regression     | [Amazonbookprice](https://www.kaggle.com/hengwdai/amazon-book-price-data-split)          | RMSE              | [629.792](https://www.kaggle.com/code/hengwdai/amazon-book-price-auto3ml)   | [687.870](https://www.kaggle.com/hengwdai/amazon-book-price-autogluon)        | [642.167](https://www.kaggle.com/code/hengwdai/amazon-book-price-h2o/)        |
-| Regression     | [MercariPrice](https://www.kaggle.com/hengwdai/mercariprice-data-split)                  | RMSE              | [32.042](https://www.kaggle.com/code/hengwdai/mercariprice-auto3ml)         | [34.500](https://www.kaggle.com/code/hengwdai/mercariprice-autogluon)         | [43.960](https://www.kaggle.com/code/hengwdai/mercariprice-h2o)               |
-| Classification | [Titanic](https://www.kaggle.com/competitions/titanic/data)                              | AUC               | [0.794](https://www.kaggle.com/code/hengwdai/autox-titanic)                 | [0.780](https://www.kaggle.com/code/sishihara/autogluon-tabular-for-titanic)  | [0.768](https://www.kaggle.com/code/hengwdai/titanic-solution-with-basic-h2o) |
-| Classification | [Stumbleupon](https://www.kaggle.com/hengwdai/stumbleupon-data-split)                    | AUC               | [0.855](https://www.kaggle.com/code/hengwdai/stumbleupon-auto3ml)           | [0.503](https://www.kaggle.com/code/hengwdai/stumbleupon-autogluon)           | [0.707](https://www.kaggle.com/code/hengwdai/stumbleupon-h2o)                 |
-| Classification | [DisasterTweets](https://www.kaggle.com/competitions/nlp-getting-started/data)           | AUC               | [0.786](https://www.kaggle.com/code/hengwdai/tweeter-autox)                 | [0.746](https://www.kaggle.com/hengwdai/tweeter-autogluon)                    | [0.721](https://www.kaggle.com/code/hengwdai/tweeter-h2o)                     |
+# Concat meta feature with raw data
 
-# 处理效率对比
-点击表格中的超链接可跳转至kaggle平台的线上demo，无需配置环境直接运行
+for column in df.columns:
+    df_train[column] = df[column]
 
-| Dataset              | Text Column     | Average Text Length | TPS    | AutoX                                                                               | AutoGluon                                                                               | H2O                                                                                    |
-|----------------------|-----------------|---------------------|--------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| MercariPrice         | BrandName       | 6                   | item/s | [3480.66](https://www.kaggle.com/hengwdai/mercariprice-6-efficiency-auto3ml)        | [127.15](https://www.kaggle.com/hengwdai/mercariprice-6-efficiency-autogluon)           | [979.18](https://www.kaggle.com/hengwdai/mercariprice-6-efficiency-h2o)                |
-| MercariPrice         | CategoryName    | 30                  | item/s | [2215.40](https://www.kaggle.com/hengwdai/mercariprice-30-efficiency-auto3ml)       | [118.92](https://www.kaggle.com/hengwdai/mercariprice-30-efficiency-autogluon)          | [656.80](https://www.kaggle.com/code/hengwdai/mercariprice-30-efficiency-h2o)          |
-| MercariPrice         | ItemDescription | 150                 | item/s | [466.73](https://www.kaggle.com/hengwdai/mercariprice-150-efficiency-auto3ml)       | [65.46](https://www.kaggle.com/hengwdai/mercariprice-150-efficiency-autogluon)          | [183.14](https://www.kaggle.com/hengwdai/mercariprice-150-efficiency-h2o)              |
-| TMDBBoxOffice        | Overview        | 300                 | item/s | [282.73](https://www.kaggle.com/code/hengwdai/tmdbboxoffice-300-efficiency-auto3ml) | [20.74](https://www.kaggle.com/code/hengwdai/tmdbboxoffice-300-efficiency-autogluon)    | [79.18](https://www.kaggle.com/hengwdai/tmdbboxoffice-300-efficiency-h2o)              |
-| CommonlitReadability | Excerpt         | 1000                | item/s | [103.99](https://www.kaggle.com/hengwdai/commonlitreadability-1000-efficiency)      | [12.39](https://www.kaggle.com/hengwdai/commonlitreadability-1000-efficiency-autogluon) | [30.30](https://www.kaggle.com/code/hengwdai/commonlitreadability-1000-efficiency-h2o) |
+test = nlp.transform(test)
+```
+### 无监督分词器分词
+```
+
+use_Toknizer=True
+
+df = nlp.fit(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+## 按特征提取方式划分
+### TFIDF
+```
+
+emb_mode='TFIDF'
+
+df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+### Word2Vec
+```
+
+emb_mode='Word2Vec'
+
+df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+### FastText
+```
+
+emb_mode='FastText'
+
+df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+### Glove
+```
+
+emb_mode='Glove'
+
+df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+### Bert
+```
+
+emb_mode='Bert'
+
+df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+```
+### Zero-shot Labeling
+```
+
+task='zero-shot-classification'
+hypothesis = {'text_column_name':[
+                        'this text is too complex',
+                        'this text is easy to understand'
+                        ]}
+
+df = nlp.fit(
+              df = df_train,
+              text_columns_def = ['text_column_name'],
+              use_tokenizer = True,
+              text_columns_def = None,
+              task = task, 
+              y = None,
+              text_columns_def = hypothesis )
+
+df_train = nlp.transform(df_train)
+test = nlp.transform(test)
+
+```
+## 按特征输出形式划分
+### 直接输出embedding
+```
+
+task=embedding
+
+train_sparse_matrix = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+
+test_sparse_matrix = nlp.transform(test)
+```
+### 使用target encode输出数值型特征
+```
+
+task='supervise'
+
+df = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+
+```
+### 使用k means输出离散型特征
+```
+
+task='unsupervise'
+
+df = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+
+# Concat meta feature with raw data
+
+for column in df.columns:
+    df_train[column] = df[column]
+
+test = nlp.transform(test)
+

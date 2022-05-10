@@ -53,6 +53,8 @@ pip install ./autox
 | Classification | [DisasterTweets](https://www.kaggle.com/competitions/nlp-getting-started/data)           | AUC               | [0.786](https://www.kaggle.com/code/hengwdai/tweeter-autox)                 | [0.746](https://www.kaggle.com/hengwdai/tweeter-autogluon)                    | [0.721](https://www.kaggle.com/code/hengwdai/tweeter-h2o)                     |
 
 # 处理效率对比
+使用文本处理工具，将数据集中特定文本列 (不同文本列的平均字符数不同) 转化为数值特征，统计整个流程所用时间并除以文本条数，得到处理效率 (TPS)。<br>
+注：不同工具处理方式不同，具体流程可以点击表格中的超链接访问对应demo查看。
 
 | Dataset              | Text Column     | Average Text Length | TPS    | AutoX                                                                               | AutoGluon                                                                               | H2O                                                                                    |
 |----------------------|-----------------|---------------------|--------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
