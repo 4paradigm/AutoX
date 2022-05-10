@@ -7,14 +7,12 @@ AutoX_nlp 是针对文本数据进行处理的辅助工具。
 - 高效处理：该工具在不同字符长度的文本数据处理上，速度显著优于其他AutoML的文本处理工具(见[处理效率对比](#处理效率对比))。
 - 多方式提取：该工具支持TFIDF、Word2Vec、Glove、FastText、Bert 和 Zero-shot labeling 六种特征提取方式。
 - 多样化特征：支持直接输出Embedding特征，也支持输出离散型、连续型特征。
-  <img height="669" src="/Users/surfacebook/Documents/acm mm/NLP_feature_eng.png" width="375"/>
 
 # 目录
 <!-- TOC -->
 
 - [autox_nlp是什么](#autox_nlp是什么)
 - [安装](#安装)
-- [比赛案例](#比赛案例)
 - [快速上手](#快速上手)
 - [目录](#目录)
 - [效果对比](#效果对比)
@@ -34,15 +32,13 @@ pip install ./autox
 ## pip安装包可能更新不及时，建议用github安装方式安装最新版本
 !pip install automl-x -i https://www.pypi.org/simple/
 ```
-# 比赛案例
-见[效果对比](#效果对比)和[处理效率对比](#处理效率对比)。
-点击表格中的超链接可跳转至kaggle平台的线上demo，无需配置环境直接运行
-
 # 快速上手
 - [文本特征提取](feature_engineer/README.md)
 
 
 # 效果对比
+点击表格中的超链接可跳转至kaggle平台的线上demo，无需配置环境直接运行
+
 | Task type      | Dataset name                                                                             | Evaluation Metric | AutoX                                                                       | AutoGluon                                                                     | H2o                                                                           |
 |----------------|------------------------------------------------------------------------------------------|-------------------|-----------------------------------------------------------------------------|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | Regression     | [CommonlitReadability](https://www.kaggle.com/hengwdai/commonlit-readability-data-split) | RMSE              | [0.597](https://www.kaggle.com/code/hengwdai/commonlit-readability-auto3ml) | [1.022](https://www.kaggle.com/code/hengwdai/commonlit-readability-autogluon) | [1.023](https://www.kaggle.com/code/hengwdai/commonlit-readability-h2o)       |
@@ -53,6 +49,7 @@ pip install ./autox
 | Classification | [DisasterTweets](https://www.kaggle.com/competitions/nlp-getting-started/data)           | AUC               | [0.786](https://www.kaggle.com/code/hengwdai/tweeter-autox)                 | [0.746](https://www.kaggle.com/hengwdai/tweeter-autogluon)                    | [0.721](https://www.kaggle.com/code/hengwdai/tweeter-h2o)                     |
 
 # 处理效率对比
+点击表格中的超链接可跳转至kaggle平台的线上demo，无需配置环境直接运行
 
 | Dataset              | Text Column     | Average Text Length | TPS    | AutoX                                                                               | AutoGluon                                                                               | H2O                                                                                    |
 |----------------------|-----------------|---------------------|--------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
