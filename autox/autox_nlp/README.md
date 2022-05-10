@@ -8,7 +8,7 @@ AutoX_nlp 是针对文本数据进行处理的辅助工具。
 - 多方式提取：该工具支持TFIDF、Word2Vec、Glove、FastText、Bert 和 Zero-shot labeling 六种特征提取方式。
 - 多样化特征：支持直接输出Embedding特征，也支持输出离散型、连续型特征。
 
-![](/Users/surfacebook/Documents/acm mm/NLP_feature_eng.png "文本处理流程")
+![框架图](NLP_Framework.png "框架图")
 
 # 目录
 <!-- TOC -->
