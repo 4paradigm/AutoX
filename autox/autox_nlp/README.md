@@ -7,7 +7,8 @@ AutoX_nlp 是针对文本数据进行处理的辅助工具。
 - 高效处理：该工具在不同字符长度的文本数据处理上，速度显著优于其他AutoML的文本处理工具(见[处理效率对比](#处理效率对比))。
 - 多方式提取：该工具支持TFIDF、Word2Vec、Glove、FastText、Bert 和 Zero-shot labeling 六种特征提取方式。
 - 多样化特征：支持直接输出Embedding特征，也支持输出离散型、连续型特征。
-  <img height="669" src="/Users/surfacebook/Documents/acm mm/NLP_feature_eng.png" width="375"/>
+
+![](/Users/surfacebook/Documents/acm mm/NLP_feature_eng.png "文本处理流程")
 
 # 目录
 <!-- TOC -->
