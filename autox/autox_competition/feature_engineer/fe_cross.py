@@ -63,7 +63,7 @@ class FeatureCross:
 
         self.top_k_features = [x for x in self.feature_importances['feature'] if x in category_cols][:top_k]
         self.cross_features = []
-        for item in list(itertools.permutations(self.top_k_features, self.top_k_features)):
+        for item in list(itertools.permutations(self.top_k_features, 2)):
             f1 = item[0]
             f2 = item[1]
             if f1 in category_cols and f2 in category_cols:
