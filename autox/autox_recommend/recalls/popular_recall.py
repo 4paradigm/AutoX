@@ -31,5 +31,5 @@ class PopularRecall():
         samples = pd.DataFrame(samples, columns=[self.uid, self.iid])
 
         samples = samples.groupby(self.uid)[self.iid].agg(list).reset_index()
-        samples.columns = [self.uid, 'recommend']
+        samples.columns = [self.uid, 'prediction']
         return samples

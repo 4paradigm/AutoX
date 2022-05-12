@@ -4,6 +4,12 @@
 
 在贡献代码、文档或Issue之前，请阅读以下指引。
 
+## 联系方式
+
+- AutoX贡献者意向成员群
+  <img src="./img/developers_0517.png" width = "200" height = "200" alt="wechat" align=center/>
+- Email: caihengxing@4paradigm.com
+
 ## AutoX可贡献内容
 
 ### 内容完善
@@ -70,9 +76,3 @@
 建议通过pull request的方式提交修改，对git不熟悉的朋友可以参考这个[链接](https://gitbeijing.com/fork_flow.html)。
 
 我们的代码团队会监控pull request, 进行相应的代码测试和检查，通过的pr会被合并至Master分支。
-
-## 联系方式
-
-- AutoX贡献者意向成员群
-  <img src="./img/developers_0511.jpeg" width = "200" height = "200" alt="wechat" align=center/>
-- Email: caihengxing@4paradigm.com

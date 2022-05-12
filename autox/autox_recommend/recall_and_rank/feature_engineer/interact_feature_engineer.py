@@ -7,6 +7,10 @@ from tqdm import tqdm
 def interact_feature_engineer(samples, data, customers, articles, uid, iid, time_col):
     date_ths = str(data[time_col].max())
 
+    last_3months = 90
+    last_3months_date = datetime.datetime.strptime(date_ths, '%Y-%m-%d %H:%M:%S') - datetime.timedelta(days=last_3months)
+    data_l3m = data[data[time_col] >= last_3months_date]
+
     last_month = 30
     last_month_date = datetime.datetime.strptime(date_ths, '%Y-%m-%d %H:%M:%S') - datetime.timedelta(days=last_month)
     data_lm = data[data[time_col] >= last_month_date]
@@ -61,6 +65,13 @@ def interact_feature_engineer(samples, data, customers, articles, uid, iid, time
     cols = ['count']
     tmp = data_lm.groupby([uid, iid])['price'].agg(cols).reset_index()
     new_col = ['customer_article_last_month_{}'.format(col) for col in cols]
+    tmp.columns = [uid, iid] + new_col
+    samples = samples.merge(tmp, on=[uid, iid], how='left')
+
+    # 过去3个月购买过的物品次数统计
+    cols = ['count']
+    tmp = data_l3m.groupby([uid, iid])['price'].agg(cols).reset_index()
+    new_col = ['customer_article_last_3months_{}'.format(col) for col in cols]
     tmp.columns = [uid, iid] + new_col
     samples = samples.merge(tmp, on=[uid, iid], how='left')
 

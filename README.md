@@ -17,7 +17,7 @@ AutoX一个高效的自动化机器学习工具。
 - [autox_interpreter](autox/autox_interpreter/README.md): 机器学习可解释功能
 
 # 加入社区
-<img src="./img/qr_code_0513.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_0517.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # 如何为AutoX贡献
 [如何为AutoX贡献](./how_to_contribute.md)
@@ -97,6 +97,7 @@ pip install ./autox
 
 ### 比赛获奖
 - [2021阿里云基础设施供应链大赛-冠军方案](https://tianchi.aliyun.com/forum/postDetail?postId=344505)
+- [kaggle-H&M个性化推荐-金牌方案](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324158)
 
 
 # TODO
