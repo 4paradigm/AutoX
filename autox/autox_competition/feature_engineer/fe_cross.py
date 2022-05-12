@@ -2,14 +2,16 @@ import itertools
 import warnings
 import lightgbm as lgb
 import pandas as pd
+import numpy as np
 warnings.filterwarnings('ignore')
 
 
 class FeatureCross:
     """**synthetic feature formed by multiplying (crossing) two features.**
         """
-    def __init__(self):
-        pass
+    def __init__(self, importance_type='split'):
+        self.importance_type = importance_type
+        self.shapely_flag = importance_type == 'shapley_value'
 
     def fit(self, X, y, objective, category_cols, top_k=10, used_cols=[]):
         '''
@@ -49,20 +51,23 @@ class FeatureCross:
         self.feature_importances = pd.DataFrame()
 
         self.feature_importances['feature'] = X[self.used_cols].columns
-        self.feature_importances['imp'] = self.clf.feature_importance()
+        if self.shapely_flag:
+            self.feature_importances['imp'] = np.abs(
+                self.clf.predict(X[self.used_cols], pred_contrib=True)
+            ).sum(axis=0)[:len(self.used_cols)]
+        else:
+            self.feature_importances['imp'] = self.clf.feature_importance(importance_type=self.importance_type)
+
         self.feature_importances = self.feature_importances.sort_values(by="imp", ascending=False)
         self.feature_importances.index = range(len(self.feature_importances))
 
         self.top_k_features = [x for x in self.feature_importances['feature'] if x in category_cols][:top_k]
         self.cross_features = []
-        for item in list(itertools.product(self.top_k_features, self.top_k_features)):
+        for item in list(itertools.permutations(self.top_k_features, 2)):
             f1 = item[0]
             f2 = item[1]
-            if f1 == f2:
-                pass
-            else:
-                if f1 in category_cols and f2 in category_cols:
-                    self.cross_features.append([f1, f2])
+            if f1 in category_cols and f2 in category_cols:
+                self.cross_features.append([f1, f2])
 
     def transform(self, X):
         '''
