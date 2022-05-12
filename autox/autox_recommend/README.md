@@ -21,7 +21,7 @@
 [数据集链接](./datasets/README.md)
 
 # 框架
-![Framework](./img/framework_0511.png)
+![Framework](./img/framework_0512.png)
 
 ## 数据切分
 - 有交易记录的用户: 采用多路召回+排序+模型融合的方式进行推荐
