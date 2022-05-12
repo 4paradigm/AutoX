@@ -238,8 +238,8 @@ test = nlp.transform(test)
 · y (pandas.DataFrame, optional, defaults to None)      - 数据集中的目标值列,e.g., df['target']
 · candidate_labels (dict, optional, defaults to None)   - 若使用zero shot，则需要为每一列文本列指定可能的类别标签,e.g.,{'text1':['label1','label2'],'text2':['label3','label2']}
 ```
-### 返回值: pandas.DataFrame
-由每一列文本列的特征拼接而成
+### 返回值: pandas.DataFrame / dict { text_name : sparse.csr_matrix }
+若降维方式选择embedding，则返回值格式为由文本列名和sparse.csr_matrix组成的字典, 其他方式则是由每一列文本列的特征拼接而成的DataFrame
 
 ## NLP_feature.transform
 使用 fit 完成的工具类对新的测试数据进行特征提取。将测试集与提取后的特征的拼接作为输出。
