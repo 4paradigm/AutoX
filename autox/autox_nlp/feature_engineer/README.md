@@ -11,8 +11,7 @@ feature_engineer 是autox_nlp的特征工程模块。
 - [按分词方式划分](#按分词方式划分)
 - [按特征提取方式划分](#按特征提取方式划分)
 - [按特征输出形式划分](#按特征输出形式划分)
-- [参数介绍](#参数介绍)
-- [属性介绍](#属性介绍)
+- [class NLP_feature](#NLP_feature)
 
 <!-- /TOC -->
 # 调用方式
@@ -167,7 +166,7 @@ test = nlp.transform(test)
 ### 直接输出embedding
 ```
 
-task=embedding
+task='embedding'
 
 train_sparse_matrix = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
 
@@ -201,4 +200,54 @@ for column in df.columns:
     df_train[column] = df[column]
 
 test = nlp.transform(test)
+```
 
+# NLP_feature
+
+文本特征提取工具，以分词、词嵌入（特征提取）、特征降维的流程对文本进行处理。
+## 属性介绍
+```
+· text_columns_def (list)       - 数据集里面的文本列列名
+· task (str)                    - 特征降维的方法 ('embedding'/'supervise'/'unsupervise'/'zero-shot-classification')
+· y (DataFrame)                 - 数据集里面的目标值列
+· use_tokenizer (bool)          - 是否使用无监督分词器
+· embedding_mode (str)          - 词嵌入(特征提取)方式 ('TFIDF'/'Word2Vec'/'Glove'/'FastText'/'Bert')
+· candidate_labels (dict)       - 若使用zero-shot labeling，则需要为每个文本列设置可能的类别，存储于字典中
+· tokenizers (dict)             - 以字典形式存储的分词器，key为文本列列名，value为对应分词器
+· embeddings (dict)             - 以字典形式存储的词嵌入模型，key为文本列列名，value为对应模型
+· encoders (dict)               - 以字典形式存储的特征降维模型，key为文本列列名，value为对应模型
+· model_name (str)              - 使用Bert进行词嵌入时所用的预训练模型，可以使用huggingface上其他的模型
+· zero_shot_model (str)         - 使用zero-shot进行特征提取时所用的预训练模型，可以使用huggingface上其他的模型
+· corpus_model (dict)           - 以字典形式存储的Glove前置模型，key为文本列列名，value为对应模型
+· device (str)                  - 当前所有使用深度模型场景的推理环境，若支持GPU则自动设置为cuda
+· pipline (huggingface pipline) - 使用zero-shot进行特征提取时的pipeline
+· n_clusters (int)              - 使用k-means进行特征降维的输出维度
+· do_mlm (bool)                 - 使用Bert进行词嵌入时，是否使用mask language方式进行预训练
+· mlm_epochs (int)              - 使用Bert进行词嵌入时，使用mlm预训练的训练轮次
+· emb_size (int)                - 使用Word2Vec、FastText、Glove进行词嵌入时的输出维度
+```
+## NLP_feature.fit
+使用训练数据中的文本列训练特征提取pipeline，并输出提取后的训练数据文本特征
+### 参数介绍
+```
+· df (pandas.DataFrame)                                 - 包含文本列的训练数据集
+· text_columns_def (list)                               - 通过列表存储的文本列名,e.g.,['text1','text2']
+· use_tokenizer (bool, optional, defaults to True)      - 是否使用无监督分词器(True,False)
+· embedding_mode (str, optional, defaults to 'TFIDF')   - 词嵌入方式('TFIDF'/'Word2Vec'/'Glove'/'FastText'/'Bert')
+· task (str, optional, defaults to 'unsupervise')       - 特征降维方式('embedding'/'supervise'/'unsupervise'/'zero-shot-classification')
+· y (pandas.DataFrame, optional, defaults to None)      - 数据集中的目标值列,e.g., df['target']
+· candidate_labels (dict, optional, defaults to None)   - 若使用zero shot，则需要为每一列文本列指定可能的类别标签,e.g.,{'text1':['label1','label2'],'text2':['label3','label2']}
+```
+### 返回值: pandas.DataFrame
+由每一列文本列的特征拼接而成
+
+## NLP_feature.transform
+使用 fit 完成的工具类对新的测试数据进行特征提取。将测试集与提取后的特征的拼接作为输出。
+### 参数介绍
+```
+· test_df (pandas.DataFrame)                                 - 包含文本列的测试数据集，且 fit入参 'text_columns_def'指定的列必须包含在测试数据中
+```
+### 返回值：pandas.DataFrame
+由输入的测试集与每列文本列转化成的特征列拼接得到的新数据集
+    
+    
