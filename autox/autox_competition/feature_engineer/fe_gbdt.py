@@ -19,7 +19,7 @@ class FeatureGbdt:
         self.used_cols = [x for x in list(X.describe().columns) if x in self.used_cols]
         self.num_of_features = num_of_features
 
-        assert(objective in ['binary', 'regression'])
+        assert(objective in ['binary', 'regression', 'multiclass'])
 
         params = {'objective': objective,
                   'boosting': 'gbdt',
@@ -36,11 +36,11 @@ class FeatureGbdt:
         # leaves = num_boost_round * multi_class
         self.N_round = int(num_of_features)
         self.leaves =  self.N_round
-        if objective == 'binary':
+        if objective in ['binary', 'multiclass']:
             n_class = y.nunique() if hasattr(y, 'values') else pd.Series(y).nunique()
             self.N_round = int(num_of_features if n_class == 2 else num_of_features // n_class)
+            self.leaves = int(num_of_features if n_class == 2 else self.N_round * n_class)
             if  n_class > 2 and num_of_features % n_class:
-                self.leaves = int(self.N_round * n_class)
                 print(f"Multi-Class fixed num_of_features : {num_of_features} -> {self.leaves}")
 
         trn_data = lgb.Dataset(X[self.used_cols], label=y, categorical_feature=category_cols)
