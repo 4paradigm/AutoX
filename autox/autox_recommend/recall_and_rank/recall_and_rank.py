@@ -28,10 +28,12 @@ class RecallAndRank():
         self.time_col = time_col
         self.recall_num = recall_num
         self.time_decay = time_decay
+        self.debug = debug
 
         if debug:
             assert debug_save_path is not None
             path_output = debug_save_path
+            self.path_output = path_output
             os.makedirs(path_output, exist_ok=True)
 
         temp_date = datetime.datetime.strptime(str(inter_df[time_col].max()), '%Y-%m-%d %H:%M:%S') + \
@@ -274,15 +276,26 @@ class RecallAndRank():
                                              uid=self.uid, iid=self.iid, time_col=self.time_col,
                                              last_days=7, recall_num=self.recall_num, dtype='test')
         print('\nitemcf recall, test')
-        itemcf_recall_test = itemcf_recall(uids, self.inter_df, date=test_date,
-                                           uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                           last_days=7, recall_num=self.recall_num, dtype='test',
-                                           topk=1000, use_iif=False, sim_last_days=14,
-                                           time_decay=self.time_decay)
+        if os.path.exists(f'{self.path_output}/itemcf_recall_test.hdf'):
+            itemcf_recall_test = pd.read_hdf(f'{self.path_output}/itemcf_recall_test.hdf')
+        else:
+            itemcf_recall_test = itemcf_recall(uids, self.inter_df, date=test_date,
+                                               uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                               last_days=7, recall_num=self.recall_num, dtype='test',
+                                               topk=1000, use_iif=False, sim_last_days=14,
+                                               time_decay=self.time_decay)
+        if self.debug:
+            itemcf_recall_test.to_hdf(f'{self.path_output}/itemcf_recall_test.hdf', 'w', complib='blosc', complevel=5)
+
         print('\nbinary recall, test')
-        binary_recall_test = binary_recall(uids, self.inter_df, date=test_date,
-                                           uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                           last_days=7, recall_num=self.recall_num, dtype='test', topk=1000)
+        if os.path.exists(f'{self.path_output}/binary_recall_test.hdf'):
+            binary_recall_test = pd.read_hdf(f'{self.path_output}/binary_recall_test.hdf')
+        else:
+            binary_recall_test = binary_recall(uids, self.inter_df, date=test_date,
+                                               uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                               last_days=7, recall_num=self.recall_num, dtype='test', topk=1000)
+        if self.debug:
+            binary_recall_test.to_hdf(f'{self.path_output}/binary_recall_test.hdf', 'w', complib='blosc', complevel=5)
 
         print('\nmerge recalls')
         history_recall_test.drop_duplicates(subset=[self.uid, self.iid], keep='first', inplace=True)
@@ -294,11 +307,17 @@ class RecallAndRank():
         test = test.merge(binary_recall_test, on=[self.uid, self.iid], how='outer')
 
         print('\nfeature engineer')
-        test_fe = feature_engineer(test, self.inter_df,
-                                   date=test_date,
-                                   user_df=self.user_df, item_df=self.item_df,
-                                   uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                   last_days=7, dtype='test')
+        if os.path.exists(f'{self.path_output}/test_fe.hdf'):
+            test_fe = pd.read_hdf(f'{self.path_output}/test_fe.hdf')
+        else:
+            test_fe = feature_engineer(test, self.inter_df,
+                                       date=test_date,
+                                       user_df=self.user_df, item_df=self.item_df,
+                                       uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                       last_days=7, dtype='test')
+        if self.debug:
+            test_fe.to_hdf(f'{self.path_output}/test_fe.hdf', 'w', complib='blosc', complevel=5)
+
         test_fe[self.iid + '_idx'] = test_fe[self.iid].map(self.iid2idx)
         print(f"test_fe shape: {test_fe.shape}")
 
