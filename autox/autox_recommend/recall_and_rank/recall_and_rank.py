@@ -1,5 +1,6 @@
 import datetime
 import pandas as pd
+import os
 from .feature_engineer import feature_engineer
 from .ranker import ranker, ranker_test, inference
 from .recalls import binary_recall
@@ -14,7 +15,7 @@ class RecallAndRank():
 
     def fit(self, inter_df, user_df, item_df,
                   uid, iid, time_col,
-                  recall_num, debug=False):
+                  recall_num, debug=False, debug_save_path=None):
 
         self.inter_df = inter_df
         self.user_df = user_df
@@ -26,8 +27,8 @@ class RecallAndRank():
         self.recall_num = recall_num
 
         if debug:
-            import os
-            path_output = './temp'
+            assert debug_save_path is not None
+            path_output = debug_save_path
             os.makedirs(path_output, exist_ok=True)
 
         temp_date = datetime.datetime.strptime(str(inter_df[time_col].max()), '%Y-%m-%d %H:%M:%S') + \
