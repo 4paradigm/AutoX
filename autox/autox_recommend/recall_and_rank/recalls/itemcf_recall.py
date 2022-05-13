@@ -8,20 +8,18 @@ from tqdm import tqdm
 warnings.filterwarnings('ignore')
 import datetime
 
-def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_price_dict, user_id, top_k, item_num, time_max,
+def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, item_num, time_max,
                      rt_dict=False):
     rank = {}
     interacted_items = user_item_dict[user_id]
     interacted_times = user_time_dict[user_id]
-    interacted_prices = user_price_dict[user_id]
     for loc, i in enumerate(interacted_items):
         if i in sim_item:
-            time = interacted_times[loc]  # datetime.datetime.strptime(interacted_times[loc], '%Y-%m-%d')
-            price = interacted_prices[loc]
+            time = interacted_times[loc]
             items = sorted(sim_item[i].items(), reverse=True)[0:top_k]
             for j, wij in items:
                 rank.setdefault(j, 0)
-                rank[j] += wij * 0.8 ** time * price
+                rank[j] += wij * 0.8 ** time
 
     if rt_dict:
         return rank
@@ -41,8 +39,8 @@ def get_sim_item(df,
     del df['date']
     gc.collect()
 
-    user_price = df.groupby(user_col)['price'].agg(list).reset_index()
-    user_price_dict = dict(zip(user_price[user_col], user_price['price']))
+    # user_price = df.groupby(user_col)['price'].agg(list).reset_index()
+    # user_price_dict = dict(zip(user_price[user_col], user_price['price']))
 
     sim_item = {}
     item_cnt = defaultdict(int)  # 商品被点击次数
@@ -64,23 +62,25 @@ def get_sim_item(df,
                     sim_item[item][relate_item] += 1 / math.log(1 + len(items))
 
     sim_item_corr = sim_item.copy()  # 引入AB的各种被点击次数
-    return sim_item_corr, user_item_dict, user_time_dict, user_price_dict
+    return sim_item_corr, user_item_dict, user_time_dict
 
 
 def get_itemcf_recall(data, target_df, df,
                       uid, iid, time_col,
                       time_max, topk=200, rec_num=100, use_iif=False):
     time_max = datetime.datetime.strptime(time_max, '%Y-%m-%d %H:%M:%S')
-    sim_item_corr, user_item_dict, user_time_dict, user_price_dict = get_sim_item(df,
-                                                                                  uid, iid, time_col,
-                                                                                  use_iif=use_iif,
-                                                                                  time_max=time_max)
+    print('calculate similarity')
+    sim_item_corr, user_item_dict, user_time_dict = get_sim_item(df,
+                                                                 uid, iid, time_col,
+                                                                 use_iif=use_iif,
+                                                                 time_max=time_max)
 
     samples = []
     target_df = target_df[target_df[uid].isin(data[uid].unique())]
-
+    print('ItemCF recommend')
+    # todo: 并行优化
     for cust, hist_arts, dates in tqdm(data[[uid, iid, time_col]].values):
-        rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, user_price_dict, cust, topk, rec_num,
+        rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, cust, topk, rec_num,
                                time_max, )
         for k, v in rec:
             samples.append([cust, k, v])
@@ -91,7 +91,8 @@ def get_itemcf_recall(data, target_df, df,
     samples = samples.merge(target_df[[uid, iid, 'label']], on=[uid, iid], how='left')
     samples['label'] = samples['label'].fillna(0)
     print('ItemCF recall: ', samples.shape)
-    print(samples.label.mean())
+    print('mean:', samples.label.mean())
+    print('sum:', samples.label.sum())
     return samples
 
 
@@ -131,10 +132,10 @@ def itemcf_recall(uids, data, date,
     elif dtype == 'test':
 
         time_max = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-        sim_item_corr, user_item_dict, user_time_dict, user_price_dict = get_sim_item(data,
-                                                                                      uid, iid, time_col,
-                                                                                      use_iif=use_iif,
-                                                                                      time_max=time_max)
+        sim_item_corr, user_item_dict, user_time_dict = get_sim_item(data,
+                                                                     uid, iid, time_col,
+                                                                     use_iif=use_iif,
+                                                                     time_max=time_max)
 
         data_ = data[data[uid].isin(uids)]
 
@@ -148,7 +149,7 @@ def itemcf_recall(uids, data, date,
             if cust not in user_item_dict:
                 continue
 
-            rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, user_price_dict, cust, topk,
+            rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, cust, topk,
                                    recall_num, time_max)
             for k, v in rec:
                 samples.append([cust, k, v])

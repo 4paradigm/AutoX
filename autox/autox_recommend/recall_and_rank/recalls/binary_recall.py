@@ -8,17 +8,17 @@ warnings.filterwarnings('ignore')
 import datetime
 
 
-def BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, user_price_dict, user_id, top_k, item_num, time_max,
+def BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, item_num, time_max,
                         rt_dict=False):
     rank = {}
     interacted_items = user_item_dict[user_id]
     interacted_times = user_time_dict[user_id]
     for loc, i in enumerate(interacted_items):
-        time = interacted_times[loc]  # datetime.datetime.strptime(interacted_times[loc], '%Y-%m-%d %H:%M:%S')
+        time = interacted_times[loc]
         items = sorted(sim_item[i].items(), reverse=True)[0:top_k]
         for j, wij in items:
             rank.setdefault(j, 0)
-            rank[j] += wij * 0.8 ** time  # * price
+            rank[j] += wij * 0.8 ** time
 
     if rt_dict:
         return rank
@@ -42,9 +42,6 @@ def get_sim_item_binary(df,
     del df['date']
     gc.collect()
 
-    user_price = df.groupby(user_col)['price'].agg(list).reset_index()
-    user_price_dict = dict(zip(user_price[user_col], user_price['price']))
-
     sim_item = {}
     for item, users in tqdm(item_user_dict.items()):
         sim_item.setdefault(item, {})
@@ -54,23 +51,23 @@ def get_sim_item_binary(df,
                 sim_item[item].setdefault(relate_item, 0)
                 sim_item[item][relate_item] += 1 / (math.log(len(users) + 1) * math.log(tmp_len + 1))
 
-    return sim_item, user_item_dict, user_time_dict, user_price_dict
+    return sim_item, user_item_dict, user_time_dict
 
 
 def get_binaryNet_recall(custs, target_df, df,
                          uid, iid, time_col,
                          time_max, topk=200, rec_num=100):
     time_max = datetime.datetime.strptime(time_max, '%Y-%m-%d %H:%M:%S')
-    sim_item, user_item_dict, user_time_dict, user_price_dict = get_sim_item_binary(df,
-                                                                                    uid, iid, time_col,
-                                                                                    time_max)
+    sim_item, user_item_dict, user_time_dict, = get_sim_item_binary(df,
+                                                                    uid, iid, time_col,
+                                                                    time_max)
 
     samples = []
     target_df = target_df[target_df[uid].isin(custs)]
     for cust in tqdm(custs):
         if cust not in user_item_dict:
             continue
-        rec = BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, user_price_dict, cust, topk, rec_num,
+        rec = BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, cust, topk, rec_num,
                                   time_max)
         for k, v in rec:
             samples.append([cust, k, v])
@@ -112,7 +109,7 @@ def binary_recall(uids, data, date,
 
         time_max = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
 
-        sim_item, user_item_dict, user_time_dict, user_price_dict = get_sim_item_binary(
+        sim_item, user_item_dict, user_time_dict = get_sim_item_binary(
             data,
             uid, iid, time_col,
             time_max)
@@ -122,7 +119,7 @@ def binary_recall(uids, data, date,
             if cust not in user_item_dict:
                 continue
 
-            rec = BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, user_price_dict, cust, topk,
+            rec = BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, cust, topk,
                                       recall_num,
                                       time_max)
             for k, v in rec:
