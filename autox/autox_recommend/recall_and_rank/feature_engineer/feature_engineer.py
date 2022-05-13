@@ -24,8 +24,10 @@ def feature_engineer(samples, data, date,
         #         print('article feature engineer')
         #         samples = article_feature_engineer(samples, data_hist, uid, iid, time_col)
 
-        samples = samples.merge(user_df, on=uid, how='left')
-        #         samples = samples.merge(item_df, on=iid, how='left')
+        if user_df is not None:
+            samples = samples.merge(user_df, on=uid, how='left')
+        if item_df is not None:
+            samples = samples.merge(item_df, on=iid, how='left')
 
         #         print(samples.head())
         #         print(data_hist.head())
@@ -40,8 +42,10 @@ def feature_engineer(samples, data, date,
         #         print('article feature engineer')
         #         samples = article_feature_engineer(samples, data, uid, iid, time_col)
 
-        samples = samples.merge(user_df, on=uid, how='left')
-        #         samples = samples.merge(item_df, on=iid, how='left')
+        if user_df is not None:
+            samples = samples.merge(user_df, on=uid, how='left')
+        if item_df is not None:
+            samples = samples.merge(item_df, on=iid, how='left')
 
         print('interact feature engineer')
         samples = interact_feature_engineer(samples, data, uid, iid, time_col)
