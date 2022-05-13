@@ -30,7 +30,7 @@ def feature_engineer(samples, data, date,
         #         print(samples.head())
         #         print(data_hist.head())
         print('interact feature engineer')
-        samples = interact_feature_engineer(samples, data_hist, user_df, item_df, uid, iid, time_col)
+        samples = interact_feature_engineer(samples, data_hist, uid, iid, time_col)
 
     elif dtype == 'test':
 
@@ -44,6 +44,6 @@ def feature_engineer(samples, data, date,
         #         samples = samples.merge(item_df, on=iid, how='left')
 
         print('interact feature engineer')
-        samples = interact_feature_engineer(samples, data, user_df, item_df, uid, iid, time_col)
+        samples = interact_feature_engineer(samples, data, uid, iid, time_col)
 
     return samples
