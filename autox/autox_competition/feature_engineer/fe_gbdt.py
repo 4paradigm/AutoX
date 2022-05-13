@@ -19,7 +19,7 @@ class FeatureGbdt:
         self.used_cols = [x for x in list(X.describe().columns) if x in self.used_cols]
         self.num_of_features = num_of_features
 
-        assert(objective in ['binary', 'regression'])
+        assert(objective in ['binary', 'regression', 'multiclass'])
 
         params = {'objective': objective,
                   'boosting': 'gbdt',
@@ -33,14 +33,23 @@ class FeatureGbdt:
                   'max_bin': 100,
                   'max_depth': 3
                   }
+        # leaves = num_boost_round * multi_class
         self.N_round = int(num_of_features)
+        self.leaves =  self.N_round
+        if objective in ['binary', 'multiclass']:
+            n_class = y.nunique() if hasattr(y, 'values') else pd.Series(y).nunique()
+            self.N_round = int(num_of_features if n_class == 2 else num_of_features // n_class)
+            self.leaves = int(num_of_features if n_class == 2 else self.N_round * n_class)
+            if  n_class > 2 and num_of_features % n_class:
+                print(f"Multi-Class fixed num_of_features : {num_of_features} -> {self.leaves}")
+
         trn_data = lgb.Dataset(X[self.used_cols], label=y, categorical_feature=category_cols)
         self.clf = lgb.train(params, trn_data, num_boost_round=self.N_round, valid_sets=[trn_data], verbose_eval=False)
 
     def transform(self, X):
         lgb_feature = pd.DataFrame(self.clf.predict(X[self.used_cols], pred_leaf=True))
 
-        feas_name = ["lgb_" + str(i) for i in range(1, self.N_round + 1)]
+        feas_name = ["lgb_" + str(i) for i in range(1, self.leaves + 1)]
         lgb_feature.columns = feas_name
 
         return lgb_feature
