@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 import datetime
 
 def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, item_num, time_max,
-                     rt_dict=False):
+                     rt_dict=False, time_decay=0.8):
     rank = {}
     interacted_items = user_item_dict[user_id]
     interacted_times = user_time_dict[user_id]
@@ -19,7 +19,7 @@ def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, i
             items = sorted(sim_item[i].items(), reverse=True)[0:top_k]
             for j, wij in items:
                 rank.setdefault(j, 0)
-                rank[j] += wij * 0.8 ** time
+                rank[j] += wij * time_decay ** time
 
     if rt_dict:
         return rank
@@ -28,7 +28,8 @@ def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, i
 
 def get_sim_item(df,
                  user_col, item_col, time_col,
-                 use_iif=False, time_max=None):
+                 use_iif=False, time_max=None,
+                 time_decay=0.8):
     user_item_ = df.groupby(user_col)[item_col].agg(list).reset_index()
     user_item_dict = dict(zip(user_item_[user_col], user_item_[item_col]))
 
@@ -55,9 +56,9 @@ def get_sim_item(df,
                     t1 = user_time_dict[user][loc1]
                     t2 = user_time_dict[user][loc2]
                     if loc1 - loc2 > 0:
-                        sim_item[item][relate_item] += 0.7 * (0.8 ** (t1 - t2)) / math.log(1 + len(items))
+                        sim_item[item][relate_item] += 0.7 * (time_decay ** (t1 - t2)) / math.log(1 + len(items))
                     else:
-                        sim_item[item][relate_item] += 1.0 * (0.8 ** (t2 - t1)) / math.log(1 + len(items))
+                        sim_item[item][relate_item] += 1.0 * (time_decay ** (t2 - t1)) / math.log(1 + len(items))
                 else:
                     sim_item[item][relate_item] += 1 / math.log(1 + len(items))
 
@@ -67,13 +68,14 @@ def get_sim_item(df,
 
 def get_itemcf_recall(data, target_df, df,
                       uid, iid, time_col,
-                      time_max, topk=200, rec_num=100, use_iif=False):
+                      time_max, topk=200, rec_num=100, use_iif=False, time_decay=0.8):
     time_max = datetime.datetime.strptime(time_max, '%Y-%m-%d %H:%M:%S')
     print('calculate similarity')
     sim_item_corr, user_item_dict, user_time_dict = get_sim_item(df,
                                                                  uid, iid, time_col,
                                                                  use_iif=use_iif,
-                                                                 time_max=time_max)
+                                                                 time_max=time_max,
+                                                                 time_decay=time_decay)
 
     samples = []
     target_df = target_df[target_df[uid].isin(data[uid].unique())]
@@ -81,7 +83,7 @@ def get_itemcf_recall(data, target_df, df,
     # todo: 并行优化
     for cust, hist_arts, dates in tqdm(data[[uid, iid, time_col]].values):
         rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, cust, topk, rec_num,
-                               time_max, )
+                               time_max, False, time_decay)
         for k, v in rec:
             samples.append([cust, k, v])
     samples = pd.DataFrame(samples, columns=[uid, iid, 'itemcf_score'])
@@ -99,7 +101,8 @@ def get_itemcf_recall(data, target_df, df,
 def itemcf_recall(uids, data, date,
                   uid, iid, time_col,
                   last_days=7, recall_num=100, dtype='train',
-                  topk=1000, use_iif=False, sim_last_days=14):
+                  topk=1000, use_iif=False, sim_last_days=14,
+                  time_decay=0.8):
     assert dtype in ['train', 'test']
 
     if dtype == 'train':
@@ -124,8 +127,8 @@ def itemcf_recall(uids, data, date,
         samples = get_itemcf_recall(df_hist, target_df, data_hist,
                                     uid, iid, time_col,
                                     begin_date, topk=topk,
-                                    rec_num=recall_num, use_iif=use_iif
-                                    )
+                                    rec_num=recall_num, use_iif=use_iif,
+                                    time_decay=time_decay)
 
         return samples
 
@@ -135,7 +138,8 @@ def itemcf_recall(uids, data, date,
         sim_item_corr, user_item_dict, user_time_dict = get_sim_item(data,
                                                                      uid, iid, time_col,
                                                                      use_iif=use_iif,
-                                                                     time_max=time_max)
+                                                                     time_max=time_max,
+                                                                     time_decay=time_decay)
 
         data_ = data[data[uid].isin(uids)]
 
@@ -150,7 +154,7 @@ def itemcf_recall(uids, data, date,
                 continue
 
             rec = ItemCF_Recommend(sim_item_corr, user_item_dict, user_time_dict, cust, topk,
-                                   recall_num, time_max)
+                                   recall_num, time_max, False, time_decay)
             for k, v in rec:
                 samples.append([cust, k, v])
 

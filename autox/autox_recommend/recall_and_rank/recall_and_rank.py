@@ -15,7 +15,9 @@ class RecallAndRank():
 
     def fit(self, inter_df, user_df, item_df,
                   uid, iid, time_col,
-                  recall_num, debug=False, debug_save_path=None):
+                  recall_num,
+                  time_decay=0.8,
+                  debug=False, debug_save_path=None):
 
         self.inter_df = inter_df
         self.user_df = user_df
@@ -25,6 +27,7 @@ class RecallAndRank():
         self.iid = iid
         self.time_col = time_col
         self.recall_num = recall_num
+        self.time_decay = time_decay
 
         if debug:
             assert debug_save_path is not None
@@ -65,12 +68,14 @@ class RecallAndRank():
         itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+                                            topk=1000, use_iif=False, sim_last_days=14,
+                                            time_decay=time_decay)
         print('valid')
         itemcf_recall_valid = itemcf_recall(None, inter_df, date=valid_date,
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+                                            topk=1000, use_iif=False, sim_last_days=14,
+                                            time_decay=time_decay)
         if debug:
             itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train.hdf', 'w', complib='blosc', complevel=5)
             itemcf_recall_valid.to_hdf(f'{path_output}/itemcf_recall_valid.hdf', 'w', complib='blosc', complevel=5)
@@ -143,6 +148,8 @@ class RecallAndRank():
         print(f"valid_fe shape: {valid_fe.shape}")
 
         print('\nranker')
+        # todo: 检查train_fe中是否有冗余特征, 方差为0的特征
+
         lgb_ranker, valid_pred = ranker(train_fe, valid_fe,
                                         uid=uid, iid=iid, time_col=time_col)
         
@@ -183,7 +190,8 @@ class RecallAndRank():
         itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+                                            topk=1000, use_iif=False, sim_last_days=14,
+                                            time_decay=time_decay)
 
         if debug:
             itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
@@ -242,7 +250,8 @@ class RecallAndRank():
         itemcf_recall_test = itemcf_recall(uids, self.inter_df, date=test_date,
                                            uid=self.uid, iid=self.iid, time_col=self.time_col,
                                            last_days=7, recall_num=self.recall_num, dtype='test',
-                                           topk=1000, use_iif=False, sim_last_days=14)
+                                           topk=1000, use_iif=False, sim_last_days=14,
+                                           time_decay=self.time_decay)
         print('\nbinary recall, test')
         binary_recall_test = binary_recall(uids, self.inter_df, date=test_date,
                                            uid=self.uid, iid=self.iid, time_col=self.time_col,
