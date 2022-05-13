@@ -14,7 +14,7 @@ class RecallAndRank():
 
     def fit(self, inter_df, user_df, item_df,
                   uid, iid, time_col,
-                  recall_num):
+                  recall_num, debug=False):
 
         self.inter_df = inter_df
         self.user_df = user_df
@@ -25,13 +25,15 @@ class RecallAndRank():
         self.time_col = time_col
         self.recall_num = recall_num
 
+        if debug:
+            import os
+            path_output = './temp'
+            os.makedirs(path_output, exist_ok=True)
+
         temp_date = datetime.datetime.strptime(str(inter_df[time_col].max()), '%Y-%m-%d %H:%M:%S') + \
                     datetime.timedelta(days=1)
         valid_date = str(datetime.datetime(temp_date.year, temp_date.month, temp_date.day))
         self.valid_date = valid_date
-
-        # valid_date = '2022-04-07 00:00:00'
-        # train_date = '2022-03-31 00:00:00'
 
         train_date = datetime.datetime.strptime(valid_date, '%Y-%m-%d %H:%M:%S') - datetime.timedelta(days=7)
         train_date = str(train_date)
@@ -68,6 +70,9 @@ class RecallAndRank():
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train',
                                             topk=1000, use_iif=False, sim_last_days=14)
+        if debug:
+            itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train.hdf', 'w', complib='blosc', complevel=5)
+            itemcf_recall_valid.to_hdf(f'{path_output}/itemcf_recall_valid.hdf', 'w', complib='blosc', complevel=5)
 
         print('\nbinary_recall')
         print('train')
@@ -79,6 +84,10 @@ class RecallAndRank():
         binary_recall_valid = binary_recall(None, inter_df, date=valid_date,
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if debug:
+            binary_recall_train.to_hdf(f'{path_output}/binary_recall_train.hdf', 'w', complib='blosc', complevel=5)
+            binary_recall_valid.to_hdf(f'{path_output}/binary_recall_valid.hdf', 'w', complib='blosc', complevel=5)
+
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -115,6 +124,11 @@ class RecallAndRank():
                                     uid=uid, iid=iid, time_col=time_col,
                                     last_days=7, dtype='train')
 
+        if debug:
+            train_fe.to_hdf(f'{path_output}/train_fe.hdf', 'w', complib='blosc', complevel=5)
+            valid_fe.to_hdf(f'{path_output}/valid_fe.hdf', 'w', complib='blosc', complevel=5)
+
+
         iid2idx = {}
         idx2iid = {}
         for idx, cur_iid in enumerate(train_fe[iid].unique()):
@@ -148,8 +162,8 @@ class RecallAndRank():
         print("mAP Score on Validation set:", mapk(valid_true[iid], valid_pred[iid]))
 
         self.best_iteration_ = lgb_ranker.best_iteration_
-        
-        
+
+
         print("#" * 30)
         print('retrain')
         # 重新训练
@@ -169,10 +183,17 @@ class RecallAndRank():
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train',
                                             topk=1000, use_iif=False, sim_last_days=14)
+
+        if debug:
+            itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
+
         print('\nbinary_recall')
         binary_recall_train = binary_recall(None, inter_df, date=train_date,
                                             uid=uid, iid=iid, time_col=time_col,
                                             last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if debug:
+            binary_recall_train.to_hdf(f'{path_output}/binary_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
+
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -191,6 +212,10 @@ class RecallAndRank():
                                     user_df=user_df, item_df=item_df,
                                     uid=uid, iid=iid, time_col=time_col,
                                     last_days=7, dtype='train')
+        if debug:
+            train_fe.to_hdf(f'{path_output}/train_fe_all.hdf', 'w', complib='blosc', complevel=5)
+
+
         train_fe[iid + '_idx'] = train_fe[iid].map(iid2idx)
         print(f"train_fe shape: {train_fe.shape}")
 
