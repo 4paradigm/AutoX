@@ -7,5 +7,3 @@
 - [Restaurant Recommendations](https://www.kaggle.com/datasets/teesoong/ml-challenge?select=checkins.csv)
 - [Amazon product data](http://jmcauley.ucsd.edu/data/amazon/)
 - [kdd cup 2020](https://tianchi.aliyun.com/competition/entrance/231785/introduction)
-
-## 数据预处理
