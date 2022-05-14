@@ -17,7 +17,7 @@
 ## 2. 基于当前设计框架，开发其中的组件.
 ![Framework](./img/framework_0512.png)
 
-|组件 | 状态 | 备注 |
+|组件 | 状态 | code |
 |------------ | ------------- | ------------- |
 | 流行商品召回 | 已完成 | [popular_recall](./recall_and_rank/recalls/popular_recall.py) | 
 | 历史购买召回 | 已完成 | [history_recall](./recall_and_rank/recalls/history_recall.py)  | 
