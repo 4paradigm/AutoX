@@ -315,8 +315,8 @@ class RecallAndRank():
                                        user_df=self.user_df, item_df=self.item_df,
                                        uid=self.uid, iid=self.iid, time_col=self.time_col,
                                        last_days=7, dtype='test')
-        if self.debug:
-            test_fe.to_hdf(f'{self.path_output}/test_fe.hdf', 'w', complib='blosc', complevel=5)
+        # if self.debug:
+        #     test_fe.to_hdf(f'{self.path_output}/test_fe.hdf', 'w', complib='blosc', complevel=5)
 
         test_fe[self.iid + '_idx'] = test_fe[self.iid].map(self.iid2idx)
         print(f"test_fe shape: {test_fe.shape}")
