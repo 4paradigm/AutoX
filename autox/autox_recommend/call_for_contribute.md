@@ -1,5 +1,12 @@
 # AutoX Recommend System
 
+## 联系方式
+
+- AutoX贡献者意向成员群
+  <img src="../../img/developers_0517.png" width = "200" height = "200" alt="wechat" align=center/>
+- Email: caihengxing@4paradigm.com
+
+
 ## 1. 数据集收集和处理
 |数据 | 数据处理 |
 |------------ | ------------- |
