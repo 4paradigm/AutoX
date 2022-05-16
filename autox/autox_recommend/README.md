@@ -9,13 +9,18 @@
 # 目录
 <!-- TOC -->
 
-- [autox_recommend是什么是什么](#autox_recommend是什么是什么)
+- [autox_recommend是什么](#autox_recommend是什么)
 - [快速上手](#快速上手)
 - [目录](#目录)
+- [如何给AutoX-Recommend做贡献](#如何给AutoX-Recommend做贡献)
+- [数据集](#数据集)
 - [框架](#框架)
 - [效果对比](#效果对比)
 
 <!-- /TOC -->
+
+# 如何给AutoX-Recommend做贡献
+[如何给AutoX-Recommend做贡献](./call_for_contribute.md)
 
 # 数据集
 [数据集链接](./datasets/README.md)
