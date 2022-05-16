@@ -1,5 +1,6 @@
 import datetime
 import pandas as pd
+import os
 from .feature_engineer import feature_engineer
 from .ranker import ranker, ranker_test, inference
 from .recalls import binary_recall
@@ -14,7 +15,9 @@ class RecallAndRank():
 
     def fit(self, inter_df, user_df, item_df,
                   uid, iid, time_col,
-                  recall_num):
+                  recall_num,
+                  time_decay=0.8,
+                  debug=False, debug_save_path=None):
 
         self.inter_df = inter_df
         self.user_df = user_df
@@ -24,14 +27,19 @@ class RecallAndRank():
         self.iid = iid
         self.time_col = time_col
         self.recall_num = recall_num
+        self.time_decay = time_decay
+        self.debug = debug
+
+        if debug:
+            assert debug_save_path is not None
+            path_output = debug_save_path
+            self.path_output = path_output
+            os.makedirs(path_output, exist_ok=True)
 
         temp_date = datetime.datetime.strptime(str(inter_df[time_col].max()), '%Y-%m-%d %H:%M:%S') + \
                     datetime.timedelta(days=1)
         valid_date = str(datetime.datetime(temp_date.year, temp_date.month, temp_date.day))
         self.valid_date = valid_date
-
-        # valid_date = '2022-04-07 00:00:00'
-        # train_date = '2022-03-31 00:00:00'
 
         train_date = datetime.datetime.strptime(valid_date, '%Y-%m-%d %H:%M:%S') - datetime.timedelta(days=7)
         train_date = str(train_date)
@@ -59,26 +67,47 @@ class RecallAndRank():
 
         print('\nitemcf_recall')
         print('train')
-        itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+        if os.path.exists(f'{path_output}/itemcf_recall_train.hdf'):
+            itemcf_recall_train = pd.read_hdf(f'{path_output}/itemcf_recall_train.hdf')
+        else:
+            itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train',
+                                                topk=1000, use_iif=False, sim_last_days=14,
+                                                time_decay=time_decay)
         print('valid')
-        itemcf_recall_valid = itemcf_recall(None, inter_df, date=valid_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+        if os.path.exists(f'{path_output}/itemcf_recall_valid.hdf'):
+            itemcf_recall_valid = pd.read_hdf(f'{path_output}/itemcf_recall_valid.hdf')
+        else:
+            itemcf_recall_valid = itemcf_recall(None, inter_df, date=valid_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train',
+                                                topk=1000, use_iif=False, sim_last_days=14,
+                                                time_decay=time_decay)
+        if debug:
+            itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train.hdf', 'w', complib='blosc', complevel=5)
+            itemcf_recall_valid.to_hdf(f'{path_output}/itemcf_recall_valid.hdf', 'w', complib='blosc', complevel=5)
 
         print('\nbinary_recall')
         print('train')
-        binary_recall_train = binary_recall(None, inter_df, date=train_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if os.path.exists(f'{path_output}/binary_recall_train.hdf'):
+            binary_recall_train = pd.read_hdf(f'{path_output}/binary_recall_train.hdf')
+        else:
+            binary_recall_train = binary_recall(None, inter_df, date=train_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train', topk=1000)
 
         print('valid')
-        binary_recall_valid = binary_recall(None, inter_df, date=valid_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if os.path.exists(f'{path_output}/binary_recall_valid.hdf'):
+            binary_recall_valid = pd.read_hdf(f'{path_output}/binary_recall_valid.hdf')
+        else:
+            binary_recall_valid = binary_recall(None, inter_df, date=valid_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if debug:
+            binary_recall_train.to_hdf(f'{path_output}/binary_recall_train.hdf', 'w', complib='blosc', complevel=5)
+            binary_recall_valid.to_hdf(f'{path_output}/binary_recall_valid.hdf', 'w', complib='blosc', complevel=5)
+
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -103,17 +132,28 @@ class RecallAndRank():
         # 特征工程
         print('\nfeature engineer')
         print('train')
-        train_fe = feature_engineer(train, inter_df,
-                                    date=train_date,
-                                    user_df=user_df, item_df=item_df,
-                                    uid=uid, iid=iid, time_col=time_col,
-                                    last_days=7, dtype='train')
+        if os.path.exists(f'{path_output}/train_fe.hdf'):
+            train_fe = pd.read_hdf(f'{path_output}/train_fe.hdf')
+        else:
+            train_fe = feature_engineer(train, inter_df,
+                                        date=train_date,
+                                        user_df=user_df, item_df=item_df,
+                                        uid=uid, iid=iid, time_col=time_col,
+                                        last_days=7, dtype='train')
         print('valid')
-        valid_fe = feature_engineer(valid, inter_df,
-                                    date=valid_date,
-                                    user_df=user_df, item_df=item_df,
-                                    uid=uid, iid=iid, time_col=time_col,
-                                    last_days=7, dtype='train')
+        if os.path.exists(f'{path_output}/valid_fe.hdf'):
+            valid_fe = pd.read_hdf(f'{path_output}/valid_fe.hdf')
+        else:
+            valid_fe = feature_engineer(valid, inter_df,
+                                        date=valid_date,
+                                        user_df=user_df, item_df=item_df,
+                                        uid=uid, iid=iid, time_col=time_col,
+                                        last_days=7, dtype='train')
+
+        if debug:
+            train_fe.to_hdf(f'{path_output}/train_fe.hdf', 'w', complib='blosc', complevel=5)
+            valid_fe.to_hdf(f'{path_output}/valid_fe.hdf', 'w', complib='blosc', complevel=5)
+
 
         iid2idx = {}
         idx2iid = {}
@@ -128,6 +168,8 @@ class RecallAndRank():
         print(f"valid_fe shape: {valid_fe.shape}")
 
         print('\nranker')
+        # todo: 检查train_fe中是否有冗余特征, 方差为0的特征
+
         lgb_ranker, valid_pred = ranker(train_fe, valid_fe,
                                         uid=uid, iid=iid, time_col=time_col)
         
@@ -148,8 +190,8 @@ class RecallAndRank():
         print("mAP Score on Validation set:", mapk(valid_true[iid], valid_pred[iid]))
 
         self.best_iteration_ = lgb_ranker.best_iteration_
-        
-        
+
+
         print("#" * 30)
         print('retrain')
         # 重新训练
@@ -165,14 +207,28 @@ class RecallAndRank():
                                               uid=uid, iid=iid, time_col=time_col,
                                               last_days=7, recall_num=recall_num, dtype='train')
         print('\nitemcf_recall')
-        itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train',
-                                            topk=1000, use_iif=False, sim_last_days=14)
+        if os.path.exists(f'{path_output}/itemcf_recall_train_all.hdf'):
+            itemcf_recall_train = pd.read_hdf(f'{path_output}/itemcf_recall_train_all.hdf')
+        else:
+            itemcf_recall_train = itemcf_recall(None, inter_df, date=train_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train',
+                                                topk=1000, use_iif=False, sim_last_days=14,
+                                                time_decay=time_decay)
+
+        if debug:
+            itemcf_recall_train.to_hdf(f'{path_output}/itemcf_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
+
         print('\nbinary_recall')
-        binary_recall_train = binary_recall(None, inter_df, date=train_date,
-                                            uid=uid, iid=iid, time_col=time_col,
-                                            last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if os.path.exists(f'{path_output}/binary_recall_train_all.hdf'):
+            binary_recall_train = pd.read_hdf(f'{path_output}/binary_recall_train_all.hdf')
+        else:
+            binary_recall_train = binary_recall(None, inter_df, date=train_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, recall_num=recall_num, dtype='train', topk=1000)
+        if debug:
+            binary_recall_train.to_hdf(f'{path_output}/binary_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
+
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -186,11 +242,18 @@ class RecallAndRank():
 
         # 特征工程
         print('\nfeature engineer')
-        train_fe = feature_engineer(train, inter_df,
-                                    date=train_date,
-                                    user_df=user_df, item_df=item_df,
-                                    uid=uid, iid=iid, time_col=time_col,
-                                    last_days=7, dtype='train')
+        if os.path.exists(f'{path_output}/train_fe_all.hdf'):
+            train_fe = pd.read_hdf(f'{path_output}/train_fe_all.hdf')
+        else:
+            train_fe = feature_engineer(train, inter_df,
+                                        date=train_date,
+                                        user_df=user_df, item_df=item_df,
+                                        uid=uid, iid=iid, time_col=time_col,
+                                        last_days=7, dtype='train')
+        if debug:
+            train_fe.to_hdf(f'{path_output}/train_fe_all.hdf', 'w', complib='blosc', complevel=5)
+
+
         train_fe[iid + '_idx'] = train_fe[iid].map(iid2idx)
         print(f"train_fe shape: {train_fe.shape}")
 
@@ -213,14 +276,26 @@ class RecallAndRank():
                                              uid=self.uid, iid=self.iid, time_col=self.time_col,
                                              last_days=7, recall_num=self.recall_num, dtype='test')
         print('\nitemcf recall, test')
-        itemcf_recall_test = itemcf_recall(uids, self.inter_df, date=test_date,
-                                           uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                           last_days=7, recall_num=self.recall_num, dtype='test',
-                                           topk=1000, use_iif=False, sim_last_days=14)
+        if os.path.exists(f'{self.path_output}/itemcf_recall_test.hdf'):
+            itemcf_recall_test = pd.read_hdf(f'{self.path_output}/itemcf_recall_test.hdf')
+        else:
+            itemcf_recall_test = itemcf_recall(uids, self.inter_df, date=test_date,
+                                               uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                               last_days=7, recall_num=self.recall_num, dtype='test',
+                                               topk=1000, use_iif=False, sim_last_days=14,
+                                               time_decay=self.time_decay)
+        if self.debug:
+            itemcf_recall_test.to_hdf(f'{self.path_output}/itemcf_recall_test.hdf', 'w', complib='blosc', complevel=5)
+
         print('\nbinary recall, test')
-        binary_recall_test = binary_recall(uids, self.inter_df, date=test_date,
-                                           uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                           last_days=7, recall_num=self.recall_num, dtype='test', topk=1000)
+        if os.path.exists(f'{self.path_output}/binary_recall_test.hdf'):
+            binary_recall_test = pd.read_hdf(f'{self.path_output}/binary_recall_test.hdf')
+        else:
+            binary_recall_test = binary_recall(uids, self.inter_df, date=test_date,
+                                               uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                               last_days=7, recall_num=self.recall_num, dtype='test', topk=1000)
+        if self.debug:
+            binary_recall_test.to_hdf(f'{self.path_output}/binary_recall_test.hdf', 'w', complib='blosc', complevel=5)
 
         print('\nmerge recalls')
         history_recall_test.drop_duplicates(subset=[self.uid, self.iid], keep='first', inplace=True)
@@ -232,11 +307,17 @@ class RecallAndRank():
         test = test.merge(binary_recall_test, on=[self.uid, self.iid], how='outer')
 
         print('\nfeature engineer')
-        test_fe = feature_engineer(test, self.inter_df,
-                                   date=test_date,
-                                   user_df=self.user_df, item_df=self.item_df,
-                                   uid=self.uid, iid=self.iid, time_col=self.time_col,
-                                   last_days=7, dtype='test')
+        if os.path.exists(f'{self.path_output}/test_fe.hdf'):
+            test_fe = pd.read_hdf(f'{self.path_output}/test_fe.hdf')
+        else:
+            test_fe = feature_engineer(test, self.inter_df,
+                                       date=test_date,
+                                       user_df=self.user_df, item_df=self.item_df,
+                                       uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                       last_days=7, dtype='test')
+        # if self.debug:
+        #     test_fe.to_hdf(f'{self.path_output}/test_fe.hdf', 'w', complib='blosc', complevel=5)
+
         test_fe[self.iid + '_idx'] = test_fe[self.iid].map(self.iid2idx)
         print(f"test_fe shape: {test_fe.shape}")
 

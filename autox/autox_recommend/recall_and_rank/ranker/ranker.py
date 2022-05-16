@@ -41,7 +41,8 @@ def ranker_test(train, epoch, uid, iid, time_col):
 
     g_train = train.groupby([uid], as_index=False).count()["label"].values
 
-    feats = [f for f in train.columns if f not in [uid, iid, 'label', 'prob']]
+    del_cols = []
+    feats = [f for f in train.describe().columns if f not in [uid, iid, 'label'] + del_cols]
 
     lgb_ranker = lgb.LGBMRanker(boosting_type='gbdt', num_leaves=31, reg_alpha=0.0, reg_lambda=1,
                                 max_depth=-1, n_estimators=epoch, subsample=0.7, colsample_bytree=0.7, subsample_freq=1,
