@@ -13,10 +13,8 @@ The framework of the NLP_feature is shown below.
 - [Different feature extract methods](#Different feature extract methods)
 - [Different feature output methods](#Different feature output methods)
 - [class NLP_feature](#NLP_feature)
-
 <!-- /TOC -->
 #Calling Method
- 
 ```
 from autox.autox_nlp import NLP_feature
 import pandas as pd
