@@ -98,7 +98,7 @@ class NLP_feature():
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.candidate_labels = {}
         self.pipline = None
-        self.n_clusters = 2
+        self.n_clusters = 16
         self.do_mlm = False
         self.mlm_epochs = 2
         self.emb_size = 32
