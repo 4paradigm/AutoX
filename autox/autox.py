@@ -274,6 +274,7 @@ class AutoX():
             log("ignore featureRank")
 
         # image特征
+        log("feature engineer: Image")
         if self.info_['image_info']:
             self.dfs_['FE_image'] = fe_ima2vec(df, self.info_['image_info']['image_path'],
                                                self.info_['image_info']['image_col'],
