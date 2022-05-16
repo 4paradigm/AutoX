@@ -15,8 +15,8 @@ The framework of the NLP_feature is shown below.
 - [class NLP_feature](#NLP_feature)
 
 <!-- /TOC -->
-# Calling Method
-
+#Calling Method
+ 
 ```
 from autox.autox_nlp import NLP_feature
 import pandas as pd
@@ -41,7 +41,8 @@ test.to_csv('new_test.csv')
 
 # Quick Start
 [demo：CommmonLit Readability prize](https://www.kaggle.com/hengwdai/quickstart-auto3ml-nlp)
-## Different token split methods
+##Different token split methods
+
 ### Tokenizing by space split
 ```
 
@@ -56,7 +57,7 @@ for column in df.columns:
 
 test = nlp.transform(test)
 ```
-### Tokenizing by Tokenizer
+###Tokenizing by Tokenizer
 ```
 
 use_Toknizer=True
@@ -70,7 +71,8 @@ for column in df.columns:
 
 test = nlp.transform(test)
 ```
-## Different feature extract methods
+##Different feature extract methods
+
 ### TFIDF
 ```
 
@@ -163,7 +165,8 @@ df_train = nlp.transform(df_train)
 test = nlp.transform(test)
 
 ```
-## Different feature output methods
+##Different feature output methods
+ 
 ### Directly output embedding
 ```
 
@@ -203,7 +206,7 @@ for column in df.columns:
 test = nlp.transform(test)
 ```
 
-# NLP_feature
+#NLP_feature
 
 Text feature extraction tool processes the text with the process of word segmentation, word embedding (feature extraction) and feature dimension reduction.
 ## Attributes
