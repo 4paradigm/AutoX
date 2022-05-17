@@ -247,7 +247,7 @@ test = nlp.transform(test)
 ```
 · test_df (pandas.DataFrame)                                 - 包含文本列的测试数据集，且 fit入参 'text_columns_def'指定的列必须包含在测试数据中
 ```
-### 返回值：pandas.DataFrame
+### 返回值：pandas.DataFrame / dict { text_name : sparse.csr_matrix }
 由输入的测试集与每列文本列转化成的特征列拼接得到的新数据集
     
     
