@@ -8,6 +8,7 @@ from .recalls import history_recall
 from .recalls import itemcf_recall
 from .recalls import popular_recall
 from ..metrics import mapk
+from autox.autox_server.util import save_obj, load_obj
 
 class RecallAndRank():
     def __init__(self):
@@ -328,3 +329,13 @@ class RecallAndRank():
                          batch_size=bs)
 
         return recs
+
+    def save(self, path):
+        save_obj(self.uid, f'{path}/uid.pkl')
+        save_obj(self.iid, f'{path}/iid.pkl')
+        save_obj(self.time_col, f'{path}/time_col.pkl')
+
+    def load(self, path):
+        self.uid = load_obj(f'{path}/uid.pkl')
+        self.iid = load_obj(f'{path}/iid.pkl')
+        self.time_col = load_obj(f'{path}/time_col.pkl')

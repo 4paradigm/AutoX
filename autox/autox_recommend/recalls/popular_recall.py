@@ -1,6 +1,7 @@
 import datetime
 import pandas as pd
 from tqdm import tqdm
+from autox.autox_server.util import save_obj, load_obj
 
 class PopularRecall():
     def __init__(self):
@@ -33,3 +34,16 @@ class PopularRecall():
         samples = samples.groupby(self.uid)[self.iid].agg(list).reset_index()
         samples.columns = [self.uid, 'prediction']
         return samples
+
+    def save(self, path):
+        save_obj(self.uid, f'{path}/uid.pkl')
+        save_obj(self.iid, f'{path}/iid.pkl')
+        save_obj(self.time_col, f'{path}/time_col.pkl')
+        save_obj(self.popular_item, f'{path}/popular_item.pkl')
+
+    def load(self, path):
+        self.uid = load_obj(f'{path}/uid.pkl')
+        self.iid = load_obj(f'{path}/iid.pkl')
+        self.time_col = load_obj(f'{path}/time_col.pkl')
+        self.popular_item = load_obj(f'{path}/popular_item.pkl')
+

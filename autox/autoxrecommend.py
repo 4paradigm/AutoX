@@ -40,3 +40,13 @@ class AutoXRecommend():
         result = self.recommend.transform(uids)
 
         return result
+
+
+    def save(self, path):
+
+        self.recommend.save(path)
+
+
+    def load(self, path):
+
+        self.recommend.load(path)
