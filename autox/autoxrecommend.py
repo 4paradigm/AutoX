@@ -40,22 +40,3 @@ class AutoXRecommend():
         result = self.recommend.transform(uids)
 
         return result
-
-
-    def save(self, path):
-
-        self.recommend.save(path)
-
-
-    def load(self, path, mode='recall_and_rank', recall_method=None):
-
-        if mode == 'recalls':
-            assert recall_method in ['popular', 'history', 'itemcf', 'binary']
-
-            if recall_method == 'popular':
-                self.recommend = PopularRecall()
-
-        elif mode == 'recall_and_rank':
-            self.recommend = RecallAndRank()
-
-        self.recommend.load(path)
