@@ -12,7 +12,12 @@ from autox.autox_server.util import save_obj, load_obj
 
 class RecallAndRank():
     def __init__(self):
-        pass
+        self.uid = None
+        self.iid = None
+        self.time_col = None
+        self.recall_num = None
+        self.time_decay = None
+        self.debug = None
 
     def fit(self, inter_df, user_df, item_df,
                   uid, iid, time_col,
@@ -173,7 +178,7 @@ class RecallAndRank():
 
         lgb_ranker, valid_pred = ranker(train_fe, valid_fe,
                                         uid=uid, iid=iid, time_col=time_col)
-        
+
         print('\nlocal result calculation')
         # 离线结果打印
         valid_pred = valid_pred.sort_values('prob', ascending=False)
@@ -259,9 +264,9 @@ class RecallAndRank():
         print(f"train_fe shape: {train_fe.shape}")
 
         print('\nranker')
-        self.model, self.feats = ranker_test(train_fe, self.best_iteration_, 
+        self.model, self.feats = ranker_test(train_fe, self.best_iteration_,
                                    uid=uid, iid=iid, time_col=time_col)
-        
+
 
     def transform(self, uids):
 
@@ -336,6 +341,8 @@ class RecallAndRank():
         save_obj(self.time_col, f'{path}/time_col.pkl')
         save_obj(self.recall_num, f'{path}/recall_num.pkl')
         save_obj(self.time_decay, f'{path}/time_decay.pkl')
+        save_obj(self.valid_date, f'{path}/valid_date.pkl')
+        save_obj(self.path_output, f'{path}/path_output.pkl')
 
         save_obj(self.inter_df, f'{path}/inter_df.pkl')
         save_obj(self.user_df, f'{path}/user_df.pkl')
@@ -350,6 +357,8 @@ class RecallAndRank():
         self.time_col = load_obj(f'{path}/time_col.pkl')
         self.recall_num = load_obj(f'{path}/recall_num.pkl')
         self.time_decay = load_obj(f'{path}/time_decay.pkl')
+        self.valid_date = load_obj(f'{path}/valid_date.pkl')
+        self.path_output = load_obj(f'{path}/path_output.pkl')
 
         self.inter_df = load_obj(f'{path}/inter_df.pkl')
         self.user_df = load_obj(f'{path}/user_df.pkl')
