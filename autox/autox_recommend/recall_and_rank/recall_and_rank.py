@@ -8,7 +8,6 @@ from .recalls import history_recall
 from .recalls import itemcf_recall
 from .recalls import popular_recall
 from ..metrics import mapk
-from autox.autox_server.util import save_obj, load_obj
 
 class RecallAndRank():
     def __init__(self):
@@ -173,7 +172,7 @@ class RecallAndRank():
 
         lgb_ranker, valid_pred = ranker(train_fe, valid_fe,
                                         uid=uid, iid=iid, time_col=time_col)
-        
+
         print('\nlocal result calculation')
         # 离线结果打印
         valid_pred = valid_pred.sort_values('prob', ascending=False)
@@ -259,9 +258,9 @@ class RecallAndRank():
         print(f"train_fe shape: {train_fe.shape}")
 
         print('\nranker')
-        self.model, self.feats = ranker_test(train_fe, self.best_iteration_, 
+        self.model, self.feats = ranker_test(train_fe, self.best_iteration_,
                                    uid=uid, iid=iid, time_col=time_col)
-        
+
 
     def transform(self, uids):
 
@@ -329,13 +328,3 @@ class RecallAndRank():
                          batch_size=bs)
 
         return recs
-
-    def save(self, path):
-        save_obj(self.uid, f'{path}/uid.pkl')
-        save_obj(self.iid, f'{path}/iid.pkl')
-        save_obj(self.time_col, f'{path}/time_col.pkl')
-
-    def load(self, path):
-        self.uid = load_obj(f'{path}/uid.pkl')
-        self.iid = load_obj(f'{path}/iid.pkl')
-        self.time_col = load_obj(f'{path}/time_col.pkl')

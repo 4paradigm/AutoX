@@ -40,15 +40,3 @@ class AutoXRecommend():
         result = self.recommend.transform(uids)
 
         return result
-
-
-    def save(self, path):
-
-        self.recommend.save(path)
-
-
-    def load(self, path):
-
-        # todo: RecallAndRank
-        self.recommend = PopularRecall()
-        self.recommend.load(path)
