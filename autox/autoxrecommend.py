@@ -47,8 +47,15 @@ class AutoXRecommend():
         self.recommend.save(path)
 
 
-    def load(self, path):
+    def load(self, path, mode='recall_and_rank', recall_method=None):
 
-        # todo: RecallAndRank
-        self.recommend = PopularRecall()
+        if mode == 'recalls':
+            assert recall_method in ['popular', 'history', 'itemcf', 'binary']
+
+            if recall_method == 'popular':
+                self.recommend = PopularRecall()
+
+        elif mode == 'recall_and_rank':
+            self.recommend = RecallAndRank()
+
         self.recommend.load(path)

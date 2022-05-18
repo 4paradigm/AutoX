@@ -334,8 +334,26 @@ class RecallAndRank():
         save_obj(self.uid, f'{path}/uid.pkl')
         save_obj(self.iid, f'{path}/iid.pkl')
         save_obj(self.time_col, f'{path}/time_col.pkl')
+        save_obj(self.recall_num, f'{path}/recall_num.pkl')
+        save_obj(self.time_decay, f'{path}/time_decay.pkl')
+
+        save_obj(self.inter_df, f'{path}/inter_df.pkl')
+        save_obj(self.user_df, f'{path}/user_df.pkl')
+        save_obj(self.item_df, f'{path}/item_df.pkl')
+
+        save_obj(self.model, f'{path}/model.pkl')
+        save_obj(self.feats, f'{path}/feats.pkl')
 
     def load(self, path):
         self.uid = load_obj(f'{path}/uid.pkl')
         self.iid = load_obj(f'{path}/iid.pkl')
         self.time_col = load_obj(f'{path}/time_col.pkl')
+        self.recall_num = load_obj(f'{path}/recall_num.pkl')
+        self.time_decay = load_obj(f'{path}/time_decay.pkl')
+
+        self.inter_df = load_obj(f'{path}/inter_df.pkl')
+        self.user_df = load_obj(f'{path}/user_df.pkl')
+        self.item_df = load_obj(f'{path}/item_df.pkl')
+
+        self.model = load_obj(f'{path}/model.pkl')
+        self.feats = load_obj(f'{path}/feats.pkl')

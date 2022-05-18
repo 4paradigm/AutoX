@@ -14,7 +14,7 @@ api = Api(app)
 autoXRecommend = AutoXRecommend()
 
 path = 'autoXRecommend_popular_temp'
-autoXRecommend.load(path)
+autoXRecommend.load(path, mode='recalls', recall_method='popular')
 
 # argument parsing
 parser = reqparse.RequestParser()
