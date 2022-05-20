@@ -116,12 +116,14 @@ def train_model(data, size=10, save_path='w2v_model/', iter=5, window=20):
     """训练模型"""
     print('Begin training w2v model')
     begin_time = time()
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
+    # if not os.path.exists(save_path):
+    #     os.mkdir(save_path)
 
-    model = Word2Vec(data, vector_size=size, window=window, min_count=0, workers=20,
-                     seed=1997, epochs=iter, sg=1, hs=1, compute_loss=True)
-    print(model.get_latest_training_loss())
+    # model = Word2Vec(data, vector_size=size, window=window, min_count=0, workers=20,
+    #                  seed=1997, epochs=iter, sg=1, hs=1, compute_loss=True)
+    # print(model.get_latest_training_loss())
+
+    model = Word2Vec(sentences=data, vector_size=size, window=window, min_count=1, workers=20)
 
     end_time = time()
     run_time = end_time - begin_time
