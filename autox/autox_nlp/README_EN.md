@@ -8,8 +8,8 @@ English | [简体中文](./README.md)
 
 - [What is AutoX_nlp?](#What-is-AutoX_nlp?)
 - [Quick Start](#Quick-Start)
-- [Table of Contents](#Table-of-Contents)
 - [Evaluation](#Evaluation)
+- [Efficiency](#Efficiency)
 
 <!-- /TOC -->
 
