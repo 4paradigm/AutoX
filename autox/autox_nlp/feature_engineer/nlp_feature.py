@@ -1,11 +1,18 @@
 import numpy as np
 import gc
 import pandas as pd
-import re
 import torch
-from joblib import Parallel, delayed
 from gensim.models import FastText, Word2Vec
-from glove import Glove, Corpus
+
+try:
+    os.system('pip install glove-python-binary')
+    from glove import Glove, Corpus
+
+    Glove_installed = True
+except Exception as e:
+    print("Your environment is not support to install glove-python-binary, so the 'embedding_mode=Glove' method is \
+          not supported")
+    Glove_installed = False
 from sklearn.model_selection import KFold
 from sklearn.cluster import KMeans
 from scipy import sparse
@@ -108,35 +115,34 @@ class NLP_feature():
         self.task = None
         self.embedding_mode = None
 
-    def fit(self, df, text_columns_def, use_tokenizer=True, embedding_mode='TFIDF', task='unsupervise', y=None,
-            candidate_labels=None):
+    def fit_transform(self, df, text_columns_def, use_tokenizer=True, embedding_mode='TFIDF', task='unsupervise',
+                      y=None,
+                      candidate_labels=None):
         self.task = task
         self.use_tokenizer = use_tokenizer
         self.text_columns_def = text_columns_def
         self.embedding_mode = embedding_mode
         self.candidate_labels = candidate_labels
         self.y = y
+        self.param_check()
         df = df.loc[:, text_columns_def]
         for col in text_columns_def:
             df[col] = df[col].apply(str)
         if self.task == 'zero-shot-classification':
             self.pipeline = pipeline(self.task, model=self.zero_shot_model)
             return
-        ## 训练分词器，如果不使用，则默认使用空格分词
         if self.use_tokenizer:
             self.fit_tokenizers(df)
         if self.embedding_mode != 'Bert':
             for column in self.text_columns_def:
                 df[f'{column}_tokenized_ids'] = self.tokenize(df, column)
-        #         return df
-        ## 训练embedding,初步确定五种： TFIDF、FastText、Word2Vec、Glove、 BertEmbedding,训练的embedding model数量与文本特征列数量相同,使用字典存储，索引为特征列名
         self.fit_embeddings(df)
-        ## 根据task训练特征提取器,训练的encoder model数量与文本特征列数量相同,使用字典存储，索引为特征列名, 与每一列的embedding model也是一一对应
-        ## 目前支持：有监督回归数值特征、无监督KNN距离特征、无监督关键词离散特征(语义，情感，。。。）
-        ## 特殊任务：根据两两对比数据 生成 每个数据的具体得分，比如通过成对评论的恶意(替换成任何一种语义程度都可以)比较，生成单个评论的恶意程度
-        ## 注意： 关键词离散特征和特殊任务目前只支持使用深度模型，无法自选tokenizer和embedding
         return self.fit_encoders(df, y)
-        ## 使用提取器处理文本数据生成新特征
+
+    def param_check(self):
+        if Glove_installed is False and self.embedding_mode == 'Glove':
+            raise NotImplementedError("Your environment is not support to install glove-python-binary, \
+            so the 'embedding_mode=Glove' method is not supported")
 
     def fit_tokenizers(self, df):
         raw_tokenizer = Tokenizer(models.WordPiece(unk_token="[UNK]"))
@@ -377,6 +383,7 @@ class NLP_feature():
             return df.drop(columns=self.text_columns_def)
 
     def transform(self, df):
+        df = df.loc[:, self.text_columns_def]
         if self.task == 'embedding':
             res_dict = {}
             for column in self.text_columns_def:
@@ -409,6 +416,7 @@ class NLP_feature():
                 #                     for idx in range(self.n_clusters):
                 #                         df[f'{column}_transformed_class{idx}'] =  meta_test[idx]
                 df[f'{column}_meta_feature'] = meta_test
+                df.drop(columns=[column])
             return df
         elif self.task == 'zero-shot-classification':
             for column in self.text_columns_def:
@@ -420,6 +428,7 @@ class NLP_feature():
                     results = classifier(text, candidate_labels)
                     pred_labels.append(results['labels'][np.argmax(results['scores'])])
                 df[f'{column}_meta_feature'] = pred_labels
+                df.drop(columns=[column])
             return df
         else:
             raise NotImplementedError
