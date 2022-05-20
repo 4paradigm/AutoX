@@ -3,15 +3,14 @@ import gc
 import pandas as pd
 import torch
 from gensim.models import FastText, Word2Vec
-
+import os
 try:
     os.system('pip install glove-python-binary')
     from glove import Glove, Corpus
 
     Glove_installed = True
 except Exception as e:
-    print("Your environment is not support to install glove-python-binary, so the 'embedding_mode=Glove' method is \
-          not supported")
+    print("Your environment is not support to install glove-python-binary, so the 'embedding_mode=Glove' method is not supported")
     Glove_installed = False
 from sklearn.model_selection import KFold
 from sklearn.cluster import KMeans
