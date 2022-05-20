@@ -172,7 +172,7 @@ class RecallAndRank():
 
         lgb_ranker, valid_pred = ranker(train_fe, valid_fe,
                                         uid=uid, iid=iid, time_col=time_col)
-        
+
         print('\nlocal result calculation')
         # 离线结果打印
         valid_pred = valid_pred.sort_values('prob', ascending=False)
@@ -258,9 +258,9 @@ class RecallAndRank():
         print(f"train_fe shape: {train_fe.shape}")
 
         print('\nranker')
-        self.model, self.feats = ranker_test(train_fe, self.best_iteration_, 
+        self.model, self.feats = ranker_test(train_fe, self.best_iteration_,
                                    uid=uid, iid=iid, time_col=time_col)
-        
+
 
     def transform(self, uids):
 

@@ -15,10 +15,11 @@ AutoX一个高效的自动化机器学习工具。
 - [autox_competition](autox/autox_competition/README.md): 主要针对于表格类型的数据挖掘竞赛
 - [autox_server](autox/autox_server/README.md): 用于上线部署的automl服务
 - [autox_interpreter](autox/autox_interpreter/README.md): 机器学习可解释功能
+- [autox_nlp](autox/autox_nlp/README.md): 对文本列进行处理的自动化工具
 - [autox_recommend](autox/autox_recommend/README.md): 推荐系统的自动机器学习
 
 # 加入社区
-<img src="./img/qr_code_0517.png" width = "200" height = "200" alt="AutoX社区" align=center />
+<img src="./img/qr_code_0524.png" width = "200" height = "200" alt="AutoX社区" align=center />
 
 # 如何为AutoX贡献
 [如何为AutoX贡献](./how_to_contribute.md)
