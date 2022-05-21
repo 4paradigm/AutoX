@@ -30,9 +30,9 @@
 | 历史购买召回 | 已完成 | [history_recall](./recall_and_rank/recalls/history_recall.py)  | 
 | ItemCF | 已完成 | [itemcf_recall](./recall_and_rank/recalls/itemcf_recall.py)  | 
 | UserCF | 待认领 |  | 
-| BinaryNet | 已完成 | [binary_recall](./recall_and_rank/recalls/binary_recall.py)  | 
+| BinaryNet | 已完成 | [binary_recall](./recall_and_rank/recalls/binary_recall.py) | 
 | 分组流行商品 | 待认领 |  | 
-| w2v内容召回 | 待认领 |  | 
+| w2v内容召回 | 已完成 | [w2v_content_recall](./recall_and_rank/recalls/w2v_content_recall.py) | 
 | NLP内容召回 | 待认领 |  | 
 | 图像内容召回 | 待认领 |  | 
 | Random graph walk | 待认领 |  | 
@@ -57,6 +57,14 @@
 | HM | [HM_AutoX_recall_and_rank](./demo/HM/HM_AutoX_recall_and_rank.ipynb) | 0.02436(public score) |
 | 内部数据-某服饰客户 | None | 0.47096 |
 
+- 版本(git commit号): e223402e6de967e9821df9037e58361751ac0b6c
+- 效果
+
+|数据 | 调用代码 | map@12 |
+|------------ | ------------- | ------------- |
+| MovieLens | [MovieLens_AutoX_recall_and_rank](./demo/MovieLens/MovieLens_AutoX_recall_and_rank_0520.ipynb) | 0.07350 |
+| HM | [HM_AutoX_recall_and_rank](./demo/HM/HM_AutoX_recall_and_rank_0520.ipynb) | 0.02616(public score) |
+| 内部数据-某服饰客户 | ms_AutoX_recall_and_rank_0520.ipynb | 0.46964 |
 
 ## 4. 第2点中组件效果/效率的优化
 
