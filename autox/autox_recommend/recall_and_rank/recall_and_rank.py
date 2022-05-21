@@ -7,9 +7,10 @@ from .recalls import binary_recall
 from .recalls import history_recall
 from .recalls import itemcf_recall
 from .recalls import popular_recall
+from .recalls import w2v_concent_recall
 from ..metrics import mapk
 
-class RecallAndRank():
+class AutoXRecommend():
     def __init__(self):
         pass
 
@@ -108,6 +109,27 @@ class RecallAndRank():
             binary_recall_train.to_hdf(f'{path_output}/binary_recall_train.hdf', 'w', complib='blosc', complevel=5)
             binary_recall_valid.to_hdf(f'{path_output}/binary_recall_valid.hdf', 'w', complib='blosc', complevel=5)
 
+        print('\nw2v_content_recall')
+        print('train')
+        if os.path.exists(f'{path_output}/w2v_content_recall_train.hdf'):
+            w2v_content_recall_train = pd.read_hdf(f'{path_output}/w2v_content_recall_train.hdf')
+        else:
+            w2v_content_recall_train = w2v_concent_recall(None, inter_df, date=train_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, dtype='train',
+                                                topn = 20, topk = 20, prefix = 'w2v')
+
+        print('valid')
+        if os.path.exists(f'{path_output}/w2v_content_recall_valid.hdf'):
+            w2v_content_recall_valid = pd.read_hdf(f'{path_output}/w2v_content_recall_valid.hdf')
+        else:
+            w2v_content_recall_valid = w2v_concent_recall(None, inter_df, date=valid_date,
+                                                uid=uid, iid=iid, time_col=time_col,
+                                                last_days=7, dtype='train',
+                                                topn=20, topk=20, prefix='w2v')
+        if debug:
+            w2v_content_recall_train.to_hdf(f'{path_output}/w2v_content_recall_train.hdf', 'w', complib='blosc', complevel=5)
+            w2v_content_recall_valid.to_hdf(f'{path_output}/w2v_content_recall_valid.hdf', 'w', complib='blosc', complevel=5)
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -119,6 +141,7 @@ class RecallAndRank():
         train.drop_duplicates(subset=[uid, iid], keep='first', inplace=True)
         train = train.merge(itemcf_recall_train, on=[uid, iid, 'label'], how='outer')
         train = train.merge(binary_recall_train, on=[uid, iid, 'label'], how='outer')
+        train = train.merge(w2v_content_recall_train, on=[uid, iid, 'label'], how='outer')
 
         print('valid')
         history_recall_valid.drop_duplicates(subset=[uid, iid, 'label'], keep='first', inplace=True)
@@ -128,6 +151,7 @@ class RecallAndRank():
         valid.drop_duplicates(subset=[uid, iid], keep='first', inplace=True)
         valid = valid.merge(itemcf_recall_valid, on=[uid, iid, 'label'], how='outer')
         valid = valid.merge(binary_recall_valid, on=[uid, iid, 'label'], how='outer')
+        valid = valid.merge(w2v_content_recall_valid, on=[uid, iid, 'label'], how='outer')
 
         # 特征工程
         print('\nfeature engineer')
@@ -229,6 +253,17 @@ class RecallAndRank():
         if debug:
             binary_recall_train.to_hdf(f'{path_output}/binary_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
 
+        print('\nw2v_content_recall')
+        if os.path.exists(f'{path_output}/w2v_content_recall_train_all.hdf'):
+            w2v_content_recall_train = pd.read_hdf(f'{path_output}/w2v_content_recall_train_all.hdf')
+        else:
+            w2v_content_recall_train = w2v_concent_recall(None, inter_df, date=train_date,
+                                                          uid=uid, iid=iid, time_col=time_col,
+                                                          last_days=7, dtype='train',
+                                                          topn=20, topk=20, prefix='w2v')
+        if debug:
+            w2v_content_recall_train.to_hdf(f'{path_output}/w2v_content_recall_train_all.hdf', 'w', complib='blosc', complevel=5)
+
 
         # 合并召回数据
         print('\nmerge recalls')
@@ -239,6 +274,7 @@ class RecallAndRank():
         train.drop_duplicates(subset=[uid, iid], keep='first', inplace=True)
         train = train.merge(itemcf_recall_train, on=[uid, iid, 'label'], how='outer')
         train = train.merge(binary_recall_train, on=[uid, iid, 'label'], how='outer')
+        train = train.merge(w2v_content_recall_train, on=[uid, iid, 'label'], how='outer')
 
         # 特征工程
         print('\nfeature engineer')
@@ -297,6 +333,17 @@ class RecallAndRank():
         if self.debug:
             binary_recall_test.to_hdf(f'{self.path_output}/binary_recall_test.hdf', 'w', complib='blosc', complevel=5)
 
+        print('\nw2v_content_recall, test')
+        if os.path.exists(f'{self.path_output}/w2v_content_recall_test.hdf'):
+            w2v_content_recall_test = pd.read_hdf(f'{self.path_output}/w2v_content_recall_test.hdf')
+        else:
+            w2v_content_recall_test = w2v_concent_recall(uids, self.inter_df, date=test_date,
+                                                         uid=self.uid, iid=self.iid, time_col=self.time_col,
+                                                         last_days=7, dtype='test',
+                                                         topn=20, topk=20, prefix='w2v')
+        if self.debug:
+            w2v_content_recall_test.to_hdf(f'{self.path_output}/w2v_content_recall_test.hdf', 'w', complib='blosc', complevel=5)
+
         print('\nmerge recalls')
         history_recall_test.drop_duplicates(subset=[self.uid, self.iid], keep='first', inplace=True)
         itemcf_recall_test.drop_duplicates(subset=[self.uid, self.iid], keep='first', inplace=True)
@@ -305,6 +352,7 @@ class RecallAndRank():
         test.drop_duplicates(subset=[self.uid, self.iid], keep='first', inplace=True)
         test = test.merge(itemcf_recall_test, on=[self.uid, self.iid], how='outer')
         test = test.merge(binary_recall_test, on=[self.uid, self.iid], how='outer')
+        test = test.merge(w2v_content_recall_test, on=[self.uid, self.iid], how='outer')
 
         print('\nfeature engineer')
         if os.path.exists(f'{self.path_output}/test_fe.hdf'):
