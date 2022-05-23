@@ -31,6 +31,7 @@
 | ItemCF | 已完成 | [itemcf_recall](./recall_and_rank/recalls/itemcf_recall.py)  | 
 | UserCF | 待认领 |  | 
 | BinaryNet | 已完成 | [binary_recall](./recall_and_rank/recalls/binary_recall.py) | 
+| Swing | 待认领 |  | 
 | 分组流行商品 | 待认领 |  | 
 | w2v内容召回 | 已完成 | [w2v_content_recall](./recall_and_rank/recalls/w2v_content_recall.py) | 
 | NLP内容召回 | 待认领 |  | 

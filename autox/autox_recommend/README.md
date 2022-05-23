@@ -49,6 +49,12 @@
 ```
 itemcf相似性的计算会有很多变种,比如考虑时间权重.
 ```
+- Swing召回
+```
+itemcf的变形,计算相似性的时候考虑两个用户重合度的大小.
+参考[02_Retrieval_02](https://github.com/wangshusen/RecommenderSystem/blob/main/Slides/02_Retrieval_02.pdf)
+```
+
 - UserCF召回
 
 - 分组流行商品召回
