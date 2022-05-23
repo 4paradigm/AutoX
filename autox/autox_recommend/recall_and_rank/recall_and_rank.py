@@ -10,7 +10,7 @@ from .recalls import popular_recall
 from .recalls import w2v_concent_recall
 from ..metrics import mapk
 
-class AutoXRecommend():
+class RecallAndRank():
     def __init__(self):
         pass
 
