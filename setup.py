@@ -23,6 +23,7 @@ setup(name="automl-x",
             'keras',
             'tensorflow',
             'gensim',
+            'pyarrow>=6.0.0'
             # 'glove-python-binary',
             'transformers',
             'datasets',

@@ -11,6 +11,5 @@ pypinyin
 keras
 tensorflow
 gensim
-glove-python-binary
 transformers
 datasets
