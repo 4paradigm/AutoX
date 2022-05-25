@@ -26,13 +26,13 @@ train = pd.read_csv('train.csv')
 test  = pd.read_csv('test.csv')
 
 # Use fit to get meta_feature
-meta_feature = nlp.fit(train, ['text_column_name'], use_Toknizer, embedding_mode, task, y, candidate_labels)
+train_meta_feature = nlp.fit_transform(train, ['text_column_name'], use_Toknizer, embedding_mode, task, y, candidate_labels)
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
-for column in meta_feature.columns:
-    train[column] = meta_feature[column]
-    
-test = nlp.transform(test)
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
 train.to_csv('new_train.csv')
 test.to_csv('new_test.csv')
@@ -43,114 +43,120 @@ test.to_csv('new_test.csv')
 ## 按分词方式划分
 ### 空格分词
 ```
-
 use_Toknizer=False
 
-df = nlp.fit(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### 无监督分词器分词
 ```
-
 use_Toknizer=True
 
-df = nlp.fit(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],use_Toknizer,'Word2Vec','unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ## 按特征提取方式划分
 ### TFIDF
 ```
-
 emb_mode='TFIDF'
 
-df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### Word2Vec
 ```
-
 emb_mode='Word2Vec'
 
-df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### FastText
 ```
-
 emb_mode='FastText'
 
-df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### Glove
 ```
-
 emb_mode='Glove'
 
-df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### Bert
 ```
-
 emb_mode='Bert'
 
-df = nlp.fit(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,emb_mode,'unsupervise')
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### Zero-shot Labeling
 ```
-
 task='zero-shot-classification'
 hypothesis = {'text_column_name':[
                         'this text is too complex',
                         'this text is easy to understand'
                         ]}
 
-df = nlp.fit(
-              df = df_train,
+train_meta_feature = nlp.fit_transform(
+              df = train,
               text_columns_def = ['text_column_name'],
               use_tokenizer = True,
               text_columns_def = None,
@@ -158,48 +164,47 @@ df = nlp.fit(
               y = None,
               text_columns_def = hypothesis )
 
-df_train = nlp.transform(df_train)
-test = nlp.transform(test)
-
+train_meta_feature = nlp.transform(train)
+test_meta_feature = nlp.transform(test)
 ```
 ## 按特征输出形式划分
 ### 直接输出embedding
 ```
-
 task='embedding'
 
-train_sparse_matrix = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+train_sparse_matrix = nlp.fit_transform(df_train,['text_column_name'],True,'Word2Vec',task)
 
 test_sparse_matrix = nlp.transform(test)
 ```
 ### 使用target encode输出数值型特征
 ```
-
 task='supervise'
 
-df = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,'Word2Vec',task)
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
-
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 ### 使用k means输出离散型特征
 ```
-
 task='unsupervise'
 
-df = nlp.fit(df_train,['text_column_name'],True,'Word2Vec',task)
+train_meta_feature = nlp.fit_transform(df_train,['text_column_name'],True,'Word2Vec',task)
+test_meta_feature = nlp.transform(test)
 
 # Concat meta feature with raw data
+for column in train_meta_feature.columns:
+    train[column] = train_meta_feature[column]
+    test[column] = test_meta_feature[column]
 
-for column in df.columns:
-    df_train[column] = df[column]
-
-test = nlp.transform(test)
+train.to_csv('new_train.csv')
+test.to_csv('new_test.csv')
 ```
 
 # NLP_feature
@@ -226,7 +231,7 @@ test = nlp.transform(test)
 · mlm_epochs (int)              - 使用Bert进行词嵌入时，使用mlm预训练的训练轮次
 · emb_size (int)                - 使用Word2Vec、FastText、Glove进行词嵌入时的输出维度
 ```
-## NLP_feature.fit
+## NLP_feature.fit_transform
 使用训练数据中的文本列训练特征提取pipeline，并输出提取后的训练数据文本特征
 ### 参数介绍
 ```
@@ -242,7 +247,7 @@ test = nlp.transform(test)
 若降维方式选择embedding，则返回值格式为由文本列名和sparse.csr_matrix组成的字典, 其他方式则是由每一列文本列的特征拼接而成的DataFrame
 
 ## NLP_feature.transform
-使用 fit 完成的工具类对新的测试数据进行特征提取。将测试集与提取后的特征的拼接作为输出。
+使用 fit 完成的工具类对新的测试数据进行特征提取。并输出提取后的测试数据文本特征
 ### 参数介绍
 ```
 · test_df (pandas.DataFrame)                                 - 包含文本列的测试数据集，且 fit入参 'text_columns_def'指定的列必须包含在测试数据中
