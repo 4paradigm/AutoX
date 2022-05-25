@@ -22,7 +22,7 @@
 欢迎将其他开源的数据集加进来，数据处理方法参考 [MovieLens_data_process](./data_process/MovieLens_data_process.ipynb).
 
 ## 2. 基于当前设计框架，开发其中的组件.
-![Framework](./img/framework_0512.png)
+![Framework](./img/framework_0525.png)
 
 |组件 | 状态 | code |
 |------------ | ------------- | ------------- |
