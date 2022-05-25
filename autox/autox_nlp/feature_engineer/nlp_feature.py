@@ -8,12 +8,16 @@ from sklearn.model_selection import KFold
 from sklearn.cluster import KMeans
 from scipy import sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
+from torch.utils.data import DataLoader, Dataset
+try:
+    from datasets import Dataset as DataSet
+except Exception as e:
+    os.system('pip install datasets')
+    from datasets import Dataset as DataSet
 from transformers import (AutoModel, AutoModelForMaskedLM,
                           AutoTokenizer, LineByLineTextDataset,
                           DataCollatorForLanguageModeling,
                           Trainer, TrainingArguments, PreTrainedTokenizerFast, pipeline)
-from torch.utils.data import DataLoader, Dataset
-from datasets import Dataset as DataSet
 from sklearn.linear_model import Ridge
 from tokenizers import (
     decoders,
