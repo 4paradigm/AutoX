@@ -18,6 +18,7 @@ AutoX_nlp 是针对文本数据进行处理的辅助工具。
 - [快速上手](#快速上手)
 - [效果对比](#效果对比)
 - [处理效率对比](#处理效率对比)
+- [如何给AutoX_nlp做贡献](#如何给AutoX_nlp做贡献)
 
 <!-- /TOC -->
 # 安装
@@ -40,6 +41,9 @@ pip install ./autox
 
 # 快速上手
 - [文本特征提取](feature_engineer/README.md)
+
+# 如何给AutoX_nlp做贡献
+[如何给AutoX_nlp做贡献](./call_for_contribute.md)
 
 
 # 效果对比
