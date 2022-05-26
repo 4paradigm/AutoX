@@ -6,7 +6,10 @@
   <img src="../../img/developers_0531.jpeg" width = "200" height = "200" alt="wechat" align=center/>
 - Email: caihengxing@4paradigm.com
 
-
+## 参与流程
+1. 找到自己感兴趣的issues;
+2. 在issue下方留言, 表明自己即将在感兴趣的issue上展开工作,我们的社区维护者将会把该issue的assignee变更为你;
+3. 你现在可以正常地编写代码，提交PR了.
 ## 1. 基于当前文本特征提取工具的优化
 针对特征提取流程、功能的优化
 
