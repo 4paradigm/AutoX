@@ -16,7 +16,7 @@ Its features include:
 - autox_interpreter: machine learning interpretable function
 
 # Join-the-community
-<img src="./img/qr_code_0531.png" width = "200" height = "200" alt="AutoX Community" align=center />  
+<img src="./img/qr_code_0531.png" width = "200" height = "260" alt="AutoX Community" align=center />  
 
 # How-to-contribute-to-AutoX?
 [how to contribute](./how_to_contribute.md)
