@@ -21,16 +21,15 @@ AutoX一个高效的自动化机器学习工具。
 # 加入社区
 <img src="./img/qr_code_0531.png" width = "200" height = "260" alt="AutoX社区" align=center />
 
-
 # 框架
 ## autox_competition
-![autox_competition framework](./autox/autox_competition/img/framework.png)
+<img src="./autox/autox_competition/img/framework.png" alt="autox_competition framework" align=center />
 
 ## autox_recommend
-![autox_recommend framework](./autox/autox_recommend/img/framework_0525.png)
+<img src="./autox/autox_recommend/img/framework_0525.png" alt="autox_recommend framework" align=center />
 
 ## autox_nlp
-![autox_nlp framework](./autox/autox_nlp/img/NLP_Framework.png)
+<img src="./autox/autox_nlp/img/NLP_Framework.png" height = "60%" alt="autox_nlp framework" align=center />
 
 
 # 如何为AutoX贡献
