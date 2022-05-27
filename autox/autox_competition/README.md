@@ -3,6 +3,9 @@
 # autox_competition是什么
 AutoX开发的，针对于表格类型的数据挖掘竞赛的自动化机器学习工具
 
+# 框架
+![Framework](./img/framework.png)
+
 # 快速上手
 ## 使用以下函数一键获取预测结果:
 ```
