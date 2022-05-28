@@ -104,8 +104,10 @@ class FeatureNlp:
                     start_time = time()
                     print('Training on model {} - fold {}'.format(model_i + 1, fold_n + 1))
 
-                    trn_data = lgb.Dataset(train[train_index], label=y.iloc[train_index], categorical_feature="")
-                    val_data = lgb.Dataset(train[valid_index], label=y.iloc[valid_index], categorical_feature="")
+                    trn_data = lgb.Dataset(train[train_index], label=y.iloc[train_index, 0].values.tolist(),
+                                           categorical_feature="")
+                    val_data = lgb.Dataset(train[valid_index], label=y.iloc[valid_index, 0].values.tolist(),
+                                           categorical_feature="")
                     clf = lgb.train(params, trn_data, num_boost_round=N_round, valid_sets=[trn_data, val_data],
                                     verbose_eval=Verbose,
                                     early_stopping_rounds=Early_Stopping_Rounds)  # , feval=evalerror
