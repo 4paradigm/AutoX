@@ -85,7 +85,11 @@ class CrossXgbBiClassifier(object):
         log(X.shape)
         self.feature_importances_['feature'] = X.columns
         self.scaler = StandardScaler()
-        X = self.scaler.fit_transform(X)
+        self.scaler_flag = True
+        try:
+            X = self.scaler.fit_transform(X)
+        except:
+            self.scaler_flag = False
 
         if tuning:
             log("[+]tuning params")
@@ -120,7 +124,8 @@ class CrossXgbBiClassifier(object):
         self.feature_importances_.index = range(len(self.feature_importances_))
 
     def predict(self, test):
-        test = self.scaler.transform(test)
+        if self.scaler_flag:
+            test = self.scaler.transform(test)
         for idx, model in enumerate(self.models):
             if idx == 0:
                 result = model.predict_proba(test)[:,1]
