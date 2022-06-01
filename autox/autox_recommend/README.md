@@ -1,26 +1,36 @@
 [English](./README_EN.md) | 简体中文
 
-# autox_recommend是什么
+# <span id="autox_recommend是什么"> AutoX Recommend </span>
 
-- 问题定义: next-item prediction, 预测用户未来一段时间点击/购买的商品
+AutoX Recommend是一个**自动化推荐算法开源库**，
+
+- 提供多场景的**端到端的解决方案**：根据业务数据，**自动挖掘**不同场景下的用户和物品的关联关系，提供相应场景下的推荐结果
+- 支持自定义专属算法：提供召回、特征工程、排序等各模块独立接口，供进阶用户调用和组合
+
+**应用场景：**
+
+- 电商平台：根据用户的历史购买行为，推荐用户最可能购买的商品（猜你喜欢，经常一起购买，流行商品）
+- 资讯内容：分析不同用户的偏好，理解不同模态的资讯内容，根据用户点赞转发等多种行为，进行个性化资讯推荐
+
+
 
 # 快速上手
 
 # 目录
 <!-- TOC -->
 
-- [autox_recommend是什么](#autox_recommend是什么)
+- [AutoX Recommend是什么](#autox_recommend是什么)
 - [快速上手](#快速上手)
 - [目录](#目录)
-- [如何给AutoX-Recommend做贡献](#如何给AutoX-Recommend做贡献)
+- [如何给AutoX Recommend做贡献](#how-to-contribute)
 - [数据集](#数据集)
 - [框架](#框架)
 - [效果对比](#效果对比)
 
 <!-- /TOC -->
 
-# 如何给AutoX-Recommend做贡献
-[如何给AutoX-Recommend做贡献](./call_for_contribute.md)
+# <span id="how-to-contribute">如何给AutoX Recommend做贡献</span>
+[如何给AutoX Recommend做贡献](./call_for_contribute.md)
 
 # 数据集
 [数据集链接](./datasets/README.md)
