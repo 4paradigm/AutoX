@@ -90,6 +90,7 @@ class CrossXgbBiClassifier(object):
             X = self.scaler.fit_transform(X)
         except:
             self.scaler_flag = False
+            X = np.array(X)
 
         if tuning:
             log("[+]tuning params")
