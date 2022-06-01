@@ -1,4 +1,13 @@
-## 推荐系统数据集
+# 推荐系统数据集
+
+## 数据集介绍
+
+| 名称 | 原始数据链接 | Train/Test划分 | 说明 |
+|:---:| :---: | :---: | :---: |
+| HM个性化时尚推荐数据集 | [H&M Personalized Fashion Recommendations](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data) | 与原始数据保持一致 | - |
+
+
+## 相关数据集
 - [netflix](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data?select=README)
 - [MovieLens](https://grouplens.org/datasets/movielens/25m/)
 - [HM](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data)
