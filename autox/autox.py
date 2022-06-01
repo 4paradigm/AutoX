@@ -232,7 +232,9 @@ class AutoX():
 
         fe_stat_cnt = 0
         for key_ in featureStat.get_ops().keys():
-            fe_stat_cnt += len(featureStat.get_ops()[key_])
+            aggs = featureStat.get_ops()[key_]
+            for cur_agg in aggs:
+                fe_stat_cnt += len(featureStat.get_ops()[key_][cur_agg])
         if fe_stat_cnt < 1500:
             self.dfs_['FE_stat'] = featureStat.transform(df)
             log(f"featureStat ops: {featureStat.get_ops()}")
