@@ -19,7 +19,7 @@ AutoX一个高效的自动化机器学习工具。
 - [autox_recommend](autox/autox_recommend/README.md): 推荐系统的自动机器学习
 
 # 加入社区
-<img src="./img/qr_code_0531.png" width = "200" height = "260" alt="AutoX社区" align=center />
+<img src="./img/qr_code_0607.png" width = "200" height = "260" alt="AutoX社区" align=center />
 
 # 框架
 ## autox_competition

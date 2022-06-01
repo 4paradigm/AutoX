@@ -3,7 +3,7 @@
 ## 联系方式
 
 - AutoX贡献者意向成员群
-  <img src="../../img/developers_0531.jpeg" width = "200" height = "260" alt="wechat" align=center/>
+  <img src="../../img/developers_0607.jpeg" width = "200" height = "260" alt="wechat" align=center/>
 - Email: caihengxing@4paradigm.com
 
 ## 参与流程
