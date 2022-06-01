@@ -1,5 +1,6 @@
 from tqdm import tqdm
 from autox.autox_competition.util import log
+import numpy as np
 
 def feature_filter(train, test, id_, target, time_series=False):
     not_used = id_ + [target]
@@ -23,6 +24,11 @@ def feature_filter(train, test, id_, target, time_series=False):
         if test[col].min() > train[col].max() or test[col].max() < train[col].min():
             if col not in not_used:
                 not_used += [col]
+
+        # 包含inf的特征
+        if train.loc[train[col] == np.inf].shape[0] != 0 or test.loc[test[col] == np.inf].shape[0] != 0:
+            not_used += [col]
+
     log(f"filtered features: {not_used}")
     used_features = [x for x in used_features if x not in not_used]
     return used_features
