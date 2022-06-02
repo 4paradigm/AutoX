@@ -37,6 +37,7 @@ def item_df(movies, genome_scores):
     movie_tags_r.columns = ['movieId'] + \
         ['tag_' + str(i) for i in range(1, tags_count)]
     movies = movies.merge(movie_tags_r, on='movieId', how='left')
+    movies.rename(columns={'movieId':'itemId'}, inplace=True)
     return movies
 
 
