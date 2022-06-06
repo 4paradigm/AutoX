@@ -14,16 +14,16 @@
 ## 1. 数据集收集和处理
 |数据 | 数据处理 |
 |------------ | ------------- |
-|[MovieLens](https://grouplens.org/datasets/movielens/25m/) | [MovieLens_data_process](./data_process/MovieLens_data_process.ipynb) |
-|[netflix](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data?select=README) | 待认领 |
+|[MovieLens](https://grouplens.org/datasets/movielens/25m/) | [MovieLens_data_process](./data_process/MovieLens_data_process.py) |
+|[netflix](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data?select=README) | [Netflix-data-process](./data_process/Netflix-data-process.ipynb) |
 |[HM](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data) | 待认领 |
-|[Retailrocket recommender system dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset?select=events.csv) | 待认领 |
+|[Retailrocket recommender system dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset?select=events.csv) | [Retailrocket_data_process](./data_process/Retailrocket_data_process.ipynb) |
 |[Amazon electronic product recommendation](https://www.kaggle.com/datasets/prokaggler/amazon-electronic-product-recommendation) | 待认领 |
-|[Restaurant Recommendations](https://www.kaggle.com/datasets/teesoong/ml-challenge?select=checkins.csv) | 待认领 |
+|[Restaurant Recommendations](https://www.kaggle.com/datasets/teesoong/ml-challenge?select=checkins.csv) | [Restaurant_data_process](./data_process/Restaurant_data_process.ipynb) |
 |[Amazon product data](http://jmcauley.ucsd.edu/data/amazon/) | 待认领 |
-|[kdd cup 2020](https://tianchi.aliyun.com/competition/entrance/231785/introduction) | 待认领 |
+|[kdd cup 2020](https://tianchi.aliyun.com/competition/entrance/231785/introduction) | [KDD Cup 2020](./data_process/KDDCup2020debiasing_data_process.py.py) |
 
-欢迎将其他开源的数据集加进来，数据处理方法参考 [MovieLens_data_process](./data_process/MovieLens_data_process.ipynb).
+欢迎将其他开源的数据集加进来，数据处理方法参考 [MovieLens_data_process](./data_process/MovieLens_data_process.py).
 
 ## 2. 基于当前设计框架，开发其中的组件.
 ![Framework](./img/framework_0525.png)
