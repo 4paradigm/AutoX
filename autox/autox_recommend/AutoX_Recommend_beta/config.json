@@ -1,0 +1,60 @@
+{
+  "USERS": {
+    "userId": "customer_id"
+  },
+
+  "ITEMS": {
+    "itemId": "article_id"
+  },
+
+  "INTERACTIONS": {
+    "userId": "customer_id",
+    "itemId": "article_id",
+
+    "timestamp": "t_dat"
+  },
+
+  "METHODS": {
+    "recallNum": 100,
+
+    "RECALL": [
+      {
+        "name": "ItemCF",
+        "parameters": {
+          "time_col": "t_dat",
+          "last_days": 7
+        },
+        "required_attrs": [
+          "userId",
+          "itemId"
+        ]
+      },
+      {
+        "name": "Popular",
+        "parameters": {
+          "time_col": "t_dat",
+          "last_days": 7
+        },
+        "required_attrs": [
+          "userId",
+          "itemId"
+        ]
+      }
+    ],
+
+    "FEATURE_ENGINEER": {
+      "name": "time_based",
+      "required_attrs": [
+        "userId",
+        "itemId",
+        "timestamp"
+      ]
+    },
+
+    "RANK": [
+      {
+        "name": "LightGBM"
+      }
+    ]
+  }
+}
