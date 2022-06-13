@@ -51,7 +51,6 @@ AutoX一个高效的自动化机器学习工具。
 ### github仓库安装
 ```
 git clone https://github.com/4paradigm/autox.git
-## github访问速度较慢时可以通过gitee地址 https://gitee.com/poteman/autox
 pip install ./autox
 ```
 
