@@ -16,7 +16,7 @@ def ItemCF_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k, i
     for loc, i in enumerate(interacted_items):
         if i in sim_item:
             time = interacted_times[loc]
-            items = sorted(sim_item[i].items(), reverse=True)[0:top_k]
+            items = sorted(sim_item[i].items(), key=lambda d: d[1], reverse=True)[:top_k]
             for j, wij in items:
                 rank.setdefault(j, 0)
                 rank[j] += wij * time_decay ** time

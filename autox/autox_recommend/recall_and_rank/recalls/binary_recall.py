@@ -15,7 +15,7 @@ def BinaryNet_Recommend(sim_item, user_item_dict, user_time_dict, user_id, top_k
     interacted_times = user_time_dict[user_id]
     for loc, i in enumerate(interacted_items):
         time = interacted_times[loc]
-        items = sorted(sim_item[i].items(), key=lambda d: d[1], reverse=True)[:topk]
+        items = sorted(sim_item[i].items(), key=lambda d: d[1], reverse=True)[:top_k]
         for j, wij in items:
             rank.setdefault(j, 0)
             rank[j] += wij * 0.8 ** time
