@@ -106,6 +106,7 @@ pip install ./autox
 ### 比赛获奖
 - [2021阿里云基础设施供应链大赛-冠军方案](https://tianchi.aliyun.com/forum/postDetail?postId=344505)
 - [kaggle-H&M个性化推荐-金牌方案](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324158)
+- [AutoX获得CCF A类会议ACM Multimedia举办的视频分类任务冠军](http://auto-video-captions.top/2022/leaderboard)
 
 
 # TODO
