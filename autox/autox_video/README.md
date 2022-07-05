@@ -8,6 +8,8 @@ TODO: 框架图
 
 [快速开始](#快速开始)
 
+[预训练权重](#预训练权重)
+
 [效果展示](#效果展示)
 
 [后续工作](#后续工作)
@@ -72,6 +74,16 @@ python AutoTest.py
 ```
 这会自动读取工作目录中储存的最优权重，并用在测试集上测试模型效果，
 并将推理结果输出到[config.yaml](config.yaml)中指定的位置（默认为results.json）。
+
+## 预训练权重
+模型使用的预训练权重可以通过下面的链接下载，下载后将权重文件储存在checkpoints目录，训练时即会自动使用预训练的权重开始训练  
+（预训练权重文件由[Video-Swin-Transformer](https://github.com/SwinTransformer/Video-Swin-Transformer)提供）
+
+| Backbone |         Pretrain          | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs  | model |
+| :---: |:-------------------------:| :---: | :---: | :---: | :---: | :---: |:------:| :---: |
+|  Swin-B  | ImageNet22k & Kinetics600 |  30ep   |     224      |  84.0  |  96.5  |   88M   | 281.6G | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics600_22k.pth)/[baidu](https://pan.baidu.com/s/1ZMeW6ylELTje-o3MiaZ-MQ) |
+
+
 
 ## 效果展示
 我们取得了ACM MM 22 PRE-TRAINING FOR VIDEO UNDERSTANDING CHALLENGE比赛视频分类赛道的第一名
