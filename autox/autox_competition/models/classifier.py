@@ -107,7 +107,7 @@ class CrossXgbBiClassifier(object):
 
             self.models.append(model)
             self.feature_importances_['fold_{}'.format(fold_n + 1)] = model.feature_importances_
-            val = model.predict_proba(X[valid_index])[:,1]
+            val = model.predict_proba(X[valid_index].astype('float64'))[:,1]
             auc_ = roc_auc_score(y.iloc[valid_index], val)
             print('AUC: {}'.format(auc_))
             AUCs.append(auc_)
