@@ -1,0 +1,26 @@
+# root directory of your dataset
+data_root: 'data/demo/videos'
+
+# annotation files of your dataset, you need to organize them following demo list
+ann_file_train: 'data/demo/annotations/train_list.txt'
+ann_file_val: 'data/demo/annotations/val_list.txt'
+ann_file_test: 'data/demo/annotations/test_list.txt'
+
+# video length of your dataset (second),
+# if your video length is inconsistent or you don't know the specific length of the video, you can set it to the average length or directly fix it to 2 seconds
+video_length: 2
+
+# number of classes
+num_class: 25
+
+# batch size while training, it depends on your gpu memory
+videos_per_gpu: 8
+
+# total epoch
+epoch: 50
+
+# working directory during training, we will look for the checkpoints file in the same directory while testing
+work_dir: 'work_dirs/demo'
+
+# output path of test result
+test_results_path: 'results.json'
