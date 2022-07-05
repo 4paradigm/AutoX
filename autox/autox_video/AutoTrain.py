@@ -42,6 +42,8 @@ def main():
     args = parse_args()
     default_cfg = 'mmaction2/configs/TASK/swin.py'
     cfg = Config.fromfile(default_cfg)
+    if not os.path.exists(cfg.load_from):
+        cfg.load_from = None
     with open('config.yaml','r') as cus_cfg:
         cus_cfg = yaml.load(cus_cfg, Loader=yaml.FullLoader)
     cfg.total_epochs = cus_cfg['epoch']

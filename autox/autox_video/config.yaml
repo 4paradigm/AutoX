@@ -6,7 +6,8 @@ ann_file_train: 'data/demo/annotations/train_list.txt'
 ann_file_val: 'data/demo/annotations/val_list.txt'
 ann_file_test: 'data/demo/annotations/test_list.txt'
 
-# video length of your dataset (second)
+# video length of your dataset (second),
+# if your video length is inconsistent or you don't know the specific length of the video, you can set it to the average length or directly fix it to 2 seconds
 video_length: 2
 
 # number of classes
