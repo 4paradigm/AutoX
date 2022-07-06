@@ -17,6 +17,7 @@ AutoX一个高效的自动化机器学习工具。
 - [autox_interpreter](autox/autox_interpreter/README.md): 机器学习可解释功能
 - [autox_nlp](autox/autox_nlp/README.md): 对文本列进行处理的自动化工具
 - [autox_recommend](autox/autox_recommend/README.md): 推荐系统的自动机器学习
+- [autox_video](autox/autox_video/README.md): 应用于视频分类任务的自动机器学习框架
 
 # 加入社区
 <img src="./img/qr_code_community.png" width = "200" height = "260" alt="AutoX社区" align=center />
