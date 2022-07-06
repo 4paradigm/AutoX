@@ -1,7 +1,7 @@
 ## AutoX_video是什么
 autox_video提供了一种基于mmaction2代码库的视频理解自动机器学习框架，您可以通过简单的命令便利地进行视频理解任务的训练。
 
-TODO: 框架图
+![framework](resources/framework.png)
 
 ## 目录
 [安装](#安装)
@@ -87,10 +87,13 @@ python AutoTest.py
 我们取得了ACM MM 22 PRE-TRAINING FOR VIDEO UNDERSTANDING CHALLENGE比赛视频分类赛道的第一名
 ![leaderboard](resources/leaderboard.jpeg)
 
-TODO：待测试在公开数据集的效果  
-1. HMDB51  
-2. UCF-101  
-3. YouTube-8M  
+公开数据集上测试：
+
+| Dataset    | Top 1 Accuracy |
+|------------|---------|
+| [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.5902  |
+| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9214  |
+
 
 ## 后续工作
 1. 目前代码仅支持Video Swin Transformer一种backbone，这是我们的实验中效果最好并且较为通用的模型，后续会增加更多的视频理解模型供用户自由选择
