@@ -117,7 +117,7 @@ Test on public datasets:
 | Dataset                                                      | Top 1 Accuracy |
 | ------------------------------------------------------------ | -------------- |
 | [HMDB51](https://translate.google.com/website?sl=zh-CN&tl=en&hl=zh-CN&client=webapp&u=https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.5902         |
-| [UCF101](https://translate.google.com/website?sl=zh-CN&tl=en&hl=zh-CN&client=webapp&u=https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9214         |
+| [UCF101](https://translate.google.com/website?sl=zh-CN&tl=en&hl=zh-CN&client=webapp&u=https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407         |
 
 ## Follow-up
 
