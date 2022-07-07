@@ -1,3 +1,4 @@
+简体中文 | [English](./README_EN.md) 
 ## AutoX_video是什么
 autox_video提供了一种基于mmaction2代码库的视频理解自动机器学习框架，您可以通过简单的命令便利地进行视频理解任务的训练。
 
