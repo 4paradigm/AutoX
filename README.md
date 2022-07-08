@@ -29,6 +29,9 @@ AutoX一个高效的自动化机器学习工具。
 ## autox_recommend
 <img src="./autox/autox_recommend/img/framework_0525.png" alt="autox_recommend framework" align=center />
 
+## autox_video
+<img src="./autox/autox_video/resources/framework.png" alt="autox_video framework" align=center />
+
 # 如何为AutoX贡献
 [如何为AutoX贡献](./how_to_contribute.md)
 
