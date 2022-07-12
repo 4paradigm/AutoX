@@ -34,9 +34,9 @@ def get_pipeline_cfg(
 
 def get_dataset_cfg(
         data_root,
-        ann_file_train,
-        ann_file_val,
-        ann_file_test,
+        ann_file_train=None,
+        ann_file_val=None,
+        ann_file_test=None,
         videos_per_gpu=8,
         video_length=2):
     train_pipeline = get_pipeline_cfg(video_length*4, 6, 1, False)
@@ -51,20 +51,20 @@ def get_dataset_cfg(
         test_dataloader=dict(
             videos_per_gpu=1,
             workers_per_gpu=2
-        ),
-        train=dict(
-            type='VideoDataset',
-            ann_file=ann_file_train,
-            data_prefix=data_root,
-            pipeline=train_pipeline),
-        val=dict(
-            type='VideoDataset',
-            ann_file=ann_file_val,
-            data_prefix=data_root,
-            pipeline=test_pipeline),
-        test=dict(
-            type='VideoDataset',
-            ann_file=ann_file_test,
-            data_prefix=data_root,
-            pipeline=test_pipeline))
+        ))
+    if ann_file_train is not None:
+        data['train'] = dict(type='VideoDataset',
+                             ann_file=ann_file_train,
+                             data_prefix=data_root,
+                             pipeline=train_pipeline)
+    if ann_file_val is not None:
+        data['val'] = dict(type='VideoDataset',
+                           ann_file=ann_file_val,
+                           data_prefix=data_root,
+                           pipeline=test_pipeline)
+    if ann_file_test is not None:
+        data['test'] = dict(type='VideoDataset',
+                            ann_file=ann_file_test,
+                            data_prefix=data_root,
+                            pipeline=test_pipeline)
     return data
