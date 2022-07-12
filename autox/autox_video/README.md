@@ -81,13 +81,17 @@ python AutoTest.py
 # ensure your current working directory is AutoX/autox/autox_video
 import AutoXVideo
 autox_video = AutoXVideo()
+
 # ------------------
+
 # Load cfg from file (recommend)
 autox_video.read_cfg('config.yaml')
 autox_video.fit()
 autox_video.transform()
+
 # ------------------
 # Manually specify cfg
+
 autox_video.fit(
     data_root='data/demo/videos',
     ann_file_train='data/demo/annotations/train_list.txt',
@@ -104,8 +108,10 @@ autox_video.transform(
     ann_file_test='data/demo/annotations/test_list.txt',
 )
 # ann_file_test is optional. if not specified, it will include all files in data_root.
+
 # ------------------
 # Transform only
+
 autox_video.transform(
     data_root='data/demo/videos',
     ann_file_test='data/demo/annotations/test_list.txt',
