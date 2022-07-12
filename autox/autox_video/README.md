@@ -83,8 +83,8 @@ import AutoXVideo
 autox_video = AutoXVideo()
 
 # ------------------
-
 # Load cfg from file (recommend)
+
 autox_video.read_cfg('config.yaml')
 autox_video.fit()
 autox_video.transform()
