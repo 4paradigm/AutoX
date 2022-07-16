@@ -59,7 +59,7 @@ python mmaction2/setup.py develop
 ```
 
 ## 快速开始
-我们提供了一个demo数据集作为测试，您可以以同样的方式运行您自己的数据集。
+我们提供了一个demo数据集作为测试，您可以以同样的方式运行您自己的数据集。您可以通过如下指令快速开始。
 ### 训练
 ```
 python AutoTrain.py
@@ -75,6 +75,51 @@ python AutoTest.py
 ```
 这会自动读取工作目录中储存的最优权重，并用在测试集上测试模型效果，
 并将推理结果输出到[config.yaml](config.yaml)中指定的位置（默认为results.json）。
+
+### 使用高级api进行训练和推理
+这里举例说明如何使用高级api
+```
+# ensure your current working directory is AutoX/autox/autox_video
+import AutoXVideo
+autox_video = AutoXVideo()
+
+# ------------------
+# Load cfg from file (recommend)
+
+autox_video.read_cfg('config.yaml')
+autox_video.fit()
+autox_video.transform()
+
+# ------------------
+# Manually specify cfg
+
+autox_video.fit(
+    data_root='data/demo/videos',
+    ann_file_train='data/demo/annotations/train_list.txt',
+    ann_file_val='data/demo/annotations/val_list.txt',
+    work_dir='work_dirs/demo',
+    video_length=2,
+    num_class=25,
+    videos_per_gpu=8,
+    epoch=50,
+    evaluation=5
+)
+autox_video.transform(
+    data_root='data/demo/videos',
+    ann_file_test='data/demo/annotations/test_list.txt',
+)
+# ann_file_test is optional. if not specified, it will include all files in data_root.
+
+# ------------------
+# Transform only
+
+autox_video.transform(
+    data_root='data/demo/videos',
+    ann_file_test='data/demo/annotations/test_list.txt',
+    checkpoints='work_dirs/demo/latest.pth'
+)
+
+```
 
 ## 预训练权重
 模型使用的预训练权重可以通过下面的链接下载，下载后将权重文件储存在checkpoints目录，训练时即会自动使用预训练的权重开始训练  
