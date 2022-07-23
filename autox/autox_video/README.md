@@ -69,6 +69,11 @@ python AutoTrain.py
 当意外中断时，重新执行此命令，我们会将恢复之前的训练结果而不是重新开始（除非你修改了工作目录的位置）。
 
 您可以通过修改[config.yaml](config.yaml)中的数据集设置来在自己的数据集上训练和测试模型。
+
+执行下面的脚本，可以启动多卡并行训练，{NUM_GPUS}修改为本机gpu数量
+```
+./dist_train.sh {NUM_GPUS}
+```
 ### 测试
 ```
 python AutoTest.py
@@ -76,6 +81,10 @@ python AutoTest.py
 这会自动读取工作目录中储存的最优权重，并用在测试集上测试模型效果，
 并将推理结果输出到[config.yaml](config.yaml)中指定的位置（默认为results.json）。
 
+执行下面的脚本，可以启动多卡并行推理，{NUM_GPUS}修改为本机gpu数量
+```
+./dist_test.sh {NUM_GPUS}
+```
 ### 使用高级api进行训练和推理
 这里举例说明如何使用高级api
 ```
