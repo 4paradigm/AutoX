@@ -148,7 +148,7 @@ autox_video.transform(
 
 | Dataset    | Top 1 Accuracy |
 |------------|---------|
-| [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.5902  |
+| [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  |
 | [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  |
 
 
