@@ -146,10 +146,11 @@ autox_video.transform(
 
 公开数据集上测试：
 
-| Dataset    | Top 1 Accuracy |
-|------------|---------|
-| [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  |
-| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  |
+| Dataset    | Top 1 Accuracy | Top 1 Accuracy in Google Vertex AI |
+|------------|---------|---------|
+| [MMDS](http://auto-video-captions.top/2022/dataset) | 0.6140 | 0.405 | 
+| [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  | \ |
+| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  | \ |
 
 
 ## 后续工作
