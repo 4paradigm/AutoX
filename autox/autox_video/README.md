@@ -137,7 +137,7 @@ autox_video.transform(
 | Backbone |         Pretrain          | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs  | model |
 | :---: |:-------------------------:| :---: | :---: | :---: | :---: | :---: |:------:| :---: |
 |  Swin-B  | ImageNet22k & Kinetics600 |  30ep   |     224      |  84.0  |  96.5  |   88M   | 281.6G | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics600_22k.pth)/[baidu](https://pan.baidu.com/s/1ZMeW6ylELTje-o3MiaZ-MQ) |
-
+*谷歌Vertex AI使用了包括UCF191在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏
 
 
 ## 效果展示
