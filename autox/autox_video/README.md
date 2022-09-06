@@ -137,7 +137,7 @@ autox_video.transform(
 | Backbone |         Pretrain          | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs  | model |
 | :---: |:-------------------------:| :---: | :---: | :---: | :---: | :---: |:------:| :---: |
 |  Swin-B  | ImageNet22k & Kinetics600 |  30ep   |     224      |  84.0  |  96.5  |   88M   | 281.6G | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics600_22k.pth)/[baidu](https://pan.baidu.com/s/1ZMeW6ylELTje-o3MiaZ-MQ) |
-*谷歌Vertex AI使用了包括UCF191在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏
+
 
 
 ## 效果展示
@@ -152,6 +152,7 @@ autox_video.transform(
 | [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  | \ |
 | [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  | 0.995* |
 
+*谷歌Vertex AI使用了包括UCF191在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏
 
 ## 后续工作
 1. 目前代码仅支持Video Swin Transformer一种backbone，这是我们的实验中效果最好并且较为通用的模型，后续会增加更多的视频理解模型供用户自由选择
