@@ -150,7 +150,7 @@ autox_video.transform(
 |------------|---------|---------|
 | [MMDS](http://auto-video-captions.top/2022/dataset) | 0.6140 | 0.405 | 
 | [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  | \ |
-| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  | 0.995* |
+| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  | \ |
 
 *谷歌Vertex AI使用了包括UCF191在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏
 
