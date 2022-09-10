@@ -150,9 +150,9 @@ autox_video.transform(
 |------------|---------|---------|
 | [MMDS](http://auto-video-captions.top/2022/dataset) | 0.6140 | 0.405 | 
 | [HMDB51](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) | 0.6357  | \ |
-| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9407  | \ |
+| [UCF101](https://www.crcv.ucf.edu/research/data-sets/ucf101/) | 0.9960*  | 0.9940* |
 
-*谷歌Vertex AI使用了包括UCF191在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏
+*谷歌Vertex AI使用了包括UCF101在内的多个开源数据集进行预训练，此处实验存在测试集标签泄漏，为了对比，我们在AutoX的预训练数据中也加入了UCF101
 
 ## 后续工作
 1. 目前代码仅支持Video Swin Transformer一种backbone，这是我们的实验中效果最好并且较为通用的模型，后续会增加更多的视频理解模型供用户自由选择
