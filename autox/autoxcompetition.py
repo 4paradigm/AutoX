@@ -173,6 +173,7 @@ class AutoX():
         else:
             self.dfs_['FE_One2M'] = None
             log("ignore featureOne2M")
+        self.featureOne2M = featureOne2M
 
         # 时间特征
         log("feature engineer: time")
@@ -180,7 +181,7 @@ class AutoX():
         featureTime.fit(df, df_feature_type=feature_type, silence_cols=id_ + [target])
         log(f"featureTime ops: {featureTime.get_ops()}")
         self.dfs_['FE_time'] = featureTime.transform(df)
-
+        self.featureTime = featureTime
 
         # cumsum特征
         log("feature engineer: Cumsum")
@@ -196,6 +197,7 @@ class AutoX():
         else:
             self.dfs_['FE_cumsum'] = None
             log("ignore featureCumsum")
+        self.featureCumsum = featureCumsum
 
         # shift特征
         log("feature engineer: Shift")
@@ -211,7 +213,7 @@ class AutoX():
         else:
             self.dfs_['FE_shift'] = None
             log("ignore featureShift")
-
+        self.featureShift = featureShift
 
         # diff特征
         log("feature engineer: Diff")
@@ -227,6 +229,7 @@ class AutoX():
         else:
             self.dfs_['FE_diff'] = None
             log("ignore featureDiff")
+        self.featureDiff = featureDiff
 
 
         # 统计特征
@@ -246,6 +249,8 @@ class AutoX():
         else:
             self.dfs_['FE_stat'] = None
             log("ignore featureStat")
+        self.featureStat = featureStat
+
 
         # nlp特征
         log("feature engineer: NLP")
@@ -253,6 +258,8 @@ class AutoX():
         featureNlp.fit(df, target, df_feature_type=feature_type, silence_cols=id_, select_all=False)
         self.dfs_['FE_nlp'] = featureNlp.transform(df)
         log(f"featureNlp ops: {featureNlp.get_ops()}")
+        self.featureNlp = featureNlp
+
 
         # count特征
         log("feature engineer: Count")
@@ -264,6 +271,7 @@ class AutoX():
             featureCount.fit(df, degree=1, df_feature_type=feature_type, silence_cols=id_ + [target], select_all=False)
         self.dfs_['FE_count'] = featureCount.transform(df)
         log(f"featureCount ops: {featureCount.get_ops()}")
+        self.featureCount = featureCount
 
 
         # rank特征
@@ -279,6 +287,8 @@ class AutoX():
         else:
             self.dfs_['FE_rank'] = None
             log("ignore featureRank")
+        self.featureRank = featureRank
+
 
         # image特征
         log("feature engineer: Image")
