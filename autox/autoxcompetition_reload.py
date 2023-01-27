@@ -9,7 +9,7 @@ class AutoXReload():
     """AutoX主函数描述"""
 
     def __init__(self, autox, test_path, test=None):
-        self.info_ = autox.info
+        self.info_ = autox.info_
         self.dfs_ = autox.dfs_
         self.featureOne2M = autox.featureOne2M
         self.featureTime = autox.featureTime
@@ -25,10 +25,10 @@ class AutoXReload():
         self.model_lgb = autox.model_lgb
         self.model_xgb = autox.model_xgb
 
-        if test != None:
-            autox.dfs_['test'] = pd.read_csv(test_path)
+        if test_path is None:
+            autox.dfs_[self.info_['test_name']] = test
         else:
-            autox.dfs_['test'] = test
+            autox.dfs_[self.info_['test_name']] = pd.read_csv(test_path)
 
         self.concat_train_test()
         self.dfs_['FE_all'] = None
