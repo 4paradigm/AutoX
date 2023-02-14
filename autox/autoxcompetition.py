@@ -11,12 +11,14 @@ from autox.autox_competition.feature_engineer import fe_ima2vec
 from autox.autox_competition.file_io import read_data_from_path
 from autox.autox_competition.models import CrossLgbRegression, CrossXgbRegression
 from autox.autox_competition.models.classifier import CrossLgbBiClassifier, CrossXgbBiClassifier
+from autox.autox_competition.models.multi_classifier import CrossLgbMultiClassifier, CrossXgbMultiClassifier
 from autox.autox_competition.process_data import feature_combination, train_test_divide, clip_label
 from autox.autox_competition.process_data import feature_filter, auto_encoder
 from autox.autox_competition.process_data.feature_type_recognition import Feature_type_recognition
 from autox.autox_competition.util import log
 from autox.autox_competition.feature_engineer import FeatureShiftTS, FeatureRollingStatTS, FeatureExpWeightedMean
 from autox.autox_competition.models.regressor_ts import LgbRegressionTs, XgbRegressionTs
+import numpy as np
 
 class AutoX():
     """AutoX主函数描述"""
@@ -70,8 +72,12 @@ class AutoX():
         self.sub = None
 
         # 识别任务类型
-        if self.dfs_[self.info_['train_name']][self.info_['target']].nunique() == 2:
+        target_ncount = self.dfs_[self.info_['train_name']][self.info_['target']].nunique()
+        self.info_['target_ncount'] = target_ncount
+        if target_ncount == 2:
             self.info_['task_type'] = 'binary'
+        elif 2 < target_ncount <= 10:
+            self.info_['task_type'] = 'multi_cls'
         else:
             self.info_['task_type'] = 'regression'
 
@@ -129,16 +135,24 @@ class AutoX():
         if self.info_['task_type'] == 'regression':
             self.model_xgb = CrossXgbRegression(metric=self.info_['metric'])
             self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
-
         elif self.info_['task_type'] == 'binary':
             self.model_xgb = CrossXgbBiClassifier()
             self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False, Debug=self.Debug)
+        elif self.info_['task_type'] == 'multi_cls':
+            self.model_xgb = CrossXgbMultiClassifier(num_class=self.info_['target_ncount'])
+            self.model_xgb.fit(self.train[self.used_features], self.train[self.info_['target']], tuning=False,
+                               Debug=self.Debug)
 
         # 模型预测
         predict_lgb = self.model_lgb.predict(self.test[self.used_features])
-        predict_xgb = self.model_xgb.predict(self.test[self.used_features].astype('float64'))
+        predict_xgb = self.model_xgb.predict(self.test[self.used_features])
         # predict_tabnet = model_tabnet.predict(test[used_features])
         predict = (predict_xgb + predict_lgb) / 2
+
+        if self.info_['task_type'] == 'multi_cls':
+            predict = np.argmax(predict, axis=1)
+            target_map_reverse = {index: value for value, index in self.info_['target_map'].items()}
+            predict = np.array([target_map_reverse[value] for value in predict])
 
         # 预测结果后处理
         min_ = self.info_['min_target']
@@ -328,9 +342,17 @@ class AutoX():
         if self.info_['task_type'] == 'regression':
             self.model_lgb = CrossLgbRegression(metric=self.info_['metric'])
             self.model_lgb.fit(self.train[self.used_features], self.train[target], tuning=False, Debug=self.Debug)
-
         elif self.info_['task_type'] == 'binary':
             self.model_lgb = CrossLgbBiClassifier()
+            self.model_lgb.fit(self.train[self.used_features], self.train[target], tuning=False, Debug=self.Debug)
+        elif self.info_['task_type'] == 'multi_cls':
+            self.model_lgb = CrossLgbMultiClassifier(num_class=self.info_['target_ncount'])
+
+            unique_target_values = self.train[target].unique()
+            target_map = {value: index for index, value in enumerate(unique_target_values)}
+            self.train[target] = self.train[target].map(target_map)
+            self.info_['target_map'] = target_map
+
             self.model_lgb.fit(self.train[self.used_features], self.train[target], tuning=False, Debug=self.Debug)
 
         # 特征重要性
